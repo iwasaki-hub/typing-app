@@ -1,4 +1,36 @@
-# React + TypeScript + Vite
+# Typing App
+
+## Supabase 接続
+
+接続先: typing-app（東京リージョン）
+
+- [Supabase Dashboard](https://supabase.com/dashboard/project/tfhrkovrmxxeoaueqxin)
+- クライアント: `src/lib/supabase.ts`
+
+ローカルでは `.env.local` に設定済みです。別の環境では `.env.example` を
+`.env.local` にコピーし、Project URL と Publishable key を設定してください。
+ホスティング先にも同じ環境変数を設定し、変更後は開発サーバーを再起動してください。
+フロントエンドには Publishable key を使用し、Secret / service_role key は設定しないでください。
+
+```sh
+npm install
+npm run check:supabase
+npm run dev
+```
+
+アプリからは次のようにクライアントを利用できます。
+
+```ts
+import { supabase } from './lib/supabase'
+```
+
+`check:supabase` は公開用キーで Auth API の設定取得による疎通確認を行います。
+テーブルやログイン画面はまだ作成していません。テーブルを追加する場合は
+RLS を有効にし、必要なアクセス権とポリシーを設定してください。
+
+接続方法: [Supabase 公式ドキュメント](https://supabase.com/docs/reference/javascript/initializing)
+
+## Vite テンプレート
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
