@@ -30,7 +30,20 @@ RLS を有効にし、必要なアクセス権とポリシーを設定してく�
 
 接続方法: [Supabase 公式ドキュメント](https://supabase.com/docs/reference/javascript/initializing)
 
+## ソースの構成
+
+- `src/api/client.ts`: Axios の共通設定（15秒のタイムアウト）とエラーメッセージ変換。
+- `src/api/supabase.ts`: Supabase の接続確認。接続設定は初回リクエスト時に検証します。
+- `src/components/Navigation.tsx`: PC・スマホ共通のナビゲーション。Escape キーでも閉じられます。
+- `src/pages/HomePage.css`: ホーム専用のスタイル。共通コンポーネントは各 CSS を持ちます。
+
+API を追加するときは `src/api/` にサービス別ファイルを作り、`createApiClient` を利用してください。
+UI にはリクエスト処理を書かず、API 関数を呼び出します。Supabase の公開用キーは
+Supabase 専用インスタンスだけに設定し、他の API と共有しません。
+Font Awesome は使用する無料アイコンだけをインポートしています。
+
 ## Vite テンプレート
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleCheck, faCircleExclamation, faPlug, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { checkSupabaseConnection } from '../api/supabase'
+import { getApiErrorMessage } from '../api/client'
 import './ConnectionStatus.css'
 
 export default function ConnectionStatus() {
@@ -12,30 +16,12 @@ export default function ConnectionStatus() {
     setCheckedAt(null)
 
     try {
-      const url = import.meta.env.VITE_SUPABASE_URL
-      const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
-      if (!url || !key) {
-        throw new Error('Supabase の接続設定が不足しています。下の手順で環境変数を設定してください。')
-      }
-      const response = await fetch(new URL('/auth/v1/settings', url), {
-        headers: { apikey: key },
-        signal: AbortSignal.timeout(15000),
-      })
-      if (!response.ok) {
-        throw new Error(`接続できませんでした（HTTP ${response.status}）。URL と公開用キーを確認してください。`)
-      }
-      await response.json()
+      await checkSupabaseConnection()
       setConnection('success')
       setConnectionMessage('Supabase との通信に成功しました。')
     } catch (error) {
       setConnection('error')
-      setConnectionMessage(
-        error instanceof Error && error.name === 'TimeoutError'
-          ? '接続がタイムアウトしました。時間をおいて再確認してください。'
-          : error instanceof TypeError
-            ? '通信できませんでした。接続先 URL とネットワークを確認してください。'
-            : error instanceof Error ? error.message : '接続に失敗しました。再確認してください。',
-      )
+      setConnectionMessage(getApiErrorMessage(error))
     } finally {
       setCheckedAt(new Date().toLocaleTimeString('ja-JP'))
     }
@@ -46,6 +32,7 @@ export default function ConnectionStatus() {
         <div className="connection-header">
           <h2 id="connection-heading">Supabase 接続確認</h2>
           <span className={`connection-badge ${connection}`}>
+            <FontAwesomeIcon icon={connection === 'checking' ? faSpinner : connection === 'success' ? faCircleCheck : connection === 'error' ? faCircleExclamation : faPlug} spin={connection === 'checking'} aria-hidden="true" />{' '}
             {{ idle: '未確認', checking: '確認中', success: '接続成功', error: '接続失敗' }[connection]}
           </span>
         </div>
