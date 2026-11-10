@@ -1,4 +1,5 @@
 import LanguageBadge from './LanguageBadge'
+import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useId, useState } from 'react'
 import { m } from 'motion/react'
 import PracticeCalendar from './PracticeCalendar'
@@ -9,13 +10,30 @@ import './TypingHistory.css'
 
 const reasons = { completed: 'クリア', timeout: '時間切れ', stopped: '手動終了' }
 
-export default function TypingHistory() {
+export default function TypingHistory({ allowDelete = false }: { allowDelete?: boolean }) {
   const viewId = useId()
   const [view, setView] = useState<'list' | 'calendar'>('list')
-  const { results, error, signedIn, status, sync, importGuest } = useHistory()
+  const { results, error, signedIn, status, sync, importGuest, deleting, clearHistory } = useHistory()
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
+  async function removeHistory() {
+    setDeleteError('')
+    try { await clearHistory(); setConfirmDelete(false) }
+    catch (error) { setDeleteError(error instanceof Error ? error.message : '削除できませんでした。') }
+  }
   return (
     <section className="typing-history" aria-labelledby="history-title">
       <h2 id="history-title">練習履歴 <small>{results.length}件</small></h2>
+      {allowDelete && <button type="button" className="history-delete" disabled={deleting} onClick={() => { setDeleteError(''); setConfirmDelete(true) }}>全履歴を削除</button>}
+      <Dialog open={confirmDelete} onClose={() => { if (!deleting) setConfirmDelete(false) }} className="history-delete-dialog">
+        <DialogBackdrop className="history-delete-backdrop" />
+        <div className="history-delete-viewport"><DialogPanel className="history-delete-panel">
+          <DialogTitle>全履歴を削除しますか？</DialogTitle>
+          <Description>このアカウントのクラウド上の全練習履歴と、この端末のアカウント別の保存履歴を削除します。取り消せません。ランキングに公開済みの記録・設定・ログイン前の履歴は削除されません。</Description>
+          {deleteError && <p role="alert">{deleteError}</p>}
+          <div className="history-delete-actions"><button type="button" data-autofocus disabled={deleting} onClick={() => setConfirmDelete(false)}>キャンセル</button><button type="button" className="history-delete" disabled={deleting} onClick={() => { void removeHistory() }}>{deleting ? '削除中…' : 'すべて削除する'}</button></div>
+        </DialogPanel></div>
+      </Dialog>
       {signedIn ? <div className="history-sync"><p>このアカウントの記録を端末間で同期します。ランキングへの公開は別途選択できます。</p><p role="status">{status}</p><button type="button" onClick={sync}>今すぐ同期</button><button type="button" onClick={importGuest}>この端末のログイン前の記録を取り込む</button></div> : <p>このブラウザに最新100件を保存します。<Link to="/login">ログイン</Link>すると、新しい記録を端末間で同期できます。</p>}
       <div className="history-view" role="group" aria-label="履歴の表示形式">{(['list', 'calendar'] as const).map((mode) => <button key={mode} type="button" aria-pressed={view === mode} onClick={() => setView(mode)}>{view === mode && <m.span aria-hidden="true" className="history-view-highlight" layoutId={viewId} transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}<span className="history-view-label">{mode === 'list' ? '一覧' : 'カレンダー'}</span></button>)}</div>
       {error && <p className="history-error" role="alert">{error}</p>}

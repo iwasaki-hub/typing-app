@@ -7,6 +7,8 @@ export const HistoryContext = createContext<{
   status: string
   sync: () => void
   importGuest: () => void
+  clearHistory: () => Promise<void>
+  deleting: boolean
 } | undefined>(undefined)
 
 export function useHistory() {

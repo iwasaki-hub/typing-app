@@ -5,7 +5,7 @@ import { createHistoryStore, HISTORY_KEY, parseHistory } from '../src/features/t
 const result = (id) => ({ id, savedAt: '2026-11-10T09:00:00.000Z', text: 'Small steps, every day.', duration: 60, elapsed: 20, wpm: 12, accuracy: 95, mistakes: 1, correct: 20, reason: 'completed' })
 function memoryStorage() {
   const data = new Map()
-  return { getItem: (key) => data.get(key) ?? null, setItem: (key, value) => data.set(key, value) }
+  return { getItem: (key) => data.get(key) ?? null, setItem: (key, value) => data.set(key, value), removeItem: (key) => data.delete(key) }
 }
 
 test('persists results and restores them in a new store', () => {
@@ -82,4 +82,42 @@ test('cloud merge caps the newest records at 100 and ignores corrupt entries', (
   assert.equal(store.getSnapshot().results.length, 100)
   assert.equal(store.getSnapshot().results[0].id, '109')
   assert.equal(store.getSnapshot().results.at(-1).id, '10')
+})
+
+test('clear removes only the current account storage key and notifies list and calendar subscribers', () => {
+  const memory = memoryStorage()
+  const store = createHistoryStore(() => memory, 'account:alice')
+  store.save(result('alice'))
+  memory.setItem(HISTORY_KEY, JSON.stringify([result('guest')]))
+  memory.setItem('account:bob', JSON.stringify([result('bob')]))
+  memory.setItem('typing-app:theme:v1', 'calm')
+  let updates = 0
+  store.subscribe(() => updates++)
+  store.clear()
+  assert.equal(memory.getItem('account:alice'), null)
+  assert.deepEqual(store.getSnapshot().results, [])
+  assert.equal(updates, 1)
+  assert.equal(JSON.parse(memory.getItem(HISTORY_KEY))[0].id, 'guest')
+  assert.equal(JSON.parse(memory.getItem('account:bob'))[0].id, 'bob')
+  assert.equal(memory.getItem('typing-app:theme:v1'), 'calm')
+  assert.deepEqual(createHistoryStore(() => memory, 'account:alice').getSnapshot().results, [])
+})
+
+test('deletion cutoff discards cached old records but keeps later practice results', () => {
+  const memory = memoryStorage()
+  const store = createHistoryStore(() => memory)
+  store.save(result('old'))
+  store.save({ ...result('new'), savedAt: '2026-11-11T09:00:00.000Z' })
+  store.discardBefore('2026-11-10T09:00:00.000Z')
+  assert.deepEqual(store.getSnapshot().results.map(item => item.id), ['new'])
+  assert.deepEqual(createHistoryStore(() => memory).getSnapshot().results.map(item => item.id), ['new'])
+})
+
+test('clear reports localStorage failure and retains the current visible history', () => {
+  const memory = memoryStorage()
+  memory.setItem(HISTORY_KEY, JSON.stringify([result('saved')]))
+  const store = createHistoryStore(() => ({ ...memory, removeItem: () => { throw new Error('blocked') } }))
+  store.getSnapshot()
+  assert.throws(() => store.clear(), /削除できません/)
+  assert.equal(store.getSnapshot().results[0].id, 'saved')
 })

@@ -42,7 +42,7 @@ export function parseHistory(raw: string | null): TypingResult[] {
 type Snapshot = { results: TypingResult[]; error: string }
 const empty: Snapshot = { results: [], error: '' }
 
-export function createHistoryStore(getStorage: () => Pick<Storage, 'getItem' | 'setItem'>, key = HISTORY_KEY) {
+export function createHistoryStore(getStorage: () => Pick<Storage, 'getItem' | 'setItem'> & Partial<Pick<Storage, 'removeItem'>>, key = HISTORY_KEY) {
   let snapshot = empty
   let initialized = false
   const listeners = new Set<() => void>()
@@ -59,6 +59,21 @@ export function createHistoryStore(getStorage: () => Pick<Storage, 'getItem' | '
     getServerSnapshot: () => empty,
     subscribe(listener: () => void) { listeners.add(listener); return () => { listeners.delete(listener) } },
     refresh() { initialized = true; publish(read()) },
+    clear() {
+      try {
+        const storage = getStorage()
+        if (storage.removeItem) storage.removeItem(key)
+        else storage.setItem(key, '[]')
+        initialized = true
+        publish({ results: [], error: '' })
+      } catch { throw new Error('端末の履歴を削除できませんでした。ブラウザの保存設定を確認してください。') }
+    },
+    discardBefore(cutoff: string) {
+      const results = read().results.filter(item => Date.parse(item.savedAt) > Date.parse(cutoff))
+      getStorage().setItem(key, JSON.stringify(results))
+      initialized = true
+      publish({ results, error: '' })
+    },
     merge(incoming: TypingResult[]) {
       const latest = read()
       const results = [...new Map([...incoming, ...latest.results].filter(isResult).map((item) => [item.id, item])).values()]
