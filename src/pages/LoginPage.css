@@ -17,6 +17,13 @@
 .login-card .login-secondary { background: white; color: #555; border-color: #ddd; font-size: .85rem; }
 .login-card .login-secondary:hover:not(:disabled) { background: #f4f4f1; }
 .login-home { display: inline-block; margin-top: 32px; }
+.login-modes { display: flex; gap: 8px; margin-top: 24px; }
+.login-modes button { flex: 1; }
+.login-modes button[aria-pressed=true] { background: #edf6ff; color: #176bb5; border-color: #2383e2; }
+.login-password-section { border-top: 1px solid #eee; margin-top: 28px; padding-top: 24px; }
+.login-card h2 { font-size: 1.1rem; }
+.login-card .login-text-button { color: #176bb5; background: none; border: 0; padding: 8px 0; margin-bottom: 16px; font-size: .85rem; text-align: left; }
+.login-card .login-text-button:hover:not(:disabled) { background: none; text-decoration: underline; }
 .login-card [role=alert] { color: #ad3028; }
 .login-card [role=status] { padding: 12px; background: #edf6ff; border-radius: 7px; }
 @media (max-width: 480px) { .login-page { padding: 32px 16px 60px; } .login-card { padding: 28px 22px; } }

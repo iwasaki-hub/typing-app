@@ -1,10 +1,36 @@
-import { useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from '../features/auth/context'
-import { sendLoginLink } from '../api/auth'
+import { signInWithPassword, registerWithPassword, requestPasswordReset, getLoginLinkRetryAt } from '../api/auth'
+import { LOGIN_RESEND_KEY } from '../features/auth/loginLink'
+import { validatePassword } from '../features/auth/password'
 import './LoginPage.css'
+
+function PasswordForm() {
+  const helpId = useId()
+  const { savePassword } = useAuth()
+  const [password, setPassword] = useState('')
+  const [confirmation, setConfirmation] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [notice, setNotice] = useState('')
+  const [error, setError] = useState('')
+  const pending = useRef(false)
+  async function save() {
+    if (pending.current) return
+    pending.current = true; setBusy(true); setError(''); setNotice('')
+    try { validatePassword(password, confirmation); await savePassword(password); setPassword(''); setConfirmation(''); setNotice('パスワードを保存しました。次回からメールアドレスとパスワードでログインできます。') }
+    catch (error) { setError(error instanceof Error ? error.message : 'パスワードを保存できませんでした。') }
+    finally { pending.current = false; setBusy(false) }
+  }
+  return <section className="login-password-section" aria-label="パスワードの設定"><h2>パスワードを設定・変更</h2><form onSubmit={(event) => { event.preventDefault(); void save() }}>
+    <label>新しいパスワード<input type="password" required minLength={8} maxLength={128} autoComplete="new-password" aria-describedby={helpId} disabled={busy} value={password} onChange={(event) => setPassword(event.target.value)} /></label>
+    <p id={helpId} className="login-help">8文字以上128文字以下で設定してください。英字・数字・記号の組み合わせをおすすめします。</p>
+    <label>新しいパスワード（確認）<input type="password" required minLength={8} maxLength={128} autoComplete="new-password" aria-describedby={`${helpId}-confirm`} disabled={busy} value={confirmation} onChange={(event) => setConfirmation(event.target.value)} /></label>
+    <p id={`${helpId}-confirm`} className="login-help">上と同じパスワードを、もう一度入力してください。</p><button type="submit" disabled={busy}>{busy ? '保存中…' : 'パスワードを保存する'}</button>
+  </form>{error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}</section>
+}
 
 function ProfileForm({ initialName }: { initialName: string }) {
   const { logout, saveDisplayName } = useAuth()
@@ -20,46 +46,79 @@ function ProfileForm({ initialName }: { initialName: string }) {
     finally { pending.current = false; setBusy(false) }
   }
   return <>
-    <form onSubmit={(event) => { event.preventDefault(); void perform(async () => { await saveDisplayName(name); setNotice('表示名を保存しました。ナビゲーションにも反映されました。') }) }}>
-      <label>表示名<input required maxLength={20} autoComplete="nickname" value={name} disabled={busy} onChange={(event) => setName(event.target.value)} placeholder="あなたの名前" /></label>
-      <p className="login-help">1〜20文字。ナビゲーションに表示し、ランキング投稿の初期表示名として使います。</p>
-      <button type="submit" disabled={busy}>{busy ? '処理中…' : '表示名を保存する'}</button>
-    </form>
-    {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
+    <form onSubmit={(event) => { event.preventDefault(); void perform(async () => { await saveDisplayName(name); setNotice('表示名を保存しました。') }) }}>
+      <label>表示名<input required maxLength={20} autoComplete="nickname" value={name} disabled={busy} onChange={(event) => setName(event.target.value)} placeholder="あなたの名前" /></label><button type="submit" disabled={busy}>{busy ? '処理中…' : '表示名を保存する'}</button>
+    </form>{error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
+    <PasswordForm />
     <div className="login-links"><Link to="/dashboard">ダッシュボードへ →</Link><button className="login-secondary" disabled={busy} onClick={() => void perform(logout)}>ログアウト</button></div>
   </>
 }
 
-export default function LoginPage({ profile = false }: { profile?: boolean }) {
-  const { session, ready, error: authError, displayName } = useAuth()
+function CredentialsForm() {
+  const helpId = useId()
+  const [mode, setMode] = useState<'login' | 'register' | 'forgot'>('login')
   const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmation, setConfirmation] = useState('')
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
+  const [retryAt, setRetryAt] = useState(getLoginLinkRetryAt)
+  const [now, setNow] = useState(Date.now)
   const pending = useRef(false)
-  if (ready && !authError && session && !profile) return <Navigate to="/dashboard" replace />
-  if (ready && !authError && !session && profile) return <Navigate to="/login" replace />
-  async function login() {
+  useEffect(() => {
+    const refresh = () => { setNow(Date.now()); setRetryAt(getLoginLinkRetryAt()) }
+    const onStorage = (event: StorageEvent) => { if (event.key === LOGIN_RESEND_KEY || event.key === null) refresh() }
+    const timer = window.setInterval(refresh, 1000)
+    window.addEventListener('storage', onStorage); document.addEventListener('visibilitychange', refresh)
+    return () => { window.clearInterval(timer); window.removeEventListener('storage', onStorage); document.removeEventListener('visibilitychange', refresh) }
+  }, [])
+  const remaining = Math.max(0, Math.ceil((retryAt - now) / 1000))
+  function changeMode(next: typeof mode) { setMode(next); setPassword(''); setConfirmation(''); setError(''); setNotice('') }
+  async function submit() {
     if (pending.current) return
-    pending.current = true; setBusy(true); setNotice(''); setError('')
-    try { await sendLoginLink(email); setNotice('ログイン用リンクを送信しました。このブラウザでメールのリンクを開いてください。届かない場合は迷惑メールも確認してください。') }
-    catch (error) { setError(error instanceof Error ? error.message : 'ログイン用リンクを送信できませんでした。') }
-    finally { pending.current = false; setBusy(false) }
+    pending.current = true; setBusy(true); setError(''); setNotice('')
+    try {
+      if (mode === 'login') await signInWithPassword(email, password)
+      else if (mode === 'register') {
+        validatePassword(password, confirmation)
+        if (!name.trim()) throw new Error('表示名を入力してください。')
+        const loggedIn = await registerWithPassword(email, password, name)
+        setNotice(loggedIn ? '登録しました。' : '確認メールを受け取った場合は、メール内のリンクを開いて登録を完了してください。登録済みの方はログインまたはパスワード再設定をご利用ください。')
+      } else {
+        await requestPasswordReset(email)
+        setNotice('対象のアカウントがある場合、パスワード設定用のメールを送信しました。このブラウザでリンクを開いてください。')
+      }
+      setPassword(''); setConfirmation('')
+    } catch (error) { setError(error instanceof Error ? error.message : '認証処理に失敗しました。') }
+    finally { pending.current = false; setBusy(false); setNow(Date.now()); setRetryAt(getLoginLinkRetryAt()) }
   }
-  return <main id="main" tabIndex={-1} className="login-page">
-    <div className="login-card">
-      <span className="login-icon"><FontAwesomeIcon icon={session ? faUser : faEnvelope} aria-hidden="true" /></span>
-      <h1>{session ? 'あなたのプロフィール' : 'Typing にログイン'}</h1>
-      <p>{session ? '表示名を設定して、毎日の練習を続けましょう。' : 'メールのリンクから、かんたんにログイン。'}</p>
-      {!ready ? <p role="status">ログイン状態を確認しています…</p> : authError ? <p role="alert">{authError}</p> : session ? <ProfileForm key={session.user.id} initialName={displayName} /> : <>
-        <form onSubmit={(event) => { event.preventDefault(); void login() }}>
-          <label>メールアドレス<input type="email" required maxLength={254} autoComplete="email" value={email} disabled={busy} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" /></label>
-          <button type="submit" disabled={busy}>{busy ? '送信中…' : 'ログインリンクを送る'}</button>
-        </form>
-        {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
-        <p className="login-help">初めての方はアカウントが作成されます。ログイン後はダッシュボードに移動します。「プロフィール」から表示名を登録してください。</p>
-      </>}
-      <Link className="login-home" to="/">← ホームに戻る</Link>
-    </div>
-  </main>
+  return <>
+    <div className="login-modes" role="group" aria-label="認証方法"><button type="button" className="login-secondary" aria-pressed={mode === 'login'} disabled={busy} onClick={() => changeMode('login')}>ログイン</button><button type="button" className="login-secondary" aria-pressed={mode === 'register'} disabled={busy} onClick={() => changeMode('register')}>新規登録</button></div>
+    {mode === 'forgot' && <h2>パスワードを再設定</h2>}
+    <form onSubmit={(event) => { event.preventDefault(); void submit() }}>
+      {mode === 'register' && <label>表示名<input required maxLength={20} autoComplete="nickname" value={name} disabled={busy} onChange={(event) => setName(event.target.value)} /></label>}
+      <label>メールアドレス<input type="email" required maxLength={254} autoComplete="email" value={email} disabled={busy} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" /></label>
+      {mode !== 'forgot' && <><label>パスワード<input type="password" required minLength={mode === 'register' ? 8 : undefined} maxLength={128} autoComplete={mode === 'register' ? 'new-password' : 'current-password'} aria-describedby={helpId} value={password} disabled={busy} onChange={(event) => setPassword(event.target.value)} /></label><p id={helpId} className="login-help">{mode === 'register' ? '8文字以上128文字以下で設定してください。英字・数字・記号の組み合わせをおすすめします。' : '登録済みのパスワードを入力してください。新しく設定する場合の基準は8文字以上128文字以下です。'}</p></>}
+      {mode === 'register' && <><label>パスワード（確認）<input type="password" required minLength={8} maxLength={128} autoComplete="new-password" aria-describedby={`${helpId}-confirm`} value={confirmation} disabled={busy} onChange={(event) => setConfirmation(event.target.value)} /></label><p id={`${helpId}-confirm`} className="login-help">上と同じパスワードを、もう一度入力してください。</p></>}
+      <button type="submit" disabled={busy || (mode !== 'login' && remaining > 0)}>{busy ? '処理中…' : mode !== 'login' && remaining > 0 ? `再送まで ${remaining}秒` : mode === 'login' ? 'ログインする' : mode === 'register' ? 'アカウントを作成する' : 'パスワード設定メールを送る'}</button>
+    </form>
+    {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
+    <button type="button" className="login-text-button" disabled={busy} onClick={() => changeMode(mode === 'forgot' ? 'login' : 'forgot')}>{mode === 'forgot' ? 'ログインに戻る' : 'パスワードを忘れた方・初めて設定する方'}</button>
+    <p className="login-help">通常のログインではメールを送信しません。新規登録の確認とパスワード再設定はメールが届く必要があります。以前メールリンクで利用していた方は、ログイン済みならプロフィールからパスワードを設定できます。</p>
+  </>
+}
+
+export default function LoginPage({ profile = false, reset = false }: { profile?: boolean; reset?: boolean }) {
+  const { session, ready, error, displayName, isPasswordRecovery } = useAuth()
+  if (ready && !error && session && !profile && !reset) return <Navigate to={isPasswordRecovery ? '/reset-password' : '/dashboard'} replace />
+  if (ready && !error && !session && profile) return <Navigate to="/login" replace />
+  return <main id="main" tabIndex={-1} className="login-page"><div className="login-card">
+    <span className="login-icon"><FontAwesomeIcon icon={profile ? faUser : faLock} aria-hidden="true" /></span>
+    <h1>{reset ? 'パスワードの設定' : profile ? 'あなたのプロフィール' : 'Typing にログイン'}</h1>
+    <p>{reset ? '新しいパスワードを保存してください。' : profile ? '表示名やパスワードを設定できます。' : 'メールアドレスとパスワードで、練習の続きを。'}</p>
+    {!ready ? <p role="status">ログイン状態を確認しています…</p> : error ? <p role="alert">{error}</p> : reset ? session ? <><PasswordForm /><Link to="/dashboard">ダッシュボードへ →</Link></> : <p role="alert">有効な設定リンクを開いてください。期限切れの場合は <Link to="/login">ログインページ</Link> から再度メールを送信してください。</p> : profile ? <ProfileForm key={session?.user.id} initialName={displayName} /> : <CredentialsForm />}
+    <Link className="login-home" to="/">← ホームに戻る</Link>
+  </div></main>
 }

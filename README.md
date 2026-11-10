@@ -42,6 +42,7 @@ React Router の `BrowserRouter` を使用します。
 - `/login`: メールログイン (`LoginPage.tsx` / `LoginPage.css`)
 - `/dashboard`: ログイン後のダッシュボード (`DashboardPage.tsx` / `DashboardPage.css`)
 - `/profile`: 表示名編集・ログアウト (`LoginPage.tsx` のプロフィール表示)
+- `/reset-password`: パスワード設定 (`LoginPage.tsx` のパスワード設定表示)
 - その他: 404 案内 (`NotFoundPage.tsx` / `NotFoundPage.css`)
 
 ルート定義は `src/App.tsx` に集約しています。共通ナビゲーションは `Link` / `NavLink` を使い、
@@ -89,7 +90,7 @@ Font Awesome は使用する無料アイコンだけをインポートしてい�
 
 - `/ranking` で30・60・120秒別に、各ユーザーのベスト記録を上位100人まで表示します。
 - WPM 降順、正確率降順、登録日時昇順で並びます。同じ条件の最良記録を1人1件に絞ります。
-- メールのログインリンクで認証し、同じブラウザに保存された履歴と公開表示名を選んで投稿します。投稿は自動ではありません。
+- メールアドレス＋パスワードで認証し、同じブラウザに保存された履歴と公開表示名を選んで投稿します。投稿は自動ではありません。
 - メールアドレスはスコアテーブルに保存しません。公開されるのはユーザーID・表示名・成績・登録日時です。
 - 計測5秒以上、1〜300 WPM、入力完了または時間切れの結果のみ対象です。旧履歴は打鍵数がないため対象外です。
 - WPM と正確率は DB の生成列で算出します。RLS で本人の投稿のみ許可し、更新・削除はクライアントに許可しません。
@@ -98,33 +99,59 @@ Font Awesome は使用する無料アイコンだけをインポートしてい�
 - `supabase/schema/typing-ranking.sql` は適用済みのスキーマ定義です。別プロジェクトでは SQL Editor から一度適用してください。
 - `scripts/check-ranking.sql` は検証用ユーザー・記録をトランザクション内で作り、権限・集計をテスト後すべてロールバックします。
 
-### メールログインの設定
+### メールアドレス＋パスワード認証
 
-ナビゲーションの「ログイン」から専用ページを開き、メールでログインします。
-ログインすると `/dashboard` に移動します。表示名が未登録なら「名前を設定」から1〜20文字の名前を登録してください。
-ダッシュボードにはブラウザ内の履歴集計・練習履歴・練習／ランキング／プロフィールへのリンクを表示します。
-未ログインで `/dashboard` や `/profile` を開くと、認証状態の確認後に `/login` へ移動します。
-名前は Supabase Auth の `user_metadata.display_name` に保存し、ナビゲーションとランキング投稿の初期値に使用します。
-このメタデータは表示専用です。権限判定には使用しません。
-ログイン状態は共通の `AuthProvider` で購読し、ページ遷移・再読み込み・別タブのログイン／ログアウトも反映します。
-各画面では `useAuth()` から `session`・`user`・`isAuthenticated`・`ready`・`error`・`displayName` を参照します。
-ログアウトは `logout()`、表示名の保存は `saveDisplayName(name)` を使い、Context 経由で状態を共有します。
-Context はメモリ内の共有状態です。再読み込み時は Supabase SDK が保存済みセッションを復元し、Context を更新します。
-認証トークンを独自に localStorage へ保存する処理は追加していません。
-プロフィール画面からログアウトできます。公開済みのランキング表示名はプロフィール変更では書き換わりません。
-メールリンクは既存設定の `/ranking` で受け取り、認証完了後にアプリ内で `/dashboard` に移動します。
-`/dashboard` や `/login` を Supabase のリダイレクトURLに追加する必要はありません。
+通常のログインは Supabase Auth の `signInWithPassword` を使い、メールは送信しません。
+`/login` の「新規登録」では表示名・メールアドレス・パスワードを入力します。
+メール確認が有効な場合、確認メールから登録を完了してからログインしてください。
+確認設定を無効にする変更は行っていません。
 
-[Supabase URL Configuration](https://supabase.com/dashboard/project/tfhrkovrmxxeoaueqxin/auth/url-configuration) で次を設定します。
+既存のメールリンク利用者は次の方法で移行できます。
 
-- Site URL: `https://typing-app-orpin.vercel.app`
-- Redirect URLs: `https://typing-app-orpin.vercel.app/ranking` と、実際に利用するローカル URL（例 `http://localhost:5173/ranking`）
+- ログイン済み：`/profile` の「パスワードを設定・変更」で保存します。
+- ログアウト済み：`/login` の「パスワードを忘れた方・初めて設定する方」から設定メールを受け取ります。
+- メールのリンクを開くと `/reset-password` に移動し、新しいパスワードを保存できます。
+- 新しいパスワードは8〜128文字、確認入力との一致を検証します。パスワードの保存・検証は Supabase Auth が行います。アプリ独自のテーブル・ブラウザ保存領域には保管しません。
 
-Email プロバイダーを有効にし、Magic Link のメールテンプレートはログインリンクを含む標準形式を使用してください。
-未登録のリダイレクト先は Site URL にフォールバックします。Preview URL も利用するなら個別に許可してください。
-Supabase の標準メール送信には宛先制限・送信上限があるため、一般公開時は
-[Custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp) を設定してください。
-こちらから実メールの送信確認は行っていません。自分のメールでリンク受信→ログイン→投稿を確認してください。
+通常のログイン後は `/dashboard` に移動します。表示名は `/profile` から変更できます。
+未ログインで `/dashboard` や `/profile` を開くとログインページへ移動します。
+名前は表示専用の `user_metadata.display_name` に保存し、権限判定には使用しません。
+
+状態は `AuthProvider` が購読し、`useAuth()` から `session`・`user`・`isAuthenticated`・`ready`・`error`・`displayName` を参照します。
+操作は `logout()`・`saveDisplayName(name)`・`savePassword(password)` を利用します。
+`PASSWORD_RECOVERY` の際は `isPasswordRecovery` でパスワード設定画面へ誘導し、保存完了で解除します。
+再読み込み時は Supabase SDK が保存済みセッションを復元します。認証トークンを独自に保存する処理はありません。
+
+### Supabase のメール・URL設定
+
+[URL Configuration](https://supabase.com/dashboard/project/tfhrkovrmxxeoaueqxin/auth/url-configuration)：
+
+- Site URL：`https://typing-app-orpin.vercel.app`
+- Redirect URLs：`https://typing-app-orpin.vercel.app/ranking` と `http://localhost:5173/ranking`（実際の開発URLに合わせる）
+
+登録確認・パスワード再設定のメールは既存の許可済み `/ranking` で受け取ります。
+`type=recovery` の場合は `/reset-password`、それ以外は `/dashboard` へアプリ内で移動します。
+Supabase 標準の確認・パスワード再設定メールテンプレートを利用してください。
+`/dashboard` や `/reset-password` のリダイレクトURL追加は不要です。
+
+### メール送信上限について
+
+パスワードによる通常ログインでは送信枠を消費しません。新規登録の確認メールとパスワード再設定メールには引き続き上限があります。
+SMTP 未設定で制限中の場合、パスワード未設定の既存ユーザーは制限解除または SMTP 設定後に設定メールを受信する必要があります。
+通常ログインはメール再送の60秒待機に影響されません。
+
+メール送信操作は成功・HTTP 429 時に60秒の待機を設け、同じオリジンの保存領域に期限のみ保持します。
+メールアドレス・パスワード・トークンは待機データに含みません。待機終了はサーバー制限解除を保証しません。
+ローカルと公開サイトが同じプロジェクトを使う場合、サーバーの送信枠も共有します。
+
+一般公開時は [Custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp) を設定してください。
+
+1. メール配信サービスで送信元を認証し、SMTP 接続情報を取得します。
+2. [SMTP Settings](https://supabase.com/dashboard/project/tfhrkovrmxxeoaueqxin/auth/smtp) に設定します。SMTP パスワードは Vite の環境変数やリポジトリに追加しません。
+3. [Rate Limits](https://supabase.com/dashboard/project/tfhrkovrmxxeoaueqxin/auth/rate-limits) と配信サービス側の送信枠を確認します。
+
+認証テスト：`npm run test:auth`（SDK をスタブ化して実メールを送信せず、ログイン・再ログイン・登録・再設定・再送制限を検証）。
+実アカウントではパスワードを本人が設定して、ログイン→ログアウト→再ログインを確認してください。
 
 ## Vite の参考情報
 

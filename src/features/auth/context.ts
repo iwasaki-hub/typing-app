@@ -8,8 +8,10 @@ export interface AuthContextValue {
   ready: boolean
   error: string
   displayName: string
+  isPasswordRecovery: boolean
   logout: () => Promise<void>
   saveDisplayName: (name: string) => Promise<void>
+  savePassword: (password: string) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined)
