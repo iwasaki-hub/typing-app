@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect, useRef } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from './features/auth/context'
 import { authCallbackDestination } from './features/auth/password'
+import { m } from 'motion/react'
 import Navigation from './components/Navigation'
 import TypingPage from './pages/TypingPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -40,6 +41,7 @@ export default function App() {
     <div id="top">
       <a className="app-skip" href="#main">本文へスキップ</a>
       <Navigation key={pathname} />
+      <m.div key={pathname} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/practice" element={<TypingPage />} />
@@ -50,6 +52,7 @@ export default function App() {
         <Route path="/ranking" element={<Suspense fallback={<main id="main" tabIndex={-1}><p role="status">ランキングを読み込んでいます…</p></main>}><RankingPage /></Suspense>} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      </m.div>
     </div>
   )
 }

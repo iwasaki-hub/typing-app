@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faXmark, faHouse, faKeyboard, faCircleInfo, faBookOpen, faArrowRight, faTrophy } from '@fortawesome/free-solid-svg-icons'
@@ -15,6 +15,12 @@ export default function Navigation() {
   const [open, setOpen] = useState(false)
   const toggle = useRef<HTMLButtonElement>(null)
   const { session, ready, displayName } = useAuth()
+  useEffect(() => {
+    if (!open) return
+    const closeOnScroll = () => setOpen(false)
+    window.addEventListener('scroll', closeOnScroll, { passive: true, once: true })
+    return () => window.removeEventListener('scroll', closeOnScroll)
+  }, [open])
   return (
     <header className="site-header" onKeyDown={(event) => {
       if (event.key === 'Escape' && open) {

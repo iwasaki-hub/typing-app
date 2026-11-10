@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import { m } from 'motion/react'
+import MotionLink from '../components/MotionLink'
 import ConnectionStatus from '../components/ConnectionStatus'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,14 +17,14 @@ export default function HomePage() {
       
       <main id="main" tabIndex={-1}>
         <section className="home-hero">
-          <div>
+          <m.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <p className="home-eyebrow">● LITTLE BY LITTLE, KEY BY KEY.</p>
             <h1>ことばを打つ。<br />毎日が、<br /><span>少し軽くなる。</span></h1>
             <p className="home-lead">考えたことが、すっと指先から伝わる。<br />まずは短い一文から、タイピングを楽しもう。</p>
-            <div className="home-hero-actions"><Link className="home-button" to="/practice">さっそく試してみる <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></Link><a href="#how-to">使い方を見る <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden="true" /></a></div>
+            <div className="home-hero-actions"><MotionLink whileHover={{ y: -3, boxShadow: '0 8px 20px #0876d933' }} whileTap={{ scale: 0.97 }} className="home-button" to="/practice">さっそく試してみる <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></MotionLink><a href="#how-to">使い方を見る <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden="true" /></a></div>
             <p className="home-caption">登録不要。練習ページですぐに体験できます。</p>
-          </div>
-          <div className="home-art" aria-hidden="true">
+          </m.div>
+          <m.div initial={{ opacity: 0, y: 24, rotate: -2 }} animate={{ opacity: 1, y: 0, rotate: 0 }} transition={{ duration: 0.65, delay: 0.1 }} className="home-art" aria-hidden="true">
             <span className="home-art-note">Make room<br />for a little practice.</span>
             <svg viewBox="0 0 500 420" fill="none">
               <path d="M64 300C28 232 74 117 177 89C259 66 309 121 352 155C403 195 460 214 441 297C421 378 126 402 64 300Z" fill="#f4f3ef" />
@@ -38,16 +40,16 @@ export default function HomePage() {
               <path d="M92 127L98 111L104 127L120 133L104 139L98 155L92 139L76 133Z" fill="#2584ea" />
             </svg>
             <span className="home-floating-key"><FontAwesomeIcon icon={faArrowTurnDown} /></span><span className="home-art-label">A little practice. A little progress.</span>
-          </div>
+          </m.div>
         </section>
         
         <section className="home-features" id="features">
           <p className="home-eyebrow">LESS NOISE. MORE FOCUS.</p><h2>気負わず、<br />打つことだけに集中。</h2>
-          <div className="home-feature-grid">
-            <article><span><FontAwesomeIcon icon={faFont} aria-hidden="true" /></span><h3>短い一文から。</h3><p>長い時間を用意しなくても大丈夫。<br />ちょっとした隙間に、指先を動かそう。</p></article>
-            <article><span><FontAwesomeIcon icon={faKeyboard} aria-hidden="true" /></span><h3>開いたら、すぐに。</h3><p>インストールも、アカウント登録も不要。<br />ブラウザがあれば、それだけで。</p></article>
-            <article><span><FontAwesomeIcon icon={faArrowTrendUp} aria-hidden="true" /></span><h3>間違いも、一歩に。</h3><p>入力した文字を、その場でチェック。<br />焦らず、何度でも試してみよう。</p></article>
-          </div>
+          <m.div className="home-feature-grid" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.15 }} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.09 } } }}>
+            <m.article variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }} whileHover={{ y: -4 }}><span><FontAwesomeIcon icon={faFont} aria-hidden="true" /></span><h3>短い一文から。</h3><p>長い時間を用意しなくても大丈夫。<br />ちょっとした隙間に、指先を動かそう。</p></m.article>
+            <m.article variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }} whileHover={{ y: -4 }}><span><FontAwesomeIcon icon={faKeyboard} aria-hidden="true" /></span><h3>開いたら、すぐに。</h3><p>インストールも、アカウント登録も不要。<br />ブラウザがあれば、それだけで。</p></m.article>
+            <m.article variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }} whileHover={{ y: -4 }}><span><FontAwesomeIcon icon={faArrowTrendUp} aria-hidden="true" /></span><h3>間違いも、一歩に。</h3><p>入力した文字を、その場でチェック。<br />焦らず、何度でも試してみよう。</p></m.article>
+          </m.div>
         </section>
         <section className="home-how" id="how-to"><div><p className="home-eyebrow">HOW TO START</p><h2>はじめの一歩は、<br />とてもシンプル。</h2></div><ol><li><span>01</span><div><h3>英文を読む</h3><p>練習ページに表示された一文を見てみよう。</p></div></li><li><span>02</span><div><h3>そのまま入力する</h3><p>キーボードを英字入力に切り替えて、一文字ずつ。</p></div></li><li><span>03</span><div><h3>もう一度、やってみる</h3><p>リセットして繰り返そう。速さよりも、まずは正確に。</p></div></li></ol></section>
         <section className="home-closing"><span aria-hidden="true"><FontAwesomeIcon icon={faWandMagicSparkles} /></span><h2>今日の一文を、ここから。</h2><Link className="home-button" to="/practice">タイピングを試す <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></Link></section>

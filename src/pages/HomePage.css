@@ -16,6 +16,7 @@
 .home-page .home-hero-actions { display: flex; align-items: center; gap: 24px; margin-top: 28px; font-size: 13px; }
 .home-page .home-caption { font-size: 11px; color: #808079; margin-top: 13px; }
 .home-page .home-art { position: relative; padding: 22px 0; }
+.home-page .home-art::before { content: ''; position: absolute; inset: 10% 0; background: radial-gradient(ellipse, #eaf4ff80, transparent 70%); z-index: -1; border-radius: 50%; }
 .home-page .home-art svg { width: 100%; display: block; }
 .home-page .home-art-note { position: absolute; top: 3px; left: 47px; font-family: Georgia, serif; font-style: italic; font-size: 21px; line-height: 1.25; transform: rotate(-8deg); }
 .home-page .home-floating-key { position: absolute; top: 54px; right: 28px; font-size: 28px; padding: 0 16px; background: #fff; border: 2px solid #222; border-radius: 8px; box-shadow: 4px 4px #222; transform: rotate(12deg); }

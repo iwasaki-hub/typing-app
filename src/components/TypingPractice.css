@@ -9,7 +9,6 @@
 .typing-sound[aria-pressed="false"] svg { color: #728096; }
 .typing-sound[aria-pressed="true"] svg { color: #176bb5; }
 .typing-actions [data-icon="rotate-left"] { color: #8462b3; }
-.typing-result [data-icon="flag-checkered"] { color: #248265; }
 .typing-volume input { width: 85px; accent-color: #0876d9; }
 .typing-volume span { min-width: 30px; }
 .typing-stats { display: grid; grid-template-columns: repeat(4, 1fr); padding: 0 28px; margin: 0; gap: 12px; }
@@ -19,7 +18,7 @@
 .typing-stats small { font-size: 12px; font-weight: 400; }
 .typing-stats .typing-urgent { color: #b52d2d; }
 .typing-body { padding: 24px 28px; }
-.typing-text { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Courier New', monospace; font-size: clamp(22px, 3vw, 32px); line-height: 1.65; color: #777972; margin: 18px 0 12px; }
+.typing-text { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Courier New', monospace; font-size: clamp(22px, 3vw, 32px); font-weight: 600; line-height: 1.65; color: #555850; margin: 18px 0 12px; }
 .typing-correct { color: #166534; }
 .typing-incorrect { color: #b91c1c; background: #ffe3e3; text-decoration: underline; }
 .typing-cursor { border-bottom: 3px solid #0876d9; background: #eaf4ff; }
@@ -29,9 +28,7 @@
 .typing-input:disabled { background: #f5f5f3; }
 .typing-progress-label { display: block; font-size: 12px; color: #666; margin-top: 20px; }
 .typing-progress-label progress { display: block; width: 100%; height: 8px; margin-top: 8px; accent-color: #0876d9; }
-.typing-result { margin-top: 24px; background: #eaf6ed; border: 1px solid #c8e7d0; border-radius: 8px; padding: 18px; color: #19492b; }
-.home-page .typing-result h3 { margin: 0 0 8px; }
-.typing-result p { font-size: 14px; margin: 0; }
+.typing-result-open { margin-top: 24px; padding: 10px 16px; color: #176bb5; background: #edf6ff; border: 1px solid #c8dff6; border-radius: 7px; }
 .typing-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; font-size: 13px; }
 .typing-actions button { display: inline-flex; align-items: center; gap: 8px; }
 .typing-actions .typing-next { margin-left: auto; color: white; background: #0876d9; border-color: #0876d9; }

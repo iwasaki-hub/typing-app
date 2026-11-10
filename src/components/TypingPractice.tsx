@@ -1,7 +1,8 @@
 import { useEffect, useReducer, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faRotateLeft, faVolumeHigh, faVolumeXmark, faFlagCheckered } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight, faRotateLeft, faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons'
 import type { PracticeQuote } from '../api/quotes'
+import TypingResultModal from './TypingResultModal'
 import { newSession, sessionMetrics, sessionReducer } from '../features/typing/session'
 import { useTypingSound } from '../features/typing/useTypingSound'
 import { typingHistory } from '../features/typing/history'
@@ -14,6 +15,9 @@ export default function TypingPractice({ quote, loading, notice, onNext }: {
   const [duration, setDuration] = useState(60)
   const [inputNotice, setInputNotice] = useState('')
   const field = useRef<HTMLInputElement>(null)
+  const resultButton = useRef<HTMLButtonElement>(null)
+  const focusAfterLoad = useRef(false)
+  const [dismissedResult, setDismissedResult] = useState<typeof session | null>(null)
   const sound = useTypingSound()
   const text = quote.text
   const running = session.status === 'running'
@@ -41,10 +45,26 @@ export default function TypingPractice({ quote, loading, notice, onNext }: {
   }, [running, duration])
 
   function reset() {
+    focusAfterLoad.current = true
+    field.current?.focus()
     dispatch({ type: 'reset' })
     setInputNotice('')
-    field.current?.focus()
   }
+
+  function nextQuestion() {
+    if (loading || running) return
+    focusAfterLoad.current = true
+    dispatch({ type: 'reset' })
+    setInputNotice('')
+    onNext()
+  }
+
+  useEffect(() => {
+    if (!loading && session.status === 'ready' && focusAfterLoad.current) {
+      focusAfterLoad.current = false
+      field.current?.focus()
+    }
+  }, [loading, session.status, text])
 
   function handleInput(value: string, composing: boolean) {
     if (composing) { setInputNotice('英字入力に切り替えてください。'); return }
@@ -81,11 +101,12 @@ export default function TypingPractice({ quote, loading, notice, onNext }: {
         <input ref={field} id="typing-input" className="typing-input" value={session.input} disabled={loading || finished} onChange={(event) => handleInput(event.target.value, (event.nativeEvent as InputEvent).isComposing)} onSelect={(event) => { const target = event.currentTarget; target.setSelectionRange(target.value.length, target.value.length) }} onPaste={(event) => { event.preventDefault(); setInputNotice('練習中は貼り付けできません。一文字ずつ入力してください。') }} onDrop={(event) => event.preventDefault()} onCompositionEnd={() => setInputNotice('英字入力に切り替え、一文字ずつ入力してください。')} autoComplete="off" autoCapitalize="off" spellCheck={false} maxLength={text.length} aria-describedby="typing-help" placeholder={loading ? '英文を読み込んでいます…' : 'ここに英文を入力してください'} />
         <p className="typing-notice" id="typing-help" role="status">{inputNotice || (running ? 'Backspace で修正できます。修正前のミスも正確率に含まれます。' : '英字入力で練習してください。貼り付けは無効です。')}</p>
         <label className="typing-progress-label">進み具合 {metrics.progress}%<progress max="100" value={metrics.progress} /></label>
-        {finished && <div className="typing-result" role="status"><h3><FontAwesomeIcon icon={faFlagCheckered} aria-hidden="true" /> {session.reason === 'completed' ? 'クリア！ おつかれさまでした。' : session.reason === 'timeout' ? '時間になりました。' : '練習を終了しました。'}</h3><p>{session.elapsed.toFixed(1)}秒 · {metrics.wpm} WPM · 正確率 {metrics.accuracy}% · 正しく入力 {metrics.correct}/{text.length}文字</p></div>}
+        {finished && <button ref={resultButton} type="button" className="typing-result-open" onClick={() => setDismissedResult(null)}>結果を表示する</button>}
+        {finished && dismissedResult !== session && <TypingResultModal session={session} wpm={metrics.wpm} accuracy={metrics.accuracy} correct={metrics.correct} total={text.length} loading={loading} onNext={nextQuestion} onRetry={reset} onDismiss={() => setDismissedResult(session)} returnFocus={resultButton} />}
         <div className="typing-actions">
           <button type="button" disabled={loading} onClick={reset}><FontAwesomeIcon icon={faRotateLeft} aria-hidden="true" /> 同じ文でやり直す</button>
           {running && <button type="button" onClick={() => dispatch({ type: 'stop', now: performance.now(), duration })}>ここで終了</button>}
-          <button type="button" className="typing-next" onClick={() => { dispatch({ type: 'reset' }); setInputNotice(''); onNext() }} disabled={loading || running}>{loading ? '読み込み中…' : '次の問題'} <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></button>
+          <button type="button" className="typing-next" onClick={nextQuestion} disabled={loading || running}>{loading ? '読み込み中…' : '次の問題'} <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></button>
         </div>
         <p className="typing-footnote">WPM は正しく入力した5文字を1語として換算。1文の入力完了、または制限時間で終了します。</p>
       </div>
