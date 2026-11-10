@@ -16,7 +16,6 @@ export interface TypingResult {
   correct: number
   reason: 'completed' | 'timeout' | 'stopped'
 }
-
 function isResult(value: unknown): value is TypingResult {
   if (!value || typeof value !== 'object') return false
   const item = value as Record<string, unknown>
@@ -43,13 +42,13 @@ export function parseHistory(raw: string | null): TypingResult[] {
 type Snapshot = { results: TypingResult[]; error: string }
 const empty: Snapshot = { results: [], error: '' }
 
-export function createHistoryStore(getStorage: () => Pick<Storage, 'getItem' | 'setItem'>) {
+export function createHistoryStore(getStorage: () => Pick<Storage, 'getItem' | 'setItem'>, key = HISTORY_KEY) {
   let snapshot = empty
   let initialized = false
   const listeners = new Set<() => void>()
   function publish(next: Snapshot) { snapshot = next; listeners.forEach((listener) => listener()) }
   function read(): Snapshot {
-    try { return { results: parseHistory(getStorage().getItem(HISTORY_KEY)), error: '' } }
+    try { return { results: parseHistory(getStorage().getItem(key)), error: '' } }
     catch { return { results: [], error: '保存済みの履歴を読み込めませんでした。ブラウザの保存設定を確認してください。' } }
   }
   return {
@@ -60,11 +59,22 @@ export function createHistoryStore(getStorage: () => Pick<Storage, 'getItem' | '
     getServerSnapshot: () => empty,
     subscribe(listener: () => void) { listeners.add(listener); return () => { listeners.delete(listener) } },
     refresh() { initialized = true; publish(read()) },
+    merge(incoming: TypingResult[]) {
+      const latest = read()
+      const results = [...new Map([...incoming, ...latest.results].filter(isResult).map((item) => [item.id, item])).values()]
+        .sort((a, b) => Date.parse(b.savedAt) - Date.parse(a.savedAt) || a.id.localeCompare(b.id)).slice(0, HISTORY_LIMIT)
+      if (JSON.stringify(results) === JSON.stringify(snapshot.results)) return
+      try {
+        getStorage().setItem(key, JSON.stringify(results))
+        initialized = true
+        publish({ results, error: '' })
+      } catch { publish({ results, error: '履歴を端末に保存できません。ブラウザの保存設定や空き容量を確認してください。' }) }
+    },
     save(result: TypingResult) {
       const latest = read()
       const results = [result, ...latest.results.filter((entry) => entry.id !== result.id)].slice(0, HISTORY_LIMIT)
       try {
-        getStorage().setItem(HISTORY_KEY, JSON.stringify(results))
+        getStorage().setItem(key, JSON.stringify(results))
         initialized = true
         publish({ results, error: '' })
       } catch {
@@ -73,5 +83,3 @@ export function createHistoryStore(getStorage: () => Pick<Storage, 'getItem' | '
     },
   }
 }
-
-export const typingHistory = createHistoryStore(() => window.localStorage)

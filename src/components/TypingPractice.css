@@ -3,8 +3,11 @@
 .home-page .typing-heading h2 { font-size: 20px; letter-spacing: 0; }
 .typing-language-context { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
 .typing-language-context > span:last-child { font-size: 12px; color: #666; }
-.typing-settings { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 20px 28px; font-size: 13px; }
+.typing-settings { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; padding: 20px 28px; font-size: 13px; }
 .typing-settings label { display: flex; align-items: center; gap: 8px; }
+.typing-sound-icon { width: 18px; color: #777; }
+.typing-sound-icon.is-enabled { color: #2383e2; }
+.typing-settings-break { flex-basis: 100%; height: 0; margin-block: -6px; }
 .typing-settings select, .typing-settings button, .typing-actions button { border: 1px solid #deded9; border-radius: 6px; background: white; color: #252525; padding: 9px 12px; }
 .typing-settings button[aria-pressed="true"] { color: #0867bd; background: #eaf4ff; border-color: #8cc5ff; }
 .typing-sound[aria-pressed="false"] svg { color: #728096; }
@@ -19,9 +22,12 @@
 .typing-stats small { font-size: 12px; font-weight: 400; }
 .typing-stats .typing-urgent { color: #b52d2d; }
 .typing-body { padding: 24px 28px; }
+.typing-practice[data-stats-visible="false"] .typing-settings { padding-bottom: 8px; }
+.typing-practice[data-stats-visible="false"] .typing-body { padding-top: 4px; }
 .typing-text { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Courier New', monospace; font-size: clamp(22px, 3vw, 32px); font-weight: 600; line-height: 1.65; color: #555850; margin: 18px 0 12px; }
 .typing-correct { color: #166534; }
 .typing-text-korean { font-family: 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; letter-spacing: .03em; line-height: 1.9; word-break: keep-all; }
+.typing-text[lang="en"] { word-spacing: -0.12em; }
 .typing-incorrect { color: #b91c1c; background: #ffe3e3; text-decoration: underline; }
 .typing-cursor { border-bottom: 3px solid #0876d9; background: #eaf4ff; }
 .typing-credit, .typing-notice, .typing-footnote { font-size: 12px; color: #686863; }

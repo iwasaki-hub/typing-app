@@ -6,7 +6,7 @@ import TypingResultModal from './TypingResultModal'
 import LanguageBadge, { LanguageFlag } from './LanguageBadge'
 import { newSession, sessionMetrics, sessionReducer } from '../features/typing/session'
 import { useTypingSound } from '../features/typing/useTypingSound'
-import { typingHistory } from '../features/typing/history'
+import { useHistory } from '../features/typing/historyContext'
 import type { PracticeLanguage } from '../features/typing/samples'
 import { durationSetting, isDuration, isEnabled, readSetting, statsVisibleSetting, writeSetting } from '../features/typing/settings'
 import './TypingPractice.css'
@@ -14,6 +14,7 @@ import './TypingPractice.css'
 export default function TypingPractice({ quote, loading, notice, onNext, onLanguageChange }: {
   quote: PracticeQuote; loading: boolean; notice: string; onNext: () => void; onLanguageChange: (language: PracticeLanguage) => void
 }) {
+  const { store: typingHistory } = useHistory()
   const [session, dispatch] = useReducer(sessionReducer, undefined, newSession)
   const [duration, setDuration] = useState(() => readSetting(durationSetting, 60, isDuration))
   useEffect(() => { writeSetting(durationSetting, duration) }, [duration])
@@ -44,7 +45,7 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
       elapsed: session.elapsed, wpm: result.wpm, accuracy: result.accuracy,
       mistakes: session.mistakes, attempts: session.attempts, correct: result.correct, reason: session.reason,
     })
-  }, [session, text, duration, language])
+  }, [session, text, duration, language, typingHistory])
 
   useEffect(() => {
     if (!running) return
@@ -103,13 +104,14 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
   }
 
   return (
-    <section className="typing-practice" id="practice" aria-labelledby="practice-title">
+    <section className="typing-practice" data-stats-visible={statsVisible} id="practice" aria-labelledby="practice-title">
       <div className="typing-heading"><h2 id="practice-title">タイピング練習</h2><div className="typing-language-context"><LanguageBadge language={language} /><span>{text.length}文字</span></div></div>
       <div className="typing-settings">
         <label>練習言語 <select value={language} disabled={running} onChange={(event) => onLanguageChange(event.target.value === 'ko' ? 'ko' : 'en')}><option value="en">🇺🇸 英語</option><option value="ko">🇰🇷 韓国語</option></select></label>
         <label>制限時間 <select value={duration} disabled={running || loading} onChange={(event) => { setDuration(Number(event.target.value)); reset() }}><option value={30}>30秒</option><option value={60}>60秒</option><option value={120}>120秒</option></select></label>
         <label>練習状況 <select value={statsVisible ? 'show' : 'hide'} onChange={(event) => setStatsVisible(event.target.value === 'show')}><option value="show">表示</option><option value="hide">非表示</option></select></label>
-        <button type="button" className="typing-sound" aria-pressed={sound.enabled} onClick={sound.toggle}><FontAwesomeIcon icon={sound.enabled ? volumeHighIcon : volumeXmarkIcon} aria-hidden="true" /> 打鍵音 {sound.enabled ? 'オン' : 'オフ'}</button>
+        <span className="typing-settings-break" aria-hidden="true" />
+        <label>打鍵音 <FontAwesomeIcon className={`typing-sound-icon${sound.enabled ? ' is-enabled' : ''}`} icon={sound.enabled ? volumeHighIcon : volumeXmarkIcon} aria-hidden="true" /><select value={sound.enabled ? 'on' : 'off'} onChange={(event) => { if ((event.target.value === 'on') !== sound.enabled) sound.toggle() }}><option value="on">ON</option><option value="off">OFF</option></select></label>
         <label>音の種類 <select value={sound.preset} onChange={(event) => sound.selectPreset(event.target.value)}>{Object.entries(sound.presets).map(([value, preset]) => <option key={value} value={value}>{preset.label}</option>)}</select></label>
         <button type="button" onClick={sound.preview} disabled={sound.volume === 0} aria-label="選択中のタイピング音を試聴する"><FontAwesomeIcon icon={volumeHighIcon} aria-hidden="true" /> 試聴</button>
         <label className="typing-volume">音量 <input type="range" min="0" max="100" value={Math.round(sound.volume * 100)} onChange={(event) => sound.setVolume(Number(event.target.value) / 100)} aria-label="タイピング音の音量" /><span>{Math.round(sound.volume * 100)}%</span></label>

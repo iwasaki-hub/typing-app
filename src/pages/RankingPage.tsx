@@ -1,10 +1,10 @@
 import { trophyIcon } from '../lib/icons'
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useAuth } from '../features/auth/context'
 import { getRanking, publishResult, rankingError, type RankingEntry } from '../api/ranking'
-import { HISTORY_KEY, typingHistory } from '../features/typing/history'
+import { useHistory } from '../features/typing/historyContext'
 import { isRankingEligible } from '../features/typing/ranking'
 import './RankingPage.css'
 
@@ -21,7 +21,7 @@ export default function RankingPage() {
   const [message, setMessage] = useState('')
   const [actionError, setActionError] = useState('')
   const inFlight = useRef(false)
-  const { results, error: historyError } = useSyncExternalStore(typingHistory.subscribe, typingHistory.getSnapshot, typingHistory.getServerSnapshot)
+  const { results, error: historyError } = useHistory()
   const eligible = results.filter(isRankingEligible)
   const selected = eligible.find((result) => result.id === selectedId) ?? eligible[0]
 
@@ -34,12 +34,6 @@ export default function RankingPage() {
     })
     return () => controller.abort()
   }, [duration, version])
-
-  useEffect(() => {
-    const refresh = (event: StorageEvent) => { if (event.key === HISTORY_KEY || event.key === null) typingHistory.refresh() }
-    window.addEventListener('storage', refresh)
-    return () => window.removeEventListener('storage', refresh)
-  }, [])
 
   async function perform(action: () => Promise<void>) {
     if (inFlight.current) return

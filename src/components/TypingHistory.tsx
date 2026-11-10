@@ -1,8 +1,10 @@
 import LanguageBadge from './LanguageBadge'
-import { useEffect, useId, useState, useSyncExternalStore } from 'react'
+import { useId, useState } from 'react'
 import { m } from 'motion/react'
 import PracticeCalendar from './PracticeCalendar'
-import { HISTORY_KEY, typingHistory, formatResultSpeed } from '../features/typing/history'
+import { formatResultSpeed } from '../features/typing/history'
+import { useHistory } from '../features/typing/historyContext'
+import { Link } from 'react-router-dom'
 import './TypingHistory.css'
 
 const reasons = { completed: 'クリア', timeout: '時間切れ', stopped: '手動終了' }
@@ -10,16 +12,11 @@ const reasons = { completed: 'クリア', timeout: '時間切れ', stopped: '手
 export default function TypingHistory() {
   const viewId = useId()
   const [view, setView] = useState<'list' | 'calendar'>('list')
-  const { results, error } = useSyncExternalStore(typingHistory.subscribe, typingHistory.getSnapshot, typingHistory.getServerSnapshot)
-  useEffect(() => {
-    const sync = (event: StorageEvent) => { if (event.key === HISTORY_KEY || event.key === null) typingHistory.refresh() }
-    window.addEventListener('storage', sync)
-    return () => window.removeEventListener('storage', sync)
-  }, [])
+  const { results, error, signedIn, status, sync, importGuest } = useHistory()
   return (
     <section className="typing-history" aria-labelledby="history-title">
       <h2 id="history-title">練習履歴 <small>{results.length}件</small></h2>
-      <p>このブラウザに最新100件を保存します。別の端末やブラウザとは共有されません。</p>
+      {signedIn ? <div className="history-sync"><p>このアカウントの記録を端末間で同期します。ランキングへの公開は別途選択できます。</p><p role="status">{status}</p><button type="button" onClick={sync}>今すぐ同期</button><button type="button" onClick={importGuest}>この端末のログイン前の記録を取り込む</button></div> : <p>このブラウザに最新100件を保存します。<Link to="/login">ログイン</Link>すると、新しい記録を端末間で同期できます。</p>}
       <div className="history-view" role="group" aria-label="履歴の表示形式">{(['list', 'calendar'] as const).map((mode) => <button key={mode} type="button" aria-pressed={view === mode} onClick={() => setView(mode)}>{view === mode && <m.span aria-hidden="true" className="history-view-highlight" layoutId={viewId} transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}<span className="history-view-label">{mode === 'list' ? '一覧' : 'カレンダー'}</span></button>)}</div>
       {error && <p className="history-error" role="alert">{error}</p>}
       <m.div key={view} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
