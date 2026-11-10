@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import TypingPractice from './TypingPractice'
 import { fallbackQuotes, getFallbackQuote, getPracticeQuote } from '../api/quotes'
 import { practiceSamples, type PracticeLanguage } from '../features/typing/samples'
+import { isLanguage, languageSetting, readSetting, writeSetting } from '../features/typing/settings'
 
 type LanguageProps = { onLanguageChange: (language: PracticeLanguage) => void }
 
@@ -46,14 +47,20 @@ function EnglishPractice({ onLanguageChange }: LanguageProps) {
 }
 
 function KoreanPractice({ onLanguageChange }: LanguageProps) {
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(() => Math.floor(Math.random() * practiceSamples.ko.length))
   const samples = practiceSamples.ko
+  function nextQuestion() {
+    if (samples.length <= 1) return
+    const choice = Math.floor(Math.random() * (samples.length - 1))
+    setIndex(choice >= index ? choice + 1 : choice)
+  }
   return <TypingPractice quote={{ text: samples[index], source: 'local', author: null, language: 'ko' }}
-    loading={false} notice={`韓国語の例文 ${index + 1} / ${samples.length}`}
-    onNext={() => setIndex((value) => (value + 1) % samples.length)} onLanguageChange={onLanguageChange} />
+    loading={false} notice={`韓国語の例文（全${samples.length}文からランダムに出題）`}
+    onNext={nextQuestion} onLanguageChange={onLanguageChange} />
 }
 
 export default function QuotePractice() {
-  const [language, setLanguage] = useState<PracticeLanguage>('en')
+  const [language, setLanguage] = useState<PracticeLanguage>(() => readSetting(languageSetting, 'en', isLanguage))
+  useEffect(() => { writeSetting(languageSetting, language) }, [language])
   return language === 'en' ? <EnglishPractice onLanguageChange={setLanguage} /> : <KoreanPractice onLanguageChange={setLanguage} />
 }

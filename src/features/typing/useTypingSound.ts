@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { isSoundPreset, playTypingSound, SOUND_PRESET_KEY, soundPresets, type SoundPreset, type TypingSoundKind } from './sounds'
+import { isEnabled, isVolume, readSetting, soundEnabledSetting, volumeSetting, writeSetting } from './settings'
 
 export function useTypingSound() {
   const context = useRef<AudioContext | null>(null)
-  const [enabled, setEnabled] = useState(false)
-  const [volume, setVolume] = useState(0.25)
+  const [enabled, setEnabled] = useState(() => readSetting(soundEnabledSetting, false, isEnabled))
+  const [volume, setVolume] = useState(() => readSetting(volumeSetting, 0.25, isVolume))
+  useEffect(() => { writeSetting(soundEnabledSetting, enabled) }, [enabled])
+  useEffect(() => { writeSetting(volumeSetting, volume) }, [volume])
   const [notice, setNotice] = useState('')
   const [preset, setPreset] = useState<SoundPreset>(() => {
     try { const saved = window.localStorage.getItem(SOUND_PRESET_KEY); return isSoundPreset(saved) ? saved : 'classic' }

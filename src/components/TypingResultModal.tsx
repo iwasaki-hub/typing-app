@@ -1,4 +1,4 @@
-import { arrowRightIcon, flagCheckeredIcon, rotateLeftIcon, xmarkIcon } from '../lib/icons'
+import { arrowRightIcon, flagCheckeredIcon, rotateLeftIcon, xmarkIcon, speedIcon, accuracyIcon, circleExclamationIcon } from '../lib/icons'
 import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { m } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -22,7 +22,7 @@ export default function TypingResultModal({ session, language = 'en', wpm, speed
       <DialogTitle>{session.reason === 'completed' ? 'クリア！ おつかれさまでした。' : session.reason === 'timeout' ? '時間になりました。' : '練習を終了しました。'}</DialogTitle>
       <Description>{session.elapsed.toFixed(1)}秒で、{correct} / {total}文字を正しく入力しました。</Description>
       <LanguageBadge language={language} />
-      <dl className="result-modal-stats"><div><dt>入力速度</dt><dd>{wpm}<small> {speedUnit}</small></dd></div><div><dt>正確率</dt><dd>{accuracy}<small> %</small></dd></div><div><dt>ミス</dt><dd>{session.mistakes}<small> 回</small></dd></div></dl>
+      <dl className="result-modal-stats"><div><dt><FontAwesomeIcon icon={speedIcon} className="result-speed-icon" aria-hidden="true" /> 入力速度</dt><dd>{wpm}<small> {speedUnit}</small></dd></div><div><dt><FontAwesomeIcon icon={accuracyIcon} className="result-accuracy-icon" aria-hidden="true" /> 正確率</dt><dd>{accuracy}<small> %</small></dd></div><div><dt><FontAwesomeIcon icon={circleExclamationIcon} className="result-mistakes-icon" aria-hidden="true" /> ミス</dt><dd>{session.mistakes}<small> 回</small></dd></div></dl>
       <div className="result-modal-actions"><button type="button" className="result-modal-next" disabled={loading} onClick={onNext} data-autofocus>次の問題 <FontAwesomeIcon icon={arrowRightIcon} aria-hidden="true" /></button><button type="button" disabled={loading} onClick={onRetry}><FontAwesomeIcon icon={rotateLeftIcon} aria-hidden="true" /> 同じ文でやり直す</button></div>
       <p className="result-modal-hint">Esc キーでも閉じられます。</p>
     </DialogPanel>

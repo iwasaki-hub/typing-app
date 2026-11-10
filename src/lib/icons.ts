@@ -1,6 +1,8 @@
 // Central icon definitions. Import named icons to keep unused exports tree-shakeable.
 export {
   faPalette as paletteIcon,
+  faGaugeHigh as speedIcon,
+  faBullseye as accuracyIcon,
   faCircleCheck as circleCheckIcon,
   faCircleExclamation as circleExclamationIcon,
   faPlug as plugIcon,

@@ -8,13 +8,15 @@ import { newSession, sessionMetrics, sessionReducer } from '../features/typing/s
 import { useTypingSound } from '../features/typing/useTypingSound'
 import { typingHistory } from '../features/typing/history'
 import type { PracticeLanguage } from '../features/typing/samples'
+import { durationSetting, isDuration, readSetting, writeSetting } from '../features/typing/settings'
 import './TypingPractice.css'
 
 export default function TypingPractice({ quote, loading, notice, onNext, onLanguageChange }: {
   quote: PracticeQuote; loading: boolean; notice: string; onNext: () => void; onLanguageChange: (language: PracticeLanguage) => void
 }) {
   const [session, dispatch] = useReducer(sessionReducer, undefined, newSession)
-  const [duration, setDuration] = useState(60)
+  const [duration, setDuration] = useState(() => readSetting(durationSetting, 60, isDuration))
+  useEffect(() => { writeSetting(durationSetting, duration) }, [duration])
   const [inputNotice, setInputNotice] = useState('')
   const [draft, setDraft] = useState<string | null>(null)
   const composing = useRef(false)
