@@ -5,6 +5,7 @@ import { useAuth } from './features/auth/context'
 import { authCallbackDestination } from './features/auth/password'
 import { m } from 'motion/react'
 import Navigation from './components/Navigation'
+import Footer from './components/Footer'
 import TypingPage from './pages/TypingPage'
 import NotFoundPage from './pages/NotFoundPage'
 const RankingPage = lazy(() => import('./pages/RankingPage'))
@@ -38,10 +39,10 @@ export default function App() {
     return () => cancelAnimationFrame(frame)
   }, [pathname, hash])
   return (
-    <div id="top">
+    <div id="top" className="app-shell">
       <a className="app-skip" href="#main">本文へスキップ</a>
       <Navigation key={`navigation:${pathname}`} />
-      <m.div key={`page:${pathname}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+      <m.div className="app-content" key={`page:${pathname}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/practice" element={<TypingPage />} />
@@ -53,6 +54,7 @@ export default function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       </m.div>
+      <Footer />
     </div>
   )
 }

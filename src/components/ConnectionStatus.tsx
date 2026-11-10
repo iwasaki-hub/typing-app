@@ -1,6 +1,6 @@
+import { circleCheckIcon, circleExclamationIcon, plugIcon, spinnerIcon } from '../lib/icons'
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faCircleExclamation, faPlug, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { checkSupabaseConnection } from '../api/supabase'
 import { getApiErrorMessage } from '../api/client'
 import './ConnectionStatus.css'
@@ -32,7 +32,7 @@ export default function ConnectionStatus() {
         <div className="connection-header">
           <h2 id="connection-heading">Supabase 接続確認</h2>
           <span className={`connection-badge ${connection}`}>
-            <FontAwesomeIcon icon={connection === 'checking' ? faSpinner : connection === 'success' ? faCircleCheck : connection === 'error' ? faCircleExclamation : faPlug} spin={connection === 'checking'} aria-hidden="true" />{' '}
+            <FontAwesomeIcon icon={connection === 'checking' ? spinnerIcon : connection === 'success' ? circleCheckIcon : connection === 'error' ? circleExclamationIcon : plugIcon} spin={connection === 'checking'} aria-hidden="true" />{' '}
             {{ idle: '未確認', checking: '確認中', success: '接続成功', error: '接続失敗' }[connection]}
           </span>
         </div>

@@ -1,0 +1,37 @@
+// Central icon definitions. Import named icons to keep unused exports tree-shakeable.
+export {
+  faCircleCheck as circleCheckIcon,
+  faCircleExclamation as circleExclamationIcon,
+  faPlug as plugIcon,
+  faSpinner as spinnerIcon,
+  faArrowUp as arrowUpIcon,
+  faBars as barsIcon,
+  faXmark as xmarkIcon,
+  faHouse as houseIcon,
+  faKeyboard as keyboardIcon,
+  faCircleInfo as circleInfoIcon,
+  faBookOpen as bookOpenIcon,
+  faArrowRight as arrowRightIcon,
+  faTrophy as trophyIcon,
+  faChartLine as chartLineIcon,
+  faChevronLeft as chevronLeftIcon,
+  faChevronRight as chevronRightIcon,
+  faRotateLeft as rotateLeftIcon,
+  faVolumeHigh as volumeHighIcon,
+  faVolumeXmark as volumeXmarkIcon,
+  faFlagCheckered as flagCheckeredIcon,
+  faUser as userIcon,
+  faArrowTrendUp as arrowTrendUpIcon,
+  faArrowUpRightFromSquare as arrowUpRightFromSquareIcon,
+  faFont as fontIcon,
+  faWandMagicSparkles as wandMagicSparklesIcon,
+  faArrowTurnDown as arrowTurnDownIcon,
+  faLock as lockIcon,
+} from '@fortawesome/free-solid-svg-icons'
+
+export {
+  faBluesky as blueskyIcon,
+  faDiscord as discordIcon,
+  faInstagram as instagramIcon,
+  faYoutube as youtubeIcon,
+} from '@fortawesome/free-brands-svg-icons'

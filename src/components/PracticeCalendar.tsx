@@ -1,6 +1,6 @@
+import { chevronLeftIcon, chevronRightIcon } from '../lib/icons'
 import { useId, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import type { TypingResult } from '../features/typing/history'
 import { groupResultsByDay, localDateKey, monthCells } from '../features/typing/calendar'
 import './PracticeCalendar.css'
@@ -23,7 +23,7 @@ export default function PracticeCalendar({ results }: { results: TypingResult[] 
   const cells = monthCells(year, month)
   function changeMonth(offset: number) { setSelected(new Date(year, month + offset, 1)) }
   return <div className="practice-calendar">
-    <div className="calendar-heading"><h3 id={titleId} aria-live="polite">{year}年 {month + 1}月</h3><div><button type="button" aria-label="前の月" onClick={() => changeMonth(-1)}><FontAwesomeIcon icon={faChevronLeft} aria-hidden="true" /></button><button type="button" onClick={() => setSelected(new Date())}>今日</button><button type="button" aria-label="次の月" onClick={() => changeMonth(1)}><FontAwesomeIcon icon={faChevronRight} aria-hidden="true" /></button></div></div>
+    <div className="calendar-heading"><h3 id={titleId} aria-live="polite">{year}年 {month + 1}月</h3><div><button type="button" aria-label="前の月" onClick={() => changeMonth(-1)}><FontAwesomeIcon icon={chevronLeftIcon} aria-hidden="true" /></button><button type="button" onClick={() => setSelected(new Date())}>今日</button><button type="button" aria-label="次の月" onClick={() => changeMonth(1)}><FontAwesomeIcon icon={chevronRightIcon} aria-hidden="true" /></button></div></div>
     <p>この月の練習日数：{activeDays}日。日付を選ぶと、その日の記録を表示します。</p>
     <table aria-labelledby={titleId}><thead><tr>{weekdays.map((day) => <th scope="col" key={day}>{day}</th>)}</tr></thead><tbody>{Array.from({ length: cells.length / 7 }, (_, week) => <tr key={week}>{cells.slice(week * 7, week * 7 + 7).map((day, index) => {
       if (day === null) return <td key={index} />

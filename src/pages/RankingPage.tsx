@@ -1,7 +1,7 @@
+import { trophyIcon } from '../lib/icons'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from '../features/auth/context'
 import { getRanking, publishResult, rankingError, type RankingEntry } from '../api/ranking'
 import { HISTORY_KEY, typingHistory } from '../features/typing/history'
@@ -52,7 +52,7 @@ export default function RankingPage() {
   function refreshRanking() { setLoading(true); setLoadError(''); setVersion((value) => value + 1) }
 
   return <main id="main" tabIndex={-1} className="ranking-page">
-    <header className="ranking-intro"><span><FontAwesomeIcon icon={faTrophy} aria-hidden="true" /> LEADERBOARD</span><h1>毎日の練習を、記録に。</h1><p>全ユーザーのベスト記録。次は、あなたの番です。</p></header>
+    <header className="ranking-intro"><span><FontAwesomeIcon icon={trophyIcon} aria-hidden="true" /> LEADERBOARD</span><h1>毎日の練習を、記録に。</h1><p>全ユーザーのベスト記録。次は、あなたの番です。</p></header>
     <section className="ranking-board" aria-labelledby="ranking-title">
       <div className="ranking-heading"><h2 id="ranking-title">全ユーザーランキング</h2><label>制限時間 <select value={duration} onChange={(event) => { setDuration(Number(event.target.value)); setRows([]); setLoading(true); setLoadError('') }}>{[30, 60, 120].map((value) => <option key={value} value={value}>{value}秒</option>)}</select></label><button onClick={refreshRanking} disabled={loading}>更新</button></div>
       <p>各ユーザーの最高 WPM を掲載（上位100人）。同じ WPM は正確率、記録日時の順に並びます。</p>

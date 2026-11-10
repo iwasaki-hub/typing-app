@@ -1,6 +1,6 @@
+import { arrowRightIcon, rotateLeftIcon, volumeHighIcon, volumeXmarkIcon } from '../lib/icons'
 import { useEffect, useReducer, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faRotateLeft, faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons'
 import type { PracticeQuote } from '../api/quotes'
 import TypingResultModal from './TypingResultModal'
 import { newSession, sessionMetrics, sessionReducer } from '../features/typing/session'
@@ -89,9 +89,9 @@ export default function TypingPractice({ quote, loading, notice, onNext }: {
       <div className="typing-heading"><h2 id="practice-title">タイピング練習</h2><span>{text.length} 文字 · 英文</span></div>
       <div className="typing-settings">
         <label>制限時間 <select value={duration} disabled={running || loading} onChange={(event) => { setDuration(Number(event.target.value)); dispatch({ type: 'reset' }) }}><option value={30}>30秒</option><option value={60}>60秒</option><option value={120}>120秒</option></select></label>
-        <button type="button" className="typing-sound" aria-pressed={sound.enabled} onClick={sound.toggle}><FontAwesomeIcon icon={sound.enabled ? faVolumeHigh : faVolumeXmark} aria-hidden="true" /> 打鍵音 {sound.enabled ? 'オン' : 'オフ'}</button>
+        <button type="button" className="typing-sound" aria-pressed={sound.enabled} onClick={sound.toggle}><FontAwesomeIcon icon={sound.enabled ? volumeHighIcon : volumeXmarkIcon} aria-hidden="true" /> 打鍵音 {sound.enabled ? 'オン' : 'オフ'}</button>
         <label>音の種類 <select value={sound.preset} onChange={(event) => sound.selectPreset(event.target.value)}>{Object.entries(sound.presets).map(([value, preset]) => <option key={value} value={value}>{preset.label}</option>)}</select></label>
-        <button type="button" onClick={sound.preview} disabled={sound.volume === 0} aria-label="選択中のタイピング音を試聴する"><FontAwesomeIcon icon={faVolumeHigh} aria-hidden="true" /> 試聴</button>
+        <button type="button" onClick={sound.preview} disabled={sound.volume === 0} aria-label="選択中のタイピング音を試聴する"><FontAwesomeIcon icon={volumeHighIcon} aria-hidden="true" /> 試聴</button>
         <label className="typing-volume">音量 <input type="range" min="0" max="100" value={Math.round(sound.volume * 100)} onChange={(event) => sound.setVolume(Number(event.target.value) / 100)} aria-label="タイピング音の音量" /><span>{Math.round(sound.volume * 100)}%</span></label>
       </div>
       {sound.notice && <p className="typing-notice" role="status">{sound.notice}</p>}
@@ -112,9 +112,9 @@ export default function TypingPractice({ quote, loading, notice, onNext }: {
         {finished && <button ref={resultButton} type="button" className="typing-result-open" onClick={() => setDismissedResult(null)}>結果を表示する</button>}
         {finished && dismissedResult !== session && <TypingResultModal session={session} wpm={metrics.wpm} accuracy={metrics.accuracy} correct={metrics.correct} total={text.length} loading={loading} onNext={nextQuestion} onRetry={reset} onDismiss={dismissResult} />}
         <div className="typing-actions">
-          <button type="button" disabled={loading} onClick={reset}><FontAwesomeIcon icon={faRotateLeft} aria-hidden="true" /> 同じ文でやり直す</button>
+          <button type="button" disabled={loading} onClick={reset}><FontAwesomeIcon icon={rotateLeftIcon} aria-hidden="true" /> 同じ文でやり直す</button>
           {running && <button type="button" onClick={() => dispatch({ type: 'stop', now: performance.now(), duration })}>ここで終了</button>}
-          <button type="button" className="typing-next" onClick={nextQuestion} disabled={loading || running}>{loading ? '読み込み中…' : '次の問題'} <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></button>
+          <button type="button" className="typing-next" onClick={nextQuestion} disabled={loading || running}>{loading ? '読み込み中…' : '次の問題'} <FontAwesomeIcon icon={arrowRightIcon} aria-hidden="true" /></button>
         </div>
         <p className="typing-footnote">WPM は正しく入力した5文字を1語として換算。1文の入力完了、または制限時間で終了します。</p>
       </div>

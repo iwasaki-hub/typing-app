@@ -12,6 +12,7 @@
 .site-navigation [data-icon="house"] { color: #527b78; }
 .site-navigation [data-icon="keyboard"] { color: #2383e2; }
 .site-navigation [data-icon="trophy"] { color: #b77916; }
+.site-navigation [data-icon="chart-line"] { color: #32846a; }
 .site-navigation [data-icon="circle-info"] { color: #8462b3; }
 .site-navigation [data-icon="book-open"] { color: #32846a; }
 .site-account { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

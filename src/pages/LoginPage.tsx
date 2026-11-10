@@ -1,7 +1,7 @@
+import { lockIcon, userIcon } from '../lib/icons'
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from '../features/auth/context'
 import { signInWithPassword, registerWithPassword, requestPasswordReset, getLoginLinkRetryAt } from '../api/auth'
 import { LOGIN_RESEND_KEY } from '../features/auth/loginLink'
@@ -115,7 +115,7 @@ export default function LoginPage({ profile = false, reset = false }: { profile?
   if (ready && !error && session && !profile && !reset) return <Navigate to={isPasswordRecovery ? '/reset-password' : '/dashboard'} replace />
   if (ready && !error && !session && profile) return <Navigate to="/login" replace />
   return <main id="main" tabIndex={-1} className="login-page"><div className="login-card">
-    <span className="login-icon"><FontAwesomeIcon icon={profile ? faUser : faLock} aria-hidden="true" /></span>
+    <span className="login-icon"><FontAwesomeIcon icon={profile ? userIcon : lockIcon} aria-hidden="true" /></span>
     <h1>{reset ? 'パスワードの設定' : profile ? 'あなたのプロフィール' : 'Typing にログイン'}</h1>
     <p>{reset ? '新しいパスワードを保存してください。' : profile ? '表示名やパスワードを設定できます。' : 'メールアドレスとパスワードで、練習の続きを。'}</p>
     {!ready ? <p role="status">ログイン状態を確認しています…</p> : error ? <p role="alert">{error}</p> : reset ? session ? <><PasswordForm /><Link to="/dashboard">ダッシュボードへ →</Link></> : <p role="alert">有効な設定リンクを開いてください。期限切れの場合は <Link to="/login">ログインページ</Link> から再度メールを送信してください。</p> : profile ? <ProfileForm key={session?.user.id} initialName={displayName} /> : <CredentialsForm />}
