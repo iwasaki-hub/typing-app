@@ -1,30 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
+import { isSoundPreset, playTypingSound, SOUND_PRESET_KEY, soundPresets, type SoundPreset, type TypingSoundKind } from './sounds'
 
 export function useTypingSound() {
   const context = useRef<AudioContext | null>(null)
   const [enabled, setEnabled] = useState(false)
   const [volume, setVolume] = useState(0.25)
   const [notice, setNotice] = useState('')
+  const [preset, setPreset] = useState<SoundPreset>(() => {
+    try { const saved = window.localStorage.getItem(SOUND_PRESET_KEY); return isSoundPreset(saved) ? saved : 'classic' }
+    catch { return 'classic' }
+  })
   useEffect(() => () => { void context.current?.close().catch(() => {}) }, [])
 
-  async function play(kind: 'key' | 'error' | 'complete', force = false) {
+  async function play(kind: TypingSoundKind, force = false, selected = preset) {
     if ((!enabled && !force) || volume === 0) return
     try {
       const audio = context.current ?? (context.current = new AudioContext())
       if (audio.state === 'suspended') await audio.resume()
-      const oscillator = audio.createOscillator()
-      const gain = audio.createGain()
-      const start = audio.currentTime
-      oscillator.type = kind === 'error' ? 'triangle' : 'sine'
-      oscillator.frequency.setValueAtTime(kind === 'error' ? 150 : kind === 'complete' ? 880 : 700, start)
-      oscillator.frequency.exponentialRampToValueAtTime(kind === 'complete' ? 1320 : 110, start + 0.045)
-      gain.gain.setValueAtTime(volume * 0.22, start)
-      gain.gain.exponentialRampToValueAtTime(0.001, start + (kind === 'complete' ? 0.2 : 0.055))
-      oscillator.connect(gain)
-      gain.connect(audio.destination)
-      oscillator.start(start)
-      oscillator.stop(start + 0.22)
-      oscillator.onended = () => { oscillator.disconnect(); gain.disconnect() }
+      if (audio.state === 'closed') return
+      playTypingSound(audio, selected, kind, volume)
     } catch {
       setEnabled(false)
       setNotice('このブラウザでは音声を再生できません。練習はそのまま続けられます。')
@@ -36,5 +30,13 @@ export function useTypingSound() {
     setEnabled(!enabled)
     if (!enabled) void play('key', true)
   }
-  return { enabled, volume, setVolume, notice, toggle, play }
+  function selectPreset(value: string) {
+    if (!isSoundPreset(value)) return
+    setPreset(value)
+    setNotice('')
+    try { window.localStorage.setItem(SOUND_PRESET_KEY, value) } catch { /* Selection still works without storage. */ }
+    if (enabled) void play('key', false, value)
+  }
+  function preview() { setNotice(''); void play('key', true) }
+  return { enabled, volume, setVolume, notice, toggle, play, preset, selectPreset, presets: soundPresets, preview }
 }

@@ -32,7 +32,7 @@
 .typing-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; font-size: 13px; }
 .typing-actions button { display: inline-flex; align-items: center; gap: 8px; }
 .typing-actions .typing-next { margin-left: auto; color: white; background: #0876d9; border-color: #0876d9; }
-.typing-actions button:disabled, .typing-settings select:disabled { opacity: .5; cursor: not-allowed; }
+.typing-actions button:disabled, .typing-settings select:disabled, .typing-settings button:disabled { opacity: .5; cursor: not-allowed; }
 .typing-footnote { margin: 18px 0 0; }
 @media (max-width: 750px) {
   .typing-practice { margin: 0 20px; }

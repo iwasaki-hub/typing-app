@@ -90,6 +90,8 @@ export default function TypingPractice({ quote, loading, notice, onNext }: {
       <div className="typing-settings">
         <label>制限時間 <select value={duration} disabled={running || loading} onChange={(event) => { setDuration(Number(event.target.value)); dispatch({ type: 'reset' }) }}><option value={30}>30秒</option><option value={60}>60秒</option><option value={120}>120秒</option></select></label>
         <button type="button" className="typing-sound" aria-pressed={sound.enabled} onClick={sound.toggle}><FontAwesomeIcon icon={sound.enabled ? faVolumeHigh : faVolumeXmark} aria-hidden="true" /> 打鍵音 {sound.enabled ? 'オン' : 'オフ'}</button>
+        <label>音の種類 <select value={sound.preset} onChange={(event) => sound.selectPreset(event.target.value)}>{Object.entries(sound.presets).map(([value, preset]) => <option key={value} value={value}>{preset.label}</option>)}</select></label>
+        <button type="button" onClick={sound.preview} disabled={sound.volume === 0} aria-label="選択中のタイピング音を試聴する"><FontAwesomeIcon icon={faVolumeHigh} aria-hidden="true" /> 試聴</button>
         <label className="typing-volume">音量 <input type="range" min="0" max="100" value={Math.round(sound.volume * 100)} onChange={(event) => sound.setVolume(Number(event.target.value) / 100)} aria-label="タイピング音の音量" /><span>{Math.round(sound.volume * 100)}%</span></label>
       </div>
       {sound.notice && <p className="typing-notice" role="status">{sound.notice}</p>}
