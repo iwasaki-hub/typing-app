@@ -17,6 +17,12 @@ export default function Navigation() {
   const toggle = useRef<HTMLButtonElement>(null)
   const { session, ready, displayName } = useAuth()
   useEffect(() => {
+    const mobile = window.matchMedia('(max-width: 768px)')
+    const closeOnDesktop = () => { if (!mobile.matches) setOpen(false) }
+    mobile.addEventListener('change', closeOnDesktop)
+    return () => mobile.removeEventListener('change', closeOnDesktop)
+  }, [])
+  useEffect(() => {
     if (!open) return
     const closeOnScroll = () => setOpen(false)
     window.addEventListener('scroll', closeOnScroll, { passive: true, once: true })

@@ -16,7 +16,12 @@
 .site-navigation [data-icon="circle-info"] { color: #8462b3; }
 .site-navigation [data-icon="book-open"] { color: #32846a; }
 .site-account { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-@media (max-width: 1520px) {
+@media (min-width: 769px) and (max-width: 1400px) {
+  .site-header-inner { flex-wrap: wrap; gap: 12px 24px; }
+  .site-header .site-navigation { order: 3; width: 100%; margin-left: 0; flex-wrap: wrap; gap: 8px 20px; }
+  .site-start { margin-left: auto; }
+}
+@media (max-width: 768px) {
   .site-header-inner { flex-wrap: wrap; padding: 16px 20px; gap: 16px; }
   .site-menu-toggle { display: block; margin-left: auto; border: 1px solid #ddd; background: white; width: 42px; height: 42px; border-radius: 6px; }
   .site-header .site-navigation { display: none; order: 4; width: 100%; margin: 0; flex-direction: column; align-items: stretch; gap: 0; }

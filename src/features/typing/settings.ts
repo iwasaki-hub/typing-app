@@ -14,6 +14,7 @@ export const languageSetting = 'typing-app:language:v1'
 export const durationSetting = 'typing-app:duration:v1'
 export const soundEnabledSetting = 'typing-app:sound-enabled:v1'
 export const volumeSetting = 'typing-app:sound-volume:v1'
+export const statsVisibleSetting = 'typing-app:stats-visible:v1'
 export const isLanguage = (value: unknown): value is 'en' | 'ko' => value === 'en' || value === 'ko'
 export const isDuration = (value: unknown): value is number => value === 30 || value === 60 || value === 120
 export const isEnabled = (value: unknown): value is boolean => typeof value === 'boolean'
