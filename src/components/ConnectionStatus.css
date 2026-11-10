@@ -1,0 +1,54 @@
+.connection-help {
+  margin: 20px 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.connection-help h3 { margin: 0 0 12px; font-size: 16px; }
+.connection-help ol, .connection-help ul { padding-left: 22px; }
+.connection-help li + li { margin-top: 8px; }
+.connection-help summary { cursor: pointer; }
+.connection-help a { text-decoration: underline; }
+
+.connection-card {
+  margin: 32px auto;
+  padding: 24px;
+  width: min(640px, calc(100% - 40px));
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  text-align: left;
+}
+
+.connection-header,
+.connection-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.home-page .connection-header h2 { margin: 0; font-size: 20px; letter-spacing: 0; }
+.connection-note { font-size: 13px; line-height: 1.7; }
+.connection-badge { padding: 4px 12px; border-radius: 20px; font-size: 13px; background: var(--social-bg); }
+.connection-badge.success { background: #dcfce7; color: #166534; }
+.connection-badge.error { background: #fee2e2; color: #991b1b; }
+.connection-badge.checking { background: #dbeafe; color: #1e40af; }
+.connection-actions button {
+  background: #166534;
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font: inherit;
+  cursor: pointer;
+}
+.connection-actions button:disabled { opacity: 0.6; cursor: wait; }
+.connection-actions button:focus-visible { outline: 3px solid #22c55e; outline-offset: 3px; }
+
+
