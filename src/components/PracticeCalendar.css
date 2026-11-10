@@ -15,6 +15,7 @@
 .practice-calendar td button[aria-current=date] > span { color: #176bb5; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
 .calendar-detail { border-top: 1px solid #eee; margin-top: 24px; padding-top: 24px; }
 .calendar-detail h3 small { font-size: .8rem; color: #777; font-weight: 400; }
+.calendar-detail li > div { flex-wrap: wrap; align-items: center; }
 .calendar-detail ul { list-style: none; margin: 12px 0 0; padding: 0; }
 .calendar-detail li { padding: 16px 0; border-bottom: 1px solid #eee; }
 .calendar-detail li > div { display: flex; gap: 16px; font-size: .8rem; color: #777; margin-bottom: 10px; }

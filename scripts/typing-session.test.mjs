@@ -50,5 +50,42 @@ test('finished sessions cannot change until reset', () => {
 })
 
 test('empty sessions do not produce NaN or infinite metrics', () => {
-  assert.deepEqual(sessionMetrics(newSession(), 'hello'), { correct: 0, progress: 0, accuracy: 100, wpm: 0 })
+  assert.deepEqual(sessionMetrics(newSession(), 'hello'), { correct: 0, progress: 0, accuracy: 100, wpm: 0, cpm: 0 })
+})
+
+test('Korean composition starts timing before commit and scores only completed syllables', () => {
+  let state = sessionReducer(newSession(), { type: 'start', now: 1000, duration: 30 })
+  assert.equal(state.attempts, 0)
+  const action = (value, now, composed = false) => ({ type: 'input', value, text: '한국어.', now, duration: 30, language: 'ko', composed })
+  assert.equal(sessionReducer(state, action('ㅎ', 1200, true)), state)
+  state = sessionReducer(state, action('한국', 3000, true))
+  assert.equal(state.attempts, 2)
+  assert.equal(state.mistakes, 0)
+  assert.equal(state.elapsed, 2)
+  assert.equal(sessionMetrics(state, '한국어.').cpm, 60)
+  state = sessionReducer(state, action('한국어', 4000, true))
+  state = sessionReducer(state, action('한국어.', 5000))
+  assert.equal(state.reason, 'completed')
+  assert.equal(state.attempts, 4)
+})
+
+test('Korean input rejects uncommitted multi-character insertion, normalizes jamo and counts corrected mistakes', () => {
+  const action = (value, composed = false) => ({ type: 'input', value, text: '한글', now: 1000, duration: 30, language: 'ko', composed })
+  const ready = newSession()
+  assert.equal(sessionReducer(ready, action('한글')), ready)
+  let state = sessionReducer(ready, action('한', true))
+  assert.equal(state.input, '한')
+  state = sessionReducer(state, action('한굴', true))
+  assert.equal(state.mistakes, 1)
+  state = sessionReducer(state, action('한'))
+  state = sessionReducer(state, action('한글', true))
+  assert.equal(state.reason, 'completed')
+  assert.equal(sessionMetrics(state, '한글').accuracy, 67)
+})
+
+test('deadline during Korean composition rejects a late commit', () => {
+  const state = sessionReducer(newSession(), { type: 'start', now: 1000, duration: 30 })
+  const finished = sessionReducer(state, { type: 'input', value: '한', text: '한글', now: 32000, duration: 30, language: 'ko', composed: true })
+  assert.equal(finished.reason, 'timeout')
+  assert.equal(finished.input, '')
 })

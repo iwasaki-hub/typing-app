@@ -1,7 +1,8 @@
 .typing-practice { max-width: 1056px; margin: 0 auto; border: 1px solid #dddeda; border-radius: 12px; background: #fff; overflow: hidden; box-shadow: 0 7px 26px #00000007; scroll-margin-top: 100px; }
 .typing-heading { display: flex; justify-content: space-between; align-items: center; padding: 20px 28px; background: #f8f8f6; border-bottom: 1px solid #e8e7e4; gap: 12px; }
 .home-page .typing-heading h2 { font-size: 20px; letter-spacing: 0; }
-.typing-heading > span { font-size: 12px; color: #666; }
+.typing-language-context { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.typing-language-context > span:last-child { font-size: 12px; color: #666; }
 .typing-settings { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 20px 28px; font-size: 13px; }
 .typing-settings label { display: flex; align-items: center; gap: 8px; }
 .typing-settings select, .typing-settings button, .typing-actions button { border: 1px solid #deded9; border-radius: 6px; background: white; color: #252525; padding: 9px 12px; }
@@ -20,12 +21,17 @@
 .typing-body { padding: 24px 28px; }
 .typing-text { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Courier New', monospace; font-size: clamp(22px, 3vw, 32px); font-weight: 600; line-height: 1.65; color: #555850; margin: 18px 0 12px; }
 .typing-correct { color: #166534; }
+.typing-text-korean { font-family: 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; letter-spacing: .03em; line-height: 1.9; word-break: keep-all; }
 .typing-incorrect { color: #b91c1c; background: #ffe3e3; text-decoration: underline; }
 .typing-cursor { border-bottom: 3px solid #0876d9; background: #eaf4ff; }
 .typing-credit, .typing-notice, .typing-footnote { font-size: 12px; color: #686863; }
 .typing-input-label { display: block; font-size: 13px; margin: 24px 0 8px; }
-.typing-input { width: 100%; padding: 14px; border: 1px solid #c8cac6; border-radius: 6px; font-size: 16px; color: #191919; background: #fff; }
+.typing-input-wrap { position: relative; }
+.typing-input-flag { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+.typing-input-flag img { width: 26px; height: 18px; object-fit: contain; border-radius: 2px; box-shadow: 0 0 0 1px #19191915; }
+.typing-input { width: 100%; padding: 14px 14px 14px 54px; border: 1px solid #c8cac6; border-radius: 6px; font-size: 16px; color: #191919; background: #fff; }
 .typing-input:disabled { background: #f5f5f3; }
+.typing-input:focus { outline: none; }
 .typing-progress-label { display: block; font-size: 12px; color: #666; margin-top: 20px; }
 .typing-progress-label progress { display: block; width: 100%; height: 8px; margin-top: 8px; accent-color: #0876d9; }
 .typing-result-open { margin-top: 24px; padding: 10px 16px; color: #176bb5; background: #edf6ff; border: 1px solid #c8dff6; border-radius: 7px; }

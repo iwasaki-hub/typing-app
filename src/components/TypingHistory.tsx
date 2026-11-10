@@ -1,7 +1,8 @@
+import LanguageBadge from './LanguageBadge'
 import { useEffect, useId, useState, useSyncExternalStore } from 'react'
 import { m } from 'motion/react'
 import PracticeCalendar from './PracticeCalendar'
-import { HISTORY_KEY, typingHistory } from '../features/typing/history'
+import { HISTORY_KEY, typingHistory, formatResultSpeed } from '../features/typing/history'
 import './TypingHistory.css'
 
 const reasons = { completed: 'クリア', timeout: '時間切れ', stopped: '手動終了' }
@@ -24,7 +25,7 @@ export default function TypingHistory() {
       <m.div key={view} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
       {view === 'calendar' ? <PracticeCalendar results={results} /> : results.length === 0 ? <p>まだ履歴がありません。練習を終了すると自動で保存されます。</p> : (
         <div className="history-table-scroll" tabIndex={0} role="region" aria-label="練習履歴の表（横にスクロールできます）">
-          <table><caption className="history-caption">新しい結果から表示</caption><thead><tr><th scope="col">日時・英文</th><th scope="col">結果</th><th scope="col">WPM</th><th scope="col">正確率</th><th scope="col">ミス</th><th scope="col">経過 / 制限</th></tr></thead><tbody>{results.map((result) => <tr key={result.id}><td><time dateTime={result.savedAt}>{new Date(result.savedAt).toLocaleString('ja-JP')}</time><span className="history-text" title={result.text}>{result.text}</span></td><td>{reasons[result.reason]}</td><td>{result.wpm}</td><td>{result.accuracy}%</td><td>{result.mistakes}回</td><td>{result.elapsed.toFixed(1)} / {result.duration}秒</td></tr>)}</tbody></table>
+          <table><caption className="history-caption">新しい結果から表示</caption><thead><tr><th scope="col">日時・言語・練習文</th><th scope="col">結果</th><th scope="col">速度</th><th scope="col">正確率</th><th scope="col">ミス</th><th scope="col">経過 / 制限</th></tr></thead><tbody>{results.map((result) => <tr key={result.id}><td><time dateTime={result.savedAt}>{new Date(result.savedAt).toLocaleString('ja-JP')}</time><LanguageBadge language={result.language} compact /><span className="history-text" title={result.text}>{result.text}</span></td><td>{reasons[result.reason]}</td><td>{formatResultSpeed(result)}</td><td>{result.accuracy}%</td><td>{result.mistakes}回</td><td>{result.elapsed.toFixed(1)} / {result.duration}秒</td></tr>)}</tbody></table>
         </div>
       )}
       </m.div>

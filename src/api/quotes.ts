@@ -1,16 +1,14 @@
 import { createApiClient } from './client.ts'
+import { practiceSamples, type PracticeLanguage } from '../features/typing/samples.ts'
 
 export interface PracticeQuote {
   text: string
   author: string | null
   source: 'dummyjson' | 'local'
+  language?: PracticeLanguage
 }
 
-export const fallbackQuotes: PracticeQuote[] = [
-  { text: 'Small steps, every day.', author: null, source: 'local' },
-  { text: 'Take your time and enjoy the journey.', author: null, source: 'local' },
-  { text: 'A little practice makes a big difference.', author: null, source: 'local' },
-]
+export const fallbackQuotes: PracticeQuote[] = practiceSamples.en.map((text) => ({ text, author: null, source: 'local', language: 'en' }))
 
 const quotesApi = createApiClient('https://dummyjson.com')
 
@@ -31,6 +29,7 @@ export function selectPracticeQuote(data: unknown, previousText?: string): Pract
       text,
       author: 'author' in item && typeof item.author === 'string' ? item.author : null,
       source: 'dummyjson',
+      language: 'en',
     }
   }
   throw new Error('練習に適した英文が見つかりませんでした。')
@@ -42,5 +41,6 @@ export async function getPracticeQuote(previousText?: string, signal?: AbortSign
 }
 
 export function getFallbackQuote(previousText?: string): PracticeQuote {
-  return fallbackQuotes.find((quote) => quote.text !== previousText) ?? fallbackQuotes[0]
+  const index = fallbackQuotes.findIndex((quote) => quote.text === previousText)
+  return fallbackQuotes[(index + 1) % fallbackQuotes.length]
 }

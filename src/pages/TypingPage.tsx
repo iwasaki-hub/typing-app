@@ -9,7 +9,7 @@ export default function TypingPage() {
       <div className="typing-page-intro">
         <Link to="/">← ホームに戻る</Link>
         <h1>自分のペースで、タイピング。</h1>
-        <p>制限時間と打鍵音を選んで、最初の一文字からスタート。</p>
+        <p>英語・韓国語の例文を選んで練習。制限時間と打鍵音も変更できます。</p>
       </div>
       <QuotePractice />
       <TypingHistory />

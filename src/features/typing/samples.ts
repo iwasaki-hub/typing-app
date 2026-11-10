@@ -1,0 +1,38 @@
+export type PracticeLanguage = 'en' | 'ko'
+
+export const practiceSamples = {
+  en: [
+    'Small steps, every day.',
+    'Take your time and enjoy the journey.',
+    'A little practice makes a big difference.',
+    'The morning sun fills the room with light.',
+    'Keep learning something new every day.',
+    'A warm cup of tea helps me relax.',
+    'We enjoy walking in the park together.',
+    'Every mistake is a chance to learn.',
+    'Focus on one word at a time.',
+    'Your next adventure starts with a small step.',
+    'Take a deep breath and relax your shoulders before you begin. Focus on typing each word carefully instead of rushing to the end.',
+    'On a quiet morning, the sunlight comes through the window while the sound of birds makes the room feel peaceful and bright.',
+    'Learning something new takes time and patience. A few minutes of practice every day can help you build a skill that lasts for years.',
+    'After a busy day, a short walk outside can clear your mind and give you fresh energy for the small things you still want to do.',
+    'Small improvements may be difficult to notice at first, but steady effort will help you become more confident with every sentence you type.',
+  ],
+  ko: [
+    '오늘도 즐겁게 타자를 연습해요.',
+    '천천히 정확하게 입력해 보세요.',
+    '작은 연습이 큰 변화를 만들어요.',
+    '매일 조금씩 실력을 키워요.',
+    '따뜻한 커피 한 잔을 마셔요.',
+    '창문 밖으로 파란 하늘이 보여요.',
+    '친구와 함께 공원에서 산책해요.',
+    '새로운 하루가 시작되었어요.',
+    '실수해도 괜찮아요. 다시 해 봐요.',
+    '꾸준히 연습하면 더 빨라져요.',
+    '연습을 시작하기 전에 어깨의 힘을 빼고 편안하게 앉아 보세요. 속도보다 정확하게 입력하는 것이 더 중요해요.',
+    '아침에 창문을 열면 시원한 바람이 방 안으로 들어와요. 따뜻한 차를 마시면서 오늘 할 일을 천천히 생각해요.',
+    '새로운 것을 배우는 데에는 시간과 인내가 필요해요. 매일 조금씩 연습하면 어제보다 나아진 자신을 발견할 수 있어요.',
+    '바쁜 하루를 보낸 후에는 가까운 공원에서 산책해 보세요. 나무와 꽃을 바라보며 걸으면 마음이 한결 가벼워져요.',
+    '처음에는 긴 문장을 입력하는 것이 어렵게 느껴질 수 있어요. 한 글자씩 차근차근 연습하다 보면 자신감이 생겨요.',
+  ],
+} satisfies Record<PracticeLanguage, string[]>

@@ -1,0 +1,5 @@
+.language-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #d5e5f5; border-radius: 7px; background: #edf6ff; color: #176bb5; font-size: 14px; font-weight: 650; white-space: nowrap; vertical-align: middle; }
+.language-badge[data-language=ko] { color: #77529e; border-color: #e5d9ef; background: #f5effb; }
+.language-badge img { display: block; width: 26px; height: 18px; object-fit: contain; border-radius: 2px; box-shadow: 0 0 0 1px #19191915; }
+.language-badge-compact { font-size: 11px; gap: 6px; padding: 3px 6px; }
+.language-badge-compact img { width: 20px; height: 14px; }

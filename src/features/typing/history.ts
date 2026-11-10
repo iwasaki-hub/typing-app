@@ -11,6 +11,8 @@ export interface TypingResult {
   accuracy: number
   mistakes: number
   attempts?: number
+  language?: 'en' | 'ko'
+  cpm?: number
   correct: number
   reason: 'completed' | 'timeout' | 'stopped'
 }
@@ -23,6 +25,12 @@ function isResult(value: unknown): value is TypingResult {
     && ['completed', 'timeout', 'stopped'].includes(String(item.reason))
     && ['duration', 'elapsed', 'wpm', 'accuracy', 'mistakes', 'correct'].every((key) => typeof item[key] === 'number' && Number.isFinite(item[key]) && item[key] >= 0)
     && Number(item.accuracy) <= 100 && Number(item.elapsed) <= Number(item.duration)
+    && (item.language === undefined || item.language === 'en' || item.language === 'ko')
+    && (item.language !== 'ko' || (typeof item.cpm === 'number' && Number.isFinite(item.cpm) && item.cpm >= 0))
+}
+
+export function formatResultSpeed(result: TypingResult) {
+  return result.language === 'ko' ? `${result.cpm ?? 0} CPM` : `${result.wpm} WPM`
 }
 
 export function parseHistory(raw: string | null): TypingResult[] {
