@@ -17,6 +17,7 @@ const quotesApi = createApiClient('https://dummyjson.com')
 function normalizeText(text: string) {
   return text.replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
     .replace(/[–—]/g, '-').replace(/…/g, '...').replace(/\s+/g, ' ').trim()
+    .toLowerCase().replace(/[a-z]/, (letter) => letter.toUpperCase())
 }
 
 // Validate external data and keep sentences manageable for an introductory exercise.

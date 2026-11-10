@@ -59,6 +59,12 @@ export default function TypingPractice({ quote, loading, notice, onNext }: {
     onNext()
   }
 
+  function dismissResult() {
+    setDismissedResult(session)
+    // The completed input is disabled; restore focus to the result trigger instead.
+    requestAnimationFrame(() => resultButton.current?.focus({ preventScroll: true }))
+  }
+
   useEffect(() => {
     if (!loading && session.status === 'ready' && focusAfterLoad.current) {
       focusAfterLoad.current = false
@@ -102,7 +108,7 @@ export default function TypingPractice({ quote, loading, notice, onNext }: {
         <p className="typing-notice" id="typing-help" role="status">{inputNotice || (running ? 'Backspace で修正できます。修正前のミスも正確率に含まれます。' : '英字入力で練習してください。貼り付けは無効です。')}</p>
         <label className="typing-progress-label">進み具合 {metrics.progress}%<progress max="100" value={metrics.progress} /></label>
         {finished && <button ref={resultButton} type="button" className="typing-result-open" onClick={() => setDismissedResult(null)}>結果を表示する</button>}
-        {finished && dismissedResult !== session && <TypingResultModal session={session} wpm={metrics.wpm} accuracy={metrics.accuracy} correct={metrics.correct} total={text.length} loading={loading} onNext={nextQuestion} onRetry={reset} onDismiss={() => setDismissedResult(session)} returnFocus={resultButton} />}
+        {finished && dismissedResult !== session && <TypingResultModal session={session} wpm={metrics.wpm} accuracy={metrics.accuracy} correct={metrics.correct} total={text.length} loading={loading} onNext={nextQuestion} onRetry={reset} onDismiss={dismissResult} />}
         <div className="typing-actions">
           <button type="button" disabled={loading} onClick={reset}><FontAwesomeIcon icon={faRotateLeft} aria-hidden="true" /> 同じ文でやり直す</button>
           {running && <button type="button" onClick={() => dispatch({ type: 'stop', now: performance.now(), duration })}>ここで終了</button>}
