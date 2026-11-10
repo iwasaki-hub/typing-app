@@ -38,6 +38,34 @@
 .home-page .home-how li > span { font-size: 12px; color: #93938b; padding-top: 5px; font-family: monospace; }
 .home-page .home-how h3 { margin: 0; }
 .home-page .home-how li p { margin: 6px 0 0; }
+.home-page .home-reviews { max-width: 1120px; margin: 100px auto; padding: 0 32px; }
+.home-page .home-review-demo { display: inline-block; margin-left: 8px; padding: 2px 8px; border: 1px solid #deded9; border-radius: 99px; font-size: 10px; letter-spacing: 1px; }
+.home-page .home-reviews-note { margin: 18px 0 0; font-size: 12px; color: #686863; }
+.home-page .home-review-link { font-size: 13px; margin-top: 12px; }
+.home-page .home-review-link a { color: var(--home-blue); }
+.home-page .home-review-card blockquote { white-space: pre-wrap; overflow-wrap: anywhere; }
+.home-page .home-review-name, .home-page .home-review-card h3 { overflow-wrap: anywhere; }
+.home-page .home-review-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 32px; }
+.home-page .home-review-card { display: flex; flex-direction: column; padding: 26px; border: 1px solid #e8e7e4; border-radius: 16px; background: #fff; }
+.home-page .home-review-rating > span:last-child { display: inline-flex; gap: 5px; color: #deded9; font-size: 13px; }
+.home-page .home-review-rating .is-filled { color: #b77916; }
+.home-page .home-review-card h3 { margin: 18px 0 12px; font-size: 17px; line-height: 1.7; }
+.home-page .home-review-card blockquote { margin: 0 0 24px; font-size: 13px; line-height: 1.95; color: #62625c; }
+.home-page .home-review-author { display: flex; align-items: center; gap: 12px; margin-top: auto; }
+.home-page .home-review-avatar { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; background: #edf6ff; color: #176bb5; font-size: 14px; font-weight: 700; }
+.home-page .home-review-card:nth-child(2) .home-review-avatar { background: #f2ecfa; color: #8462b3; }
+.home-page .home-review-card:nth-child(3) .home-review-avatar { background: #eaf6ef; color: #248265; }
+.home-page .home-review-name, .home-page .home-review-role { display: block; font-size: 12px; }
+.home-page .home-review-name { font-weight: 650; }
+.home-page .home-review-role { color: #686863; font-size: 11px; margin-top: 2px; }
+@media (max-width: 750px) {
+  .home-page .home-reviews { padding: 0 24px; margin: 64px auto; }
+  .home-page .home-review-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+}
+:root[data-theme=calm] .home-page .home-review-card { background: #fff8eb; border-color: #e7ddce; border-radius: 28px; }
+:root[data-theme=calm] .home-page .home-review-card:nth-child(2) { background: #e9e3f8; }
+:root[data-theme=calm] .home-page .home-review-card:nth-child(3) { background: #dfeedd; }
+:root[data-theme=calm] .home-page .home-review-demo { background: #ffebc5; border-color: #e7ddce; color: #85411d; }
 .home-page .home-closing { padding: 52px 24px 62px; background: #f7f7f4; text-align: center; }
 .home-page .home-closing > span { font-size: 48px; line-height: 1; }
 .home-page .home-closing h2 { margin: 20px 0 26px; font-size: 30px; }

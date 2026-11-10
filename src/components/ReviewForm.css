@@ -1,0 +1,19 @@
+.review-form-section { margin-top: 40px; padding: 28px; border: 1px solid #e8e7e4; border-radius: 12px; background: #fff; }
+.review-form-section h2 { margin: 0 0 12px; font-size: 22px; }
+.review-form-section h2 svg { color: #b77916; font-size: 19px; }
+.review-form-section p { font-size: 13px; line-height: 1.8; color: #686863; }
+.review-form-section fieldset { display: grid; gap: 20px; border: 0; padding: 0; margin: 24px 0 0; min-width: 0; }
+.review-form-section label { display: grid; gap: 8px; font-size: 14px; font-weight: 600; }
+.review-form-section input:not([type=checkbox]), .review-form-section select, .review-form-section textarea { width: 100%; border: 1px solid #d5d6d0; padding: 11px 12px; border-radius: 8px; background: #fff; color: #252525; font: inherit; font-weight: 400; }
+.review-form-section select { max-width: 220px; }
+.review-form-section textarea { resize: vertical; min-height: 130px; }
+.review-form-section small { font-size: 12px; color: #686863; font-weight: 400; line-height: 1.7; }
+.review-form-section .review-form-consent { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; font-weight: 400; line-height: 1.8; }
+.review-form-consent input { margin-top: 5px; flex-shrink: 0; accent-color: #2383e2; }
+.review-form-section button { justify-self: start; padding: 12px 18px; border: 0; border-radius: 8px; background: #176bb5; color: #fff; font: inherit; font-size: 14px; cursor: pointer; }
+.review-form-section button:disabled { opacity: .5; cursor: not-allowed; }
+.review-form-section .review-form-error { color: #b42318; }
+.review-form-section .review-form-success { color: #248265; }
+@media (max-width: 640px) { .review-form-section { padding: 20px; } }
+:root[data-theme=calm] .review-form-section { border-color: #e7ddce; border-radius: 24px; background: #fffdf7; }
+:root[data-theme=calm] .review-form-section button { border-radius: 99px; background: #2b3d8a; }

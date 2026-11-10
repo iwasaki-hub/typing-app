@@ -1,4 +1,5 @@
 import { arrowRightIcon, arrowTrendUpIcon, arrowUpRightFromSquareIcon, keyboardIcon, fontIcon, wandMagicSparklesIcon, arrowTurnDownIcon } from '../lib/icons'
+import HomeReviews from '../components/HomeReviews'
 import { Link } from 'react-router-dom'
 import { m } from 'motion/react'
 import MotionLink from '../components/MotionLink'
@@ -52,6 +53,7 @@ export default function HomePage() {
           </m.div>
         </section>
         <section className="home-how" id="how-to"><div><p className="home-eyebrow">HOW TO START</p><h2>はじめの一歩は、<br />とてもシンプル。</h2></div><ol><li><span>01</span><div><h3>英文を読む</h3><p>練習ページに表示された一文を見てみよう。</p></div></li><li><span>02</span><div><h3>そのまま入力する</h3><p>キーボードを英字入力に切り替えて、一文字ずつ。</p></div></li><li><span>03</span><div><h3>もう一度、やってみる</h3><p>リセットして繰り返そう。速さよりも、まずは正確に。</p></div></li></ol></section>
+        <HomeReviews />
         <section className="home-closing"><span aria-hidden="true"><FontAwesomeIcon icon={wandMagicSparklesIcon} /></span><h2>今日の一文を、ここから。</h2><Link className="home-button" to="/practice">タイピングを試す <FontAwesomeIcon icon={arrowRightIcon} aria-hidden="true" /></Link></section>
       </main>
       <details className="home-system"><summary>システム接続の確認</summary><ConnectionStatus /></details>
