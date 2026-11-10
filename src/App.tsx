@@ -19,7 +19,7 @@ function App() {
       const url = import.meta.env.VITE_SUPABASE_URL
       const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
       if (!url || !key) {
-        throw new Error('.env.local に Supabase の URL と公開用キーを設定してください。')
+        throw new Error('Supabase の接続設定が不足しています。下の手順で環境変数を設定してください。')
       }
       const response = await fetch(new URL('/auth/v1/settings', url), {
         headers: { apikey: key },
@@ -55,6 +55,36 @@ function App() {
           </span>
         </div>
         <p role="status" aria-live="polite">{connectionMessage}</p>
+        {connection === 'error' && (
+          <div className="connection-help">
+            <h3>Vercel で接続する場合</h3>
+            <ol>
+              <li>
+                <a
+                  href="https://vercel.com/masas-projects-39337881/typing-app/settings/environment-variables"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Vercel の環境変数設定を開く ↗
+                </a>
+              </li>
+              <li>
+                次の2つを設定、または値を確認してください。
+                <ul>
+                  <li><code>VITE_SUPABASE_URL</code>：Supabase の Project URL</li>
+                  <li><code>VITE_SUPABASE_PUBLISHABLE_KEY</code>：Supabase の Publishable key</li>
+                </ul>
+              </li>
+              <li>本番サイトには Production、プレビューには Preview を選んで保存します。</li>
+              <li>Deployments から再デプロイ（Redeploy）し、完了後にこの画面を再読み込みしてください。</li>
+            </ol>
+            <p>環境変数の変更は、再デプロイ後に反映されます。</p>
+            <details>
+              <summary>ローカルで接続する場合</summary>
+              <p>プロジェクト直下の <code>.env.local</code> に上記の2つを設定し、開発サーバーを再起動してください。</p>
+            </details>
+          </div>
+        )}
         <p className="connection-note">Auth API への疎通を確認します。データベースの読み書きやログインは行いません。</p>
         <div className="connection-actions">
           <button type="button" onClick={checkConnection} disabled={connection === 'checking'}>

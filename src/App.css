@@ -1,3 +1,19 @@
+.connection-help {
+  margin: 20px 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.connection-help h3 { margin: 0 0 12px; font-size: 16px; }
+.connection-help ol, .connection-help ul { padding-left: 22px; }
+.connection-help li + li { margin-top: 8px; }
+.connection-help summary { cursor: pointer; }
+.connection-help a { text-decoration: underline; }
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
