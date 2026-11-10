@@ -1,0 +1,4 @@
+.not-found-page { max-width: 800px; margin: 90px auto; padding: 24px; text-align: center; line-height: 1.8; }
+.not-found-page h1 { font-size: clamp(24px, 4vw, 36px); }
+.not-found-page > p:first-child { color: #0876d9; font-size: 48px; font-weight: 750; margin: 0; }
+.not-found-page a { display: inline-block; margin: 20px 12px; color: #0876d9; }

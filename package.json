@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "test:typing": "node --test scripts/typing-session.test.mjs scripts/typing-history.test.mjs",
     "check:supabase": "node scripts/check-supabase.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -17,7 +18,8 @@
     "@supabase/supabase-js": "2.119.0",
     "axios": "^1.21.1",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

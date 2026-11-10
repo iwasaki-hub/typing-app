@@ -1,0 +1,8 @@
+.typing-page { padding: 48px 24px 80px; min-height: calc(100svh - 80px); background: #fafaf8; }
+.typing-page-intro { max-width: 1056px; margin: 0 auto 32px; }
+.typing-page-intro > a { font-size: 13px; color: #686863; }
+.typing-page-intro h1 { font-size: clamp(25px, 4vw, 38px); line-height: 1.4; letter-spacing: -1px; margin: 28px 0 12px; }
+.typing-page-intro p { font-size: 14px; color: #686863; line-height: 1.8; }
+.typing-page .typing-heading h2 { font-size: 20px; letter-spacing: 0; margin: 0; }
+.typing-page .typing-result h3 { margin: 0 0 8px; font-size: 17px; }
+@media (max-width: 750px) { .typing-page { padding: 32px 0 48px; } .typing-page-intro { padding: 0 20px; } }

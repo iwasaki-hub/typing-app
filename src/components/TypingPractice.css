@@ -1,0 +1,44 @@
+.typing-practice { max-width: 1056px; margin: 0 auto; border: 1px solid #dddeda; border-radius: 12px; background: #fff; overflow: hidden; box-shadow: 0 7px 26px #00000007; scroll-margin-top: 100px; }
+.typing-heading { display: flex; justify-content: space-between; align-items: center; padding: 20px 28px; background: #f8f8f6; border-bottom: 1px solid #e8e7e4; gap: 12px; }
+.home-page .typing-heading h2 { font-size: 20px; letter-spacing: 0; }
+.typing-heading > span { font-size: 12px; color: #666; }
+.typing-settings { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 20px 28px; font-size: 13px; }
+.typing-settings label { display: flex; align-items: center; gap: 8px; }
+.typing-settings select, .typing-settings button, .typing-actions button { border: 1px solid #deded9; border-radius: 6px; background: white; color: #252525; padding: 9px 12px; }
+.typing-settings button[aria-pressed="true"] { color: #0867bd; background: #eaf4ff; border-color: #8cc5ff; }
+.typing-volume input { width: 85px; accent-color: #0876d9; }
+.typing-volume span { min-width: 30px; }
+.typing-stats { display: grid; grid-template-columns: repeat(4, 1fr); padding: 0 28px; margin: 0; gap: 12px; }
+.typing-stats > div { padding: 15px 18px; background: #f6f7f8; border-radius: 8px; }
+.typing-stats dt { font-size: 12px; color: #666; }
+.typing-stats dd { font-size: 30px; font-weight: 750; margin: 4px 0 0; font-variant-numeric: tabular-nums; }
+.typing-stats small { font-size: 12px; font-weight: 400; }
+.typing-stats .typing-urgent { color: #b52d2d; }
+.typing-body { padding: 24px 28px; }
+.typing-text { white-space: pre-wrap; overflow-wrap: anywhere; font-family: 'Courier New', monospace; font-size: clamp(22px, 3vw, 32px); line-height: 1.65; color: #777972; margin: 18px 0 12px; }
+.typing-correct { color: #166534; }
+.typing-incorrect { color: #b91c1c; background: #ffe3e3; text-decoration: underline; }
+.typing-cursor { border-bottom: 3px solid #0876d9; background: #eaf4ff; }
+.typing-credit, .typing-notice, .typing-footnote { font-size: 12px; color: #686863; }
+.typing-input-label { display: block; font-size: 13px; margin: 24px 0 8px; }
+.typing-input { width: 100%; padding: 14px; border: 1px solid #c8cac6; border-radius: 6px; font-size: 16px; color: #191919; background: #fff; }
+.typing-input:disabled { background: #f5f5f3; }
+.typing-progress-label { display: block; font-size: 12px; color: #666; margin-top: 20px; }
+.typing-progress-label progress { display: block; width: 100%; height: 8px; margin-top: 8px; accent-color: #0876d9; }
+.typing-result { margin-top: 24px; background: #eaf6ed; border: 1px solid #c8e7d0; border-radius: 8px; padding: 18px; color: #19492b; }
+.home-page .typing-result h3 { margin: 0 0 8px; }
+.typing-result p { font-size: 14px; margin: 0; }
+.typing-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; font-size: 13px; }
+.typing-actions button { display: inline-flex; align-items: center; gap: 8px; }
+.typing-actions .typing-next { margin-left: auto; color: white; background: #0876d9; border-color: #0876d9; }
+.typing-actions button:disabled, .typing-settings select:disabled { opacity: .5; cursor: not-allowed; }
+.typing-footnote { margin: 18px 0 0; }
+@media (max-width: 750px) {
+  .typing-practice { margin: 0 20px; }
+  .typing-heading, .typing-body, .typing-settings { padding: 18px; }
+  .typing-heading { flex-wrap: wrap; }
+  .typing-stats { grid-template-columns: repeat(2, 1fr); padding: 0 18px; }
+  .typing-stats dd { font-size: 26px; }
+  .typing-actions { align-items: stretch; }
+  .typing-actions .typing-next { margin-left: 0; }
+}

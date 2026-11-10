@@ -1,33 +1,26 @@
-import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import ConnectionStatus from '../components/ConnectionStatus'
-import Navigation from '../components/Navigation'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faArrowUp, faArrowTrendUp, faArrowUpRightFromSquare, faRotateLeft, faKeyboard, faFont, faWandMagicSparkles, faArrowTurnDown } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight, faArrowUp, faArrowTrendUp, faArrowUpRightFromSquare, faKeyboard, faFont, faWandMagicSparkles, faArrowTurnDown } from '@fortawesome/free-solid-svg-icons'
 import './HomePage.css'
 
-const sample = 'Small steps, every day.'
+
 
 export default function HomePage() {
-  const [input, setInput] = useState('')
-  function startPractice() {
-    document.getElementById('practice')?.scrollIntoView({
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-      block: 'center',
-    })
-    document.getElementById('typing-input')?.focus({ preventScroll: true })
-  }
+
   return (
-    <div className="home-page" id="top">
-      <a className="home-skip" href="#main">本文へスキップ</a>
-      <Navigation onStart={startPractice} />
-      <main id="main">
+    <div className="home-page">
+      
+      
+      <main id="main" tabIndex={-1}>
         <section className="home-hero">
           <div>
             <p className="home-eyebrow">● LITTLE BY LITTLE, KEY BY KEY.</p>
             <h1>ことばを打つ。<br />毎日が、<br /><span>少し軽くなる。</span></h1>
             <p className="home-lead">考えたことが、すっと指先から伝わる。<br />まずは短い一文から、タイピングを楽しもう。</p>
-            <div className="home-hero-actions"><button className="home-button" onClick={startPractice}>さっそく試してみる <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></button><a href="#how-to">使い方を見る <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden="true" /></a></div>
-            <p className="home-caption">登録不要。このページですぐに体験できます。</p>
+            <div className="home-hero-actions"><Link className="home-button" to="/practice">さっそく試してみる <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></Link><a href="#how-to">使い方を見る <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden="true" /></a></div>
+            <p className="home-caption">登録不要。練習ページですぐに体験できます。</p>
           </div>
           <div className="home-art" aria-hidden="true">
             <span className="home-art-note">Make room<br />for a little practice.</span>
@@ -47,16 +40,7 @@ export default function HomePage() {
             <span className="home-floating-key"><FontAwesomeIcon icon={faArrowTurnDown} /></span><span className="home-art-label">A little practice. A little progress.</span>
           </div>
         </section>
-        <section className="home-practice" id="practice" aria-labelledby="practice-title">
-          <div className="home-practice-top"><span>● おためしタイピング</span><span>01 / 01</span></div>
-          <div className="home-practice-content">
-            <p className="home-eyebrow" id="practice-title">まずは、この一文を。</p>
-            <p className="home-sample" aria-label={sample}>{sample.split('').map((letter, index) => <span key={index} aria-hidden="true" className={index < input.length ? input[index] === letter ? 'correct' : 'incorrect' : ''}>{letter}</span>)}</p>
-            <label className="home-sr-only" htmlFor="typing-input">表示された英文を入力</label>
-            <input id="typing-input" value={input} onChange={(event) => setInput(event.target.value)} placeholder="ここに英文を入力してください" autoComplete="off" autoCapitalize="off" spellCheck={false} maxLength={sample.length} aria-describedby="practice-feedback" />
-            <div className="home-practice-bottom"><p id="practice-feedback" role="status">{input === sample ? 'できました！ 小さな一歩を重ねていこう。' : '自分のペースで、一文字ずつ。'}</p><button onClick={() => { setInput(''); startPractice() }}>リセット <FontAwesomeIcon icon={faRotateLeft} aria-hidden="true" /></button></div>
-          </div>
-        </section>
+        
         <section className="home-features" id="features">
           <p className="home-eyebrow">LESS NOISE. MORE FOCUS.</p><h2>気負わず、<br />打つことだけに集中。</h2>
           <div className="home-feature-grid">
@@ -65,12 +49,13 @@ export default function HomePage() {
             <article><span><FontAwesomeIcon icon={faArrowTrendUp} aria-hidden="true" /></span><h3>間違いも、一歩に。</h3><p>入力した文字を、その場でチェック。<br />焦らず、何度でも試してみよう。</p></article>
           </div>
         </section>
-        <section className="home-how" id="how-to"><div><p className="home-eyebrow">HOW TO START</p><h2>はじめの一歩は、<br />とてもシンプル。</h2></div><ol><li><span>01</span><div><h3>英文を読む</h3><p>おためしエリアに表示された一文を見てみよう。</p></div></li><li><span>02</span><div><h3>そのまま入力する</h3><p>キーボードを英字入力に切り替えて、一文字ずつ。</p></div></li><li><span>03</span><div><h3>もう一度、やってみる</h3><p>リセットして繰り返そう。速さよりも、まずは正確に。</p></div></li></ol></section>
-        <section className="home-closing"><span aria-hidden="true"><FontAwesomeIcon icon={faWandMagicSparkles} /></span><h2>今日の一文を、ここから。</h2><button className="home-button" onClick={startPractice}>タイピングを試す <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></button></section>
+        <section className="home-how" id="how-to"><div><p className="home-eyebrow">HOW TO START</p><h2>はじめの一歩は、<br />とてもシンプル。</h2></div><ol><li><span>01</span><div><h3>英文を読む</h3><p>練習ページに表示された一文を見てみよう。</p></div></li><li><span>02</span><div><h3>そのまま入力する</h3><p>キーボードを英字入力に切り替えて、一文字ずつ。</p></div></li><li><span>03</span><div><h3>もう一度、やってみる</h3><p>リセットして繰り返そう。速さよりも、まずは正確に。</p></div></li></ol></section>
+        <section className="home-closing"><span aria-hidden="true"><FontAwesomeIcon icon={faWandMagicSparkles} /></span><h2>今日の一文を、ここから。</h2><Link className="home-button" to="/practice">タイピングを試す <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" /></Link></section>
       </main>
       <footer className="home-footer"><a className="home-brand" href="#top"><span className="home-mark">t.</span>Typing</a><p>ひとつずつ、自分のペースで。</p><a href="#top">ページの先頭へ <FontAwesomeIcon icon={faArrowUp} aria-hidden="true" /></a></footer>
       <details className="home-system"><summary>システム接続の確認</summary><ConnectionStatus /></details>
     </div>
   )
 }
+
 
