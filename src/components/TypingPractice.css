@@ -6,6 +6,10 @@
 .typing-settings label { display: flex; align-items: center; gap: 8px; }
 .typing-settings select, .typing-settings button, .typing-actions button { border: 1px solid #deded9; border-radius: 6px; background: white; color: #252525; padding: 9px 12px; }
 .typing-settings button[aria-pressed="true"] { color: #0867bd; background: #eaf4ff; border-color: #8cc5ff; }
+.typing-sound[aria-pressed="false"] svg { color: #728096; }
+.typing-sound[aria-pressed="true"] svg { color: #176bb5; }
+.typing-actions [data-icon="rotate-left"] { color: #8462b3; }
+.typing-result [data-icon="flag-checkered"] { color: #248265; }
 .typing-volume input { width: 85px; accent-color: #0876d9; }
 .typing-volume span { min-width: 30px; }
 .typing-stats { display: grid; grid-template-columns: repeat(4, 1fr); padding: 0 28px; margin: 0; gap: 12px; }

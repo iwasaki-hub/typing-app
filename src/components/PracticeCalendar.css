@@ -1,0 +1,24 @@
+.practice-calendar .calendar-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
+.practice-calendar h3 { font-size: 1rem; margin: 0; }
+.calendar-heading > div { display: flex; gap: 8px; }
+.calendar-heading svg { color: #176bb5; }
+.practice-calendar button { font: inherit; cursor: pointer; border: 1px solid #ddd; border-radius: 7px; padding: 8px 12px; background: white; color: #333; }
+.practice-calendar button:hover { background: #f2f6fa; }
+.practice-calendar :focus-visible { outline: 3px solid #2383e2; outline-offset: 2px; }
+.typing-history .practice-calendar table { table-layout: fixed; width: 100%; border-collapse: separate; border-spacing: 4px; }
+.typing-history .practice-calendar th { text-align: center; padding: 10px 0; background: none; border: 0; }
+.typing-history .practice-calendar td { padding: 0; border: 0; vertical-align: top; }
+.practice-calendar td button { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%; min-height: 78px; padding: 10px; text-align: left; }
+.practice-calendar td button small { font-size: .75rem; color: #176bb5; }
+.practice-calendar td button.calendar-practiced { background: #edf6ff; border-color: #d0e7fb; }
+.practice-calendar td button.calendar-selected { border: 2px solid #2383e2; padding: 9px; }
+.practice-calendar td button[aria-current=date] > span { color: #176bb5; font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
+.calendar-detail { border-top: 1px solid #eee; margin-top: 24px; padding-top: 24px; }
+.calendar-detail h3 small { font-size: .8rem; color: #777; font-weight: 400; }
+.calendar-detail ul { list-style: none; margin: 12px 0 0; padding: 0; }
+.calendar-detail li { padding: 16px 0; border-bottom: 1px solid #eee; }
+.calendar-detail li > div { display: flex; gap: 16px; font-size: .8rem; color: #777; margin-bottom: 10px; }
+.calendar-detail strong { font-size: 1rem; }
+.calendar-detail strong small { font-size: .8rem; font-weight: 400; margin-left: 12px; }
+.typing-history .calendar-detail li p { margin: 10px 0 0; overflow-wrap: anywhere; }
+@media (max-width: 480px) { .typing-history .practice-calendar table { border-spacing: 2px; } .practice-calendar td button { min-height: 60px; padding: 6px; } .practice-calendar td button.calendar-selected { padding: 5px; } .calendar-unit { display: none; } .calendar-detail strong small { display: block; margin: 8px 0 0; } }

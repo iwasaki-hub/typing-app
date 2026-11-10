@@ -1,6 +1,7 @@
 .ranking-page { max-width: 1060px; margin: 0 auto; padding: 72px 24px 100px; color: #252525; }
 .ranking-intro { margin-bottom: 48px; }
 .ranking-intro > span { font-size: .8rem; letter-spacing: .12em; color: #a56b11; }
+.ranking-intro [data-icon="trophy"] { color: #b77916; padding: 12px; margin-right: 8px; background: #fff5df; border-radius: 12px; font-size: 20px; vertical-align: middle; }
 .ranking-intro h1 { font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -.04em; margin: 18px 0; }
 .ranking-intro p, .ranking-board > p, .ranking-publish > p { color: #666; line-height: 1.8; }
 .ranking-board, .ranking-publish { border: 1px solid #e6e6e3; border-radius: 14px; padding: 28px; margin-bottom: 28px; }

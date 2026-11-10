@@ -9,4 +9,8 @@
 .typing-history th { font-size: 12px; color: #686863; background: #f8f8f6; }
 .history-text { display: block; max-width: 250px; overflow: hidden; text-overflow: ellipsis; font-size: 12px; color: #686863; margin-top: 6px; }
 .typing-history .history-error { color: #b91c1c; }
+.history-view { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid #e8e7e4; border-radius: 8px; }
+.history-view button { font: inherit; font-size: .85rem; border: 0; border-radius: 5px; padding: 8px 16px; background: white; cursor: pointer; }
+.history-view button[aria-pressed=true] { color: #176bb5; background: #edf6ff; }
+.history-view button:focus-visible { outline: 3px solid #2383e2; outline-offset: 2px; }
 @media (max-width: 750px) { .typing-history { margin: 30px 20px 0; padding: 18px; } }

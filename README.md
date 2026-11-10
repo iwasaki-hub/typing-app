@@ -39,6 +39,9 @@ React Router の `BrowserRouter` を使用します。
 - `/`: ホーム (`HomePage.tsx` / `HomePage.css`)
 - `/practice`: タイピング練習 (`TypingPage.tsx` / `TypingPage.css`)
 - `/ranking`: 全ユーザーランキング (`RankingPage.tsx` / `RankingPage.css`)
+- `/login`: メールログイン (`LoginPage.tsx` / `LoginPage.css`)
+- `/dashboard`: ログイン後のダッシュボード (`DashboardPage.tsx` / `DashboardPage.css`)
+- `/profile`: 表示名編集・ログアウト (`LoginPage.tsx` のプロフィール表示)
 - その他: 404 案内 (`NotFoundPage.tsx` / `NotFoundPage.css`)
 
 ルート定義は `src/App.tsx` に集約しています。共通ナビゲーションは `Link` / `NavLink` を使い、
@@ -73,6 +76,8 @@ Font Awesome は使用する無料アイコンだけをインポートしてい�
 - 打鍵音は初期状態でオフ。オン／オフ・音量を調整でき、通常入力・ミス・クリアで音が変わります。
 - 終了した結果（クリア・時間切れ・手動終了）は localStorage に最新100件を自動保存し、練習ページ下部に履歴を表示します。
 - 履歴は同じブラウザ・同じオリジンに保存されます。ローカル環境と公開サイト、別端末の間では共有されません。
+- 練習ページとダッシュボードの履歴は「一覧」「カレンダー」で切り替えられます。カレンダーは月移動・今日への移動・日付別の詳細表示に対応します。
+- 日付はブラウザのローカル時刻で集計します。カレンダーも保存済みの最新100件が対象で、削除された古い履歴は表示されません。
 - 保存禁止や容量不足の際は案内を表示し、練習は続行できます。ランキングへの公開は別途、本人が操作します。
 
 構成: `QuotePractice.tsx`（英文取得）、`TypingPractice.tsx` と専用 CSS（練習画面）、
@@ -94,6 +99,21 @@ Font Awesome は使用する無料アイコンだけをインポートしてい�
 - `scripts/check-ranking.sql` は検証用ユーザー・記録をトランザクション内で作り、権限・集計をテスト後すべてロールバックします。
 
 ### メールログインの設定
+
+ナビゲーションの「ログイン」から専用ページを開き、メールでログインします。
+ログインすると `/dashboard` に移動します。表示名が未登録なら「名前を設定」から1〜20文字の名前を登録してください。
+ダッシュボードにはブラウザ内の履歴集計・練習履歴・練習／ランキング／プロフィールへのリンクを表示します。
+未ログインで `/dashboard` や `/profile` を開くと、認証状態の確認後に `/login` へ移動します。
+名前は Supabase Auth の `user_metadata.display_name` に保存し、ナビゲーションとランキング投稿の初期値に使用します。
+このメタデータは表示専用です。権限判定には使用しません。
+ログイン状態は共通の `AuthProvider` で購読し、ページ遷移・再読み込み・別タブのログイン／ログアウトも反映します。
+各画面では `useAuth()` から `session`・`user`・`isAuthenticated`・`ready`・`error`・`displayName` を参照します。
+ログアウトは `logout()`、表示名の保存は `saveDisplayName(name)` を使い、Context 経由で状態を共有します。
+Context はメモリ内の共有状態です。再読み込み時は Supabase SDK が保存済みセッションを復元し、Context を更新します。
+認証トークンを独自に localStorage へ保存する処理は追加していません。
+プロフィール画面からログアウトできます。公開済みのランキング表示名はプロフィール変更では書き換わりません。
+メールリンクは既存設定の `/ranking` で受け取り、認証完了後にアプリ内で `/dashboard` に移動します。
+`/dashboard` や `/login` を Supabase のリダイレクトURLに追加する必要はありません。
 
 [Supabase URL Configuration](https://supabase.com/dashboard/project/tfhrkovrmxxeoaueqxin/auth/url-configuration) で次を設定します。
 

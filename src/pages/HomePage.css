@@ -25,6 +25,12 @@
 .home-page .home-feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 38px; margin-top: 42px; }
 .home-page .home-feature-grid article { border-top: 1px solid #dddeda; padding-top: 24px; }
 .home-page .home-feature-grid article > span { display: inline-block; font-family: Georgia, serif; font-size: 28px; font-weight: 700; height: 48px; }
+.home-page .home-feature-grid article > span { display: inline-flex; align-items: center; justify-content: center; width: 48px; border-radius: 12px; }
+.home-page .home-feature-grid article:nth-child(1) > span { color: #8462b3; background: #f2ecfa; }
+.home-page .home-feature-grid article:nth-child(2) > span { color: #176bb5; background: #edf6ff; }
+.home-page .home-feature-grid article:nth-child(3) > span { color: #248265; background: #eaf6ef; }
+.home-page .home-floating-key { color: #176bb5; background: #edf6ff; }
+.home-page .home-closing > span { color: #b77916; }
 .home-page h3 { font-size: 17px; margin: 12px 0 9px; }
 .home-page .home-feature-grid p, .home-page .home-how p:not(.home-eyebrow) { font-size: 13px; line-height: 1.9; color: #6b6b65; }
 .home-page .home-how { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; border-top: 1px solid #e8e7e4; padding-top: 64px; }
