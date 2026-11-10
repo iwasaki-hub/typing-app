@@ -23,3 +23,7 @@
 .calendar-detail strong small { font-size: .8rem; font-weight: 400; margin-left: 12px; }
 .typing-history .calendar-detail li p { margin: 10px 0 0; overflow-wrap: anywhere; }
 @media (max-width: 480px) { .typing-history .practice-calendar table { border-spacing: 2px; } .practice-calendar td button { min-height: 60px; padding: 6px; } .practice-calendar td button.calendar-selected { padding: 5px; } .calendar-unit { display: none; } .calendar-detail strong small { display: block; margin: 8px 0 0; } }
+:root[data-theme=calm] .practice-calendar td button { background: #fffaf0; border-color: #e7ddce; border-radius: 12px; }
+:root[data-theme=calm] .practice-calendar td button.calendar-practiced { background: #ffebc5; border-color: #efcd96; }
+:root[data-theme=calm] .practice-calendar td button.calendar-selected { border-color: #b95424; }
+:root[data-theme=calm] .practice-calendar td button small { color: #8f4823; }

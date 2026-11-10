@@ -32,6 +32,16 @@ RLS を有効にし、必要なアクセス権とポリシーを設定してく�
 接続方法: [Supabase 公式ドキュメント](https://supabase.com/docs/reference/javascript/initializing)
 
 ## ソースの構成
+### デザインの切り替え
+
+ナビゲーション内のパレットアイコン横の選択欄で「シンプル」「リラックス」を切り替えられます。
+スマートフォンなどではハンバーガーメニュー内に表示します。
+シンプルは従来の UI、リラックスは [Headspace](https://www.headspace.com/) を参考にしたクリーム・オレンジ・ラベンダーの配色と丸いカードです。
+独自のテーマとして実装し、参照サイトのロゴや画像は使用していません。
+選択は `typing-app:theme:v1` でブラウザに保存し、リロード・ページ移動後も維持します。
+テーマを変えても入力内容・練習結果・ログイン状態は初期化しません。
+`ThemeProvider`／`useTheme()` で状態を共有し、`src/styles/themes.css` と各ページ／コンポーネント CSS の `data-theme=calm` セレクターで装飾を管理します。
+
 ### 画面とルーティング
 
 React Router の `BrowserRouter` を使用します。

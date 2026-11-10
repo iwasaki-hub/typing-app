@@ -49,3 +49,13 @@
   .typing-actions { align-items: stretch; }
   .typing-actions .typing-next { margin-left: 0; }
 }
+:root[data-theme=calm] .typing-practice { background: #fffdf7; border-color: #e7ddce; border-radius: 28px; box-shadow: 0 10px 32px #6c472608; }
+:root[data-theme=calm] .typing-heading { background: #ffebc5; border-color: #e7ddce; color: #26314a; }
+:root[data-theme=calm] .typing-stats > div { background: #e9e3f8; border-radius: 18px; }
+:root[data-theme=calm] .typing-stats > div:nth-child(2) { background: #ffebc5; }
+:root[data-theme=calm] .typing-stats > div:nth-child(3) { background: #dfeedd; }
+:root[data-theme=calm] .typing-stats > div:nth-child(4) { background: #fce0ca; }
+:root[data-theme=calm] .typing-settings select, :root[data-theme=calm] .typing-settings button, :root[data-theme=calm] .typing-actions button { border-radius: 99px; border-color: #ded5c8; }
+:root[data-theme=calm] .typing-input { background: #fffaf0; border-color: #cfc4b5; border-radius: 16px; }
+:root[data-theme=calm] .typing-actions .typing-next { background: #2b3d8a; color: white; border-color: #2b3d8a; }
+:root[data-theme=calm] .typing-result-open { background: #e9e3f8; border-color: #d2c7e7; color: #4e397c; border-radius: 99px; }

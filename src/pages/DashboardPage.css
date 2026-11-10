@@ -23,3 +23,11 @@
 .dashboard-actions span { font-size: .85rem; color: #176bb5; }
 .dashboard-page :focus-visible { outline: 3px solid #2383e2; outline-offset: 3px; }
 @media (max-width: 640px) { .dashboard-page { padding: 40px 16px 60px; } .dashboard-actions { grid-template-columns: 1fr; } .dashboard-stats > div { padding: 18px 10px; } .dashboard-stats dd { font-size: 1.8rem; } .dashboard-stats dt { font-size: .75rem; } }
+:root[data-theme=calm] .dashboard-page { color: #26314a; }
+:root[data-theme=calm] .dashboard-intro { padding: 32px; border-radius: 28px; background: #ffebc5; }
+:root[data-theme=calm] .dashboard-stats { background: #fffdf7; border-color: #e7ddce; border-radius: 24px; }
+:root[data-theme=calm] .dashboard-stats > div + div { border-color: #e7ddce; }
+:root[data-theme=calm] .dashboard-actions > a { background: #e9e3f8; border: 0; border-radius: 24px; }
+:root[data-theme=calm] .dashboard-actions > a:first-child { background: #fce0ca; }
+:root[data-theme=calm] .dashboard-actions > a:last-child { background: #dfeedd; }
+:root[data-theme=calm] .dashboard-actions svg { background: #fff8eb; border-radius: 50%; }

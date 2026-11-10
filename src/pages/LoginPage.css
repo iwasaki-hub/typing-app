@@ -27,3 +27,10 @@
 .login-card [role=alert] { color: #ad3028; }
 .login-card [role=status] { padding: 12px; background: #edf6ff; border-radius: 7px; }
 @media (max-width: 480px) { .login-page { padding: 32px 16px 60px; } .login-card { padding: 28px 22px; } }
+:root[data-theme=calm] .login-page { background: #fff8eb; }
+:root[data-theme=calm] .login-card { background: #fffdf7; border-color: #e7ddce; border-radius: 28px; box-shadow: 0 12px 40px #6c47260c; }
+:root[data-theme=calm] .login-icon { color: #a64a21; background: #ffebc5; border-radius: 50%; }
+:root[data-theme=calm] .login-card input { border-radius: 12px; border-color: #d9cebc; background: #fffaf0; }
+:root[data-theme=calm] .login-card button { border-radius: 99px; }
+:root[data-theme=calm] .login-card button[type=submit] { background: #2b3d8a; border-color: #2b3d8a; }
+:root[data-theme=calm] .login-modes button[aria-pressed=true] { background: #ffebc5; color: #85411d; border-color: #e0b87d; }

@@ -57,3 +57,27 @@
   .home-page .home-system { margin: 0 24px 24px; }
 }
 @media (prefers-reduced-motion: reduce) { .home-page .home-button { transition: none; } }
+:root[data-theme=calm] .home-page { --home-blue: #b95424; color: #26314a; }
+:root[data-theme=calm] .home-page .home-hero { padding: 48px; margin-top: 40px; border-radius: 36px; background: #ffebc5; }
+:root[data-theme=calm] .home-page h1 { font-size: clamp(40px, 4.5vw, 64px); line-height: 1.3; letter-spacing: -.05em; }
+:root[data-theme=calm] .home-page h1 > span { color: #b95424; }
+:root[data-theme=calm] .home-page .home-button { background: #2b3d8a; border-radius: 99px; padding: 16px 26px; box-shadow: none; }
+:root[data-theme=calm] .home-page .home-button:hover { background: #20306d; }
+:root[data-theme=calm] .home-page .home-art::before { background: radial-gradient(ellipse, #ffcb8190, transparent 70%); }
+:root[data-theme=calm] .home-page .home-art svg path[fill="#f4f3ef"] { fill: #f6a451; }
+:root[data-theme=calm] .home-page .home-art svg path[fill="#e5f1ff"] { fill: #e9e3f8; }
+:root[data-theme=calm] .home-page .home-art svg path[stroke="#2584ea"] { stroke: #2b3d8a; }
+:root[data-theme=calm] .home-page .home-floating-key { color: #2b3d8a; background: #fff8eb; border-color: #26314a; border-radius: 16px; }
+:root[data-theme=calm] .home-page .home-feature-grid { gap: 20px; }
+:root[data-theme=calm] .home-page .home-feature-grid article { border: 0; border-radius: 28px; padding: 28px; background: #fce0ca; }
+:root[data-theme=calm] .home-page .home-feature-grid article:nth-child(2) { background: #e9e3f8; }
+:root[data-theme=calm] .home-page .home-feature-grid article:nth-child(3) { background: #dfeedd; }
+:root[data-theme=calm] .home-page .home-feature-grid article > span { border-radius: 50%; background: #fff8eb; }
+:root[data-theme=calm] .home-page .home-how { padding: 48px; background: #e9e3f8; border: 0; border-radius: 32px; }
+:root[data-theme=calm] .home-page .home-how li > span { color: #a64a21; }
+:root[data-theme=calm] .home-page .home-closing { background: #f6c66c; padding-block: 64px; }
+:root[data-theme=calm] .home-page .home-closing > span { color: #9b471d; }
+@media (max-width: 750px) {
+  :root[data-theme=calm] .home-page .home-hero { margin: 24px 16px 40px; padding: 32px 24px; }
+  :root[data-theme=calm] .home-page .home-how { margin-inline: 16px; padding: 28px 24px; }
+}

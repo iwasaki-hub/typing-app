@@ -17,3 +17,6 @@
 .footer-social .footer-youtube { color: #dc2626; }
 .footer-social .footer-discord { color: #5865f2; }
 @media (max-width: 600px) { .site-footer-inner { padding: 28px 24px; gap: 20px; } .site-footer-inner > div { width: 100%; } }
+:root[data-theme=calm] .site-footer { background: #e9e3f8; border-color: transparent; color: #26314a; }
+:root[data-theme=calm] .footer-mark { background: #f6a451; border: 0; box-shadow: none; border-radius: 50%; }
+:root[data-theme=calm] .footer-social a { border: 0; border-radius: 50%; background: #fff8eb; }

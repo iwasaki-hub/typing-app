@@ -22,3 +22,8 @@
 .result-modal-actions svg { margin: 0 5px; }
 .typing-result-modal .result-modal-hint { margin: 20px 0 0; font-size: .75rem; }
 @media (max-width: 480px) { .result-modal-panel { padding: 32px 20px 24px; } .result-modal-stats dd { font-size: 1.4rem; } .result-modal-stats small { display: block; margin-top: 4px; } }
+:root[data-theme=calm] .result-modal-panel { border-radius: 32px; background: #fff8eb; color: #26314a; }
+:root[data-theme=calm] .result-modal-icon { background: #f6c66c; color: #85411d; border-radius: 50%; }
+:root[data-theme=calm] .result-modal-stats > div { background: #e9e3f8; border-radius: 18px; }
+:root[data-theme=calm] .result-modal-actions button { border-radius: 99px; }
+:root[data-theme=calm] .typing-result-modal .result-modal-next { background: #2b3d8a; border-color: #2b3d8a; }

@@ -4,6 +4,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Navigation.css'
 import { useAuth } from '../features/auth/context'
+import ThemeSwitcher from './ThemeSwitcher'
 
 const links = [
   { href: '/', label: 'ホーム', icon: houseIcon },
@@ -37,6 +38,7 @@ export default function Navigation() {
           <Link to="/#features" onClick={() => setOpen(false)}><FontAwesomeIcon icon={circleInfoIcon} aria-hidden="true" />このアプリについて</Link>
           <Link to="/#how-to" onClick={() => setOpen(false)}><FontAwesomeIcon icon={bookOpenIcon} aria-hidden="true" />使い方</Link>
           <NavLink className="site-account" to={session ? '/profile' : '/login'} onClick={() => setOpen(false)} title={displayName || undefined}>{!ready ? '確認中…' : session ? displayName || '名前を設定' : 'ログイン'}</NavLink>
+          <ThemeSwitcher />
         </nav>
         <Link className="site-start" to="/practice" onClick={() => setOpen(false)}>練習をはじめる <FontAwesomeIcon icon={arrowRightIcon} aria-hidden="true" /></Link>
       </div>

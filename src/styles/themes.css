@@ -1,0 +1,5 @@
+/* Alternate theme is opt-in. The existing page styles remain the default. */
+:root[data-theme=calm] { color: #26314a; background: #fff8eb; --border: #e6dccb; --social-bg: #f4ecdb; --calm-ink: #26314a; --calm-primary: #2b3d8a; --calm-orange: #ed7437; --calm-lavender: #e9e3f8; }
+:root[data-theme=calm] body { background: #fff8eb; color: #26314a; }
+:root[data-theme=calm] ::selection { background: #f9d39d; color: #26314a; }
+:root[data-theme=calm] :focus-visible { outline-color: #b95424; }

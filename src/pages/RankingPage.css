@@ -32,3 +32,9 @@
 .ranking-note { font-size: .85rem; border-top: 1px solid #eee; padding-top: 18px; }
 .ranking-page [role=alert] { color: #ad3028; }
 @media (max-width: 600px) { .ranking-page { padding: 40px 16px 60px; } .ranking-board, .ranking-publish { padding: 20px 16px; } .ranking-heading h2 { width: 100%; margin: 0; } .ranking-form button { width: 100%; } }
+:root[data-theme=calm] .ranking-page { color: #26314a; }
+:root[data-theme=calm] .ranking-intro { padding: 32px; border-radius: 28px; background: #ffebc5; }
+:root[data-theme=calm] .ranking-board, :root[data-theme=calm] .ranking-publish { border-color: #e7ddce; border-radius: 24px; background: #fffdf7; }
+:root[data-theme=calm] .ranking-page button, :root[data-theme=calm] .ranking-page select { border-radius: 99px; }
+:root[data-theme=calm] .ranking-form button[type=submit] { background: #2b3d8a; border-color: #2b3d8a; }
+:root[data-theme=calm] .ranking-mine { background: #e9e3f8; }

@@ -17,3 +17,8 @@
 .history-view-label { position: relative; }
 .history-view button:focus-visible { outline: 3px solid #2383e2; outline-offset: 2px; }
 @media (max-width: 750px) { .typing-history { margin: 30px 20px 0; padding: 18px; } }
+:root[data-theme=calm] .typing-history { background: #fffdf7; border-color: #e7ddce; border-radius: 24px; }
+:root[data-theme=calm] .typing-history th { background: #f4ecdb; }
+:root[data-theme=calm] .history-view { border-color: #e7ddce; border-radius: 99px; }
+:root[data-theme=calm] .history-view-highlight { border-radius: 99px; background: #ffdfad; }
+:root[data-theme=calm] .history-view button[aria-pressed=true] { color: #85411d; }

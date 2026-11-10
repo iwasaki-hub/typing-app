@@ -1,5 +1,5 @@
 .site-header { position: sticky; top: 0; z-index: 20; background: #fffffff5; border-bottom: 1px solid #eee; }
-.site-header-inner { max-width: 1320px; margin: auto; padding: 18px 32px; display: flex; align-items: center; gap: 28px; }
+.site-header-inner { max-width: 1480px; margin: auto; padding: 18px 32px; display: flex; align-items: center; gap: 28px; }
 .site-brand { display: inline-flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 750; text-decoration: none; letter-spacing: -1px; }
 .site-mark { font-family: Georgia, serif; line-height: 30px; width: 32px; height: 34px; text-align: center; border: 2px solid #191919; border-radius: 5px; box-shadow: 2px 2px 0 #191919; }
 .site-header .site-navigation { display: flex; align-items: center; gap: 16px; margin-left: auto; font-size: 14px; font-weight: 600; }
@@ -16,7 +16,7 @@
 .site-navigation [data-icon="circle-info"] { color: #8462b3; }
 .site-navigation [data-icon="book-open"] { color: #32846a; }
 .site-account { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-@media (max-width: 1360px) {
+@media (max-width: 1520px) {
   .site-header-inner { flex-wrap: wrap; padding: 16px 20px; gap: 16px; }
   .site-menu-toggle { display: block; margin-left: auto; border: 1px solid #ddd; background: white; width: 42px; height: 42px; border-radius: 6px; }
   .site-header .site-navigation { display: none; order: 4; width: 100%; margin: 0; flex-direction: column; align-items: stretch; gap: 0; }
@@ -25,3 +25,10 @@
   .site-account { max-width: 100%; }
 }
 @media (max-width: 400px) { .site-start { padding: 10px; font-size: 13px; } .site-header-inner { gap: 10px; } }
+:root[data-theme=calm] .site-header { background: #fff8ebf5; border-color: #e7ddce; }
+:root[data-theme=calm] .site-brand { color: #26314a; }
+:root[data-theme=calm] .site-mark { background: #f6a451; border: 0; border-radius: 50%; box-shadow: none; color: #26314a; }
+:root[data-theme=calm] .site-start { background: #2b3d8a; border-radius: 99px; padding-inline: 22px; }
+:root[data-theme=calm] .site-navigation a:hover, :root[data-theme=calm] .site-navigation a.active { color: #a64a21; }
+:root[data-theme=calm] .site-navigation a.active { box-shadow: inset 0 -2px #ed7437; }
+:root[data-theme=calm] .site-menu-toggle { border-color: #e6d8c7; border-radius: 50%; background: #ffebc5; }
