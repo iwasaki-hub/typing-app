@@ -1,0 +1,33 @@
+.ranking-page { max-width: 1060px; margin: 0 auto; padding: 72px 24px 100px; color: #252525; }
+.ranking-intro { margin-bottom: 48px; }
+.ranking-intro > span { font-size: .8rem; letter-spacing: .12em; color: #a56b11; }
+.ranking-intro h1 { font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -.04em; margin: 18px 0; }
+.ranking-intro p, .ranking-board > p, .ranking-publish > p { color: #666; line-height: 1.8; }
+.ranking-board, .ranking-publish { border: 1px solid #e6e6e3; border-radius: 14px; padding: 28px; margin-bottom: 28px; }
+.ranking-heading, .ranking-account { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.ranking-heading h2 { margin-right: auto; }
+.ranking-page h2 { font-size: 1.25rem; }
+.ranking-page button, .ranking-page select, .ranking-page input { font: inherit; border: 1px solid #d8d8d5; border-radius: 6px; padding: 10px 12px; background: white; color: inherit; }
+.ranking-page button { cursor: pointer; }
+.ranking-page button:hover:not(:disabled) { background: #f1f1ef; }
+.ranking-page button:disabled { opacity: .5; cursor: not-allowed; }
+.ranking-page :focus-visible { outline: 3px solid #2383e2; outline-offset: 3px; }
+.ranking-page a { color: #176bb5; }
+.ranking-scroll { overflow-x: auto; }
+.ranking-page table { border-collapse: collapse; width: 100%; min-width: 540px; text-align: left; }
+.ranking-page th, .ranking-page td { padding: 16px 12px; border-bottom: 1px solid #eee; overflow-wrap: anywhere; }
+.ranking-page th { color: #777; font-size: .85rem; font-weight: 500; }
+.ranking-page td:nth-child(2) { max-width: 240px; }
+.ranking-mine { background: #edf6ff; }
+.ranking-mine small { color: #176bb5; }
+.ranking-empty { padding: 38px 0; color: #777; }
+.ranking-empty a { display: block; margin-top: 12px; }
+.ranking-form { display: flex; flex-wrap: wrap; gap: 16px; align-items: end; padding: 20px 0; }
+.ranking-form label { display: flex; flex-direction: column; gap: 8px; flex: 1 1 240px; min-width: 0; }
+.ranking-form input, .ranking-form select { width: 100%; }
+.ranking-form small { width: 100%; color: #777; }
+.ranking-form button[type=submit] { background: #2383e2; color: white; border-color: #2383e2; }
+.ranking-form button[type=submit]:hover:not(:disabled) { background: #176bb5; }
+.ranking-note { font-size: .85rem; border-top: 1px solid #eee; padding-top: 18px; }
+.ranking-page [role=alert] { color: #ad3028; }
+@media (max-width: 600px) { .ranking-page { padding: 40px 16px 60px; } .ranking-board, .ranking-publish { padding: 20px 16px; } .ranking-heading h2 { width: 100%; margin: 0; } .ranking-form button { width: 100%; } }

@@ -13,6 +13,7 @@ export default function TypingPage() {
       </div>
       <QuotePractice />
       <TypingHistory />
+      <p><Link to="/ranking">練習結果をランキングに公開する →</Link></p>
     </main>
   )
 }

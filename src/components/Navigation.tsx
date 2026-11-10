@@ -1,12 +1,13 @@
 import { useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faXmark, faHouse, faKeyboard, faCircleInfo, faBookOpen, faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faXmark, faHouse, faKeyboard, faCircleInfo, faBookOpen, faArrowRight, faTrophy } from '@fortawesome/free-solid-svg-icons'
 import './Navigation.css'
 
 const links = [
   { href: '/', label: 'ホーム', icon: faHouse },
   { href: '/practice', label: 'タイピング', icon: faKeyboard },
+  { href: '/ranking', label: 'ランキング', icon: faTrophy },
 ]
 
 export default function Navigation() {

@@ -2,7 +2,7 @@ import { createApiClient } from './client'
 
 let client: ReturnType<typeof createApiClient> | undefined
 
-function getSupabaseApi() {
+export function getSupabaseApi() {
   if (client) return client
   const url = import.meta.env.VITE_SUPABASE_URL
   const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY

@@ -21,11 +21,12 @@ npm run dev
 アプリからは次のようにクライアントを利用できます。
 
 ```ts
-import { supabase } from './lib/supabase'
+import { getSupabase } from './lib/supabase'
+const supabase = getSupabase()
 ```
 
 `check:supabase` は公開用キーで Auth API の設定取得による疎通確認を行います。
-テーブルやログイン画面はまだ作成していません。テーブルを追加する場合は
+ランキング用テーブルとメールログインを実装しています。テーブルを追加する場合も
 RLS を有効にし、必要なアクセス権とポリシーを設定してください。
 
 接続方法: [Supabase 公式ドキュメント](https://supabase.com/docs/reference/javascript/initializing)
@@ -37,6 +38,7 @@ React Router の `BrowserRouter` を使用します。
 
 - `/`: ホーム (`HomePage.tsx` / `HomePage.css`)
 - `/practice`: タイピング練習 (`TypingPage.tsx` / `TypingPage.css`)
+- `/ranking`: 全ユーザーランキング (`RankingPage.tsx` / `RankingPage.css`)
 - その他: 404 案内 (`NotFoundPage.tsx` / `NotFoundPage.css`)
 
 ルート定義は `src/App.tsx` に集約しています。共通ナビゲーションは `Link` / `NavLink` を使い、
@@ -71,12 +73,38 @@ Font Awesome は使用する無料アイコンだけをインポートしてい�
 - 打鍵音は初期状態でオフ。オン／オフ・音量を調整でき、通常入力・ミス・クリアで音が変わります。
 - 終了した結果（クリア・時間切れ・手動終了）は localStorage に最新100件を自動保存し、練習ページ下部に履歴を表示します。
 - 履歴は同じブラウザ・同じオリジンに保存されます。ローカル環境と公開サイト、別端末の間では共有されません。
-- 保存禁止や容量不足の際は案内を表示し、練習は続行できます。データベースへの保存は行いません。
+- 保存禁止や容量不足の際は案内を表示し、練習は続行できます。ランキングへの公開は別途、本人が操作します。
 
 構成: `QuotePractice.tsx`（英文取得）、`TypingPractice.tsx` と専用 CSS（練習画面）、
 `src/features/typing/session.ts`（計測・判定）、`useTypingSound.ts`（Web Audio による効果音）。
 
 計測ロジックのテスト: `npm run test:typing`（TypeScript を直接実行できる Node.js 22.18 以降を使用）。
+
+## 全ユーザーランキング
+
+- `/ranking` で30・60・120秒別に、各ユーザーのベスト記録を上位100人まで表示します。
+- WPM 降順、正確率降順、登録日時昇順で並びます。同じ条件の最良記録を1人1件に絞ります。
+- メールのログインリンクで認証し、同じブラウザに保存された履歴と公開表示名を選んで投稿します。投稿は自動ではありません。
+- メールアドレスはスコアテーブルに保存しません。公開されるのはユーザーID・表示名・成績・登録日時です。
+- 計測5秒以上、1〜300 WPM、入力完了または時間切れの結果のみ対象です。旧履歴は打鍵数がないため対象外です。
+- WPM と正確率は DB の生成列で算出します。RLS で本人の投稿のみ許可し、更新・削除はクライアントに許可しません。
+- 計測値の入力自体はブラウザから送信されます。改ざんや自動入力を完全には防げず、練習文の難易度も異なるため、カジュアルな比較用です。
+- `src/api/ranking.ts` に Axios 通信を集約。認証セッション管理のみ Supabase SDK を使います。
+- `supabase/schema/typing-ranking.sql` は適用済みのスキーマ定義です。別プロジェクトでは SQL Editor から一度適用してください。
+- `scripts/check-ranking.sql` は検証用ユーザー・記録をトランザクション内で作り、権限・集計をテスト後すべてロールバックします。
+
+### メールログインの設定
+
+[Supabase URL Configuration](https://supabase.com/dashboard/project/tfhrkovrmxxeoaueqxin/auth/url-configuration) で次を設定します。
+
+- Site URL: `https://typing-app-orpin.vercel.app`
+- Redirect URLs: `https://typing-app-orpin.vercel.app/ranking` と、実際に利用するローカル URL（例 `http://localhost:5173/ranking`）
+
+Email プロバイダーを有効にし、Magic Link のメールテンプレートはログインリンクを含む標準形式を使用してください。
+未登録のリダイレクト先は Site URL にフォールバックします。Preview URL も利用するなら個別に許可してください。
+Supabase の標準メール送信には宛先制限・送信上限があるため、一般公開時は
+[Custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp) を設定してください。
+こちらから実メールの送信確認は行っていません。自分のメールでリンク受信→ログイン→投稿を確認してください。
 
 ## Vite の参考情報
 

@@ -28,7 +28,7 @@ export default function TypingPractice({ quote, loading, notice, onNext }: {
     typingHistory.save({
       id: crypto.randomUUID(), savedAt: new Date().toISOString(), text, duration,
       elapsed: session.elapsed, wpm: result.wpm, accuracy: result.accuracy,
-      mistakes: session.mistakes, correct: result.correct, reason: session.reason,
+      mistakes: session.mistakes, attempts: session.attempts, correct: result.correct, reason: session.reason,
     })
   }, [session, text, duration])
 

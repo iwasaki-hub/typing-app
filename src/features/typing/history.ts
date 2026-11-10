@@ -10,6 +10,7 @@ export interface TypingResult {
   wpm: number
   accuracy: number
   mistakes: number
+  attempts?: number
   correct: number
   reason: 'completed' | 'timeout' | 'stopped'
 }
