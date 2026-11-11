@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "test:locale": "node --test scripts/locale.test.mjs",
     "test:reviews": "node --test scripts/reviews.test.mjs",
     "test:auth": "node --test scripts/auth-login-link.test.mjs scripts/auth-password.test.mjs",
     "test:typing": "node --test scripts/typing-session.test.mjs scripts/typing-history.test.mjs scripts/typing-ranking.test.mjs scripts/typing-calendar.test.mjs scripts/typing-sounds.test.mjs scripts/typing-samples.test.mjs scripts/typing-settings.test.mjs scripts/typing-chart.test.mjs scripts/typing-tatoeba.test.mjs",

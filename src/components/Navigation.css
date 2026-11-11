@@ -2,7 +2,7 @@
 .site-header-inner { max-width: 1480px; margin: auto; padding: 18px 32px; display: flex; align-items: center; gap: 28px; }
 .site-brand { display: inline-flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 750; text-decoration: none; letter-spacing: -1px; }
 .site-mark { font-family: Georgia, serif; line-height: 30px; width: 32px; height: 34px; text-align: center; border: 2px solid #191919; border-radius: 5px; box-shadow: 2px 2px 0 #191919; }
-.site-header .site-navigation { display: flex; align-items: center; gap: 16px; margin-left: auto; font-size: 14px; font-weight: 600; }
+.site-header .site-navigation { display: flex; align-items: center; flex-wrap: wrap; min-width: 0; gap: 16px; margin-left: auto; font-size: 14px; font-weight: 600; }
 .site-navigation a { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; padding: 8px 0; white-space: nowrap; }
 .site-navigation a:hover { color: #0876d9; }
 .site-start { display: inline-flex; align-items: center; gap: 10px; border: 0; background: #191919; color: white; padding: 11px 16px; border-radius: 7px; font-size: 14px; font-weight: 600; white-space: nowrap; }

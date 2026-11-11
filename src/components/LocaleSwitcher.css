@@ -1,0 +1,4 @@
+.locale-switcher { display: inline-flex; align-items: center; gap: 8px; border: 1px solid #e4e4e0; border-radius: 9px; padding: 6px 10px; background: white; white-space: nowrap; font-size: 12px; }
+.locale-switcher select { border: 0; background: transparent; color: inherit; font: inherit; padding: 4px 0; cursor: pointer; }
+.locale-switcher select:focus-visible { outline: 2px solid #2383e2; outline-offset: 3px; }
+:root[data-theme=calm] .locale-switcher { background: #fff8eb; border-color: #e6d8c7; border-radius: 99px; }
