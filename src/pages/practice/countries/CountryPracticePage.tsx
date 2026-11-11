@@ -5,12 +5,14 @@ import { globeIcon, arrowRightIcon, rotateLeftIcon } from '../../../lib/icons'
 import { useLocale } from '../../../features/locale/useLocale'
 import { countries, countryRound, regionLabels, type Country, type CountryRegion } from '../../../features/learning/countries'
 import { learningReducer, newLearningSession, type LearnMode } from '../../../features/learning/session'
+import { useAutoAdvance } from '../../../features/learning/useAutoAdvance'
 import './CountryPracticePage.css'
 
 export default function CountryPracticePage() {
   const { t, locale } = useLocale()
   const [region, setRegion] = useState<CountryRegion | 'all'>('all')
   const [state, dispatch] = useReducer(learningReducer<Country>, undefined, () => newLearningSession(countryRound('all'), 'guide'))
+  useAutoAdvance(state, dispatch)
   const input = useRef<HTMLInputElement>(null)
   const summary = useRef<HTMLHeadingElement>(null)
   const nextButton = useRef<HTMLButtonElement>(null)
@@ -39,6 +41,7 @@ export default function CountryPracticePage() {
         <label>{t('学び方')}<select value={state.mode} onChange={event => restart(region, event.target.value as LearnMode)}><option value="guide">{t('お手本を見て練習')}</option><option value="quiz">{t('思い出して入力')}</option></select></label>
       </div>
       <p className="learning-help">{t('地域・学び方を変更すると最初から始まります。時間制限はありません。')}</p>
+      <p className="learning-help">{t('正しい答えを入力し終えると、自動で次の問題へ進みます。Enterキーは不要です。')}</p>
       {state.finished ? <div className="learning-summary">
         <h3 ref={summary} tabIndex={-1}>{t('おつかれさまでした！')}</h3>
         <p>{t('国旗と英語の国名を、もう一度振り返ってみましょう。')}</p>

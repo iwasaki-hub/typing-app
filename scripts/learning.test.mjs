@@ -5,6 +5,7 @@ import { countries, countryRound, normalizeCountryAnswer, regionLabels } from '.
 import { learningReducer, newLearningSession } from '../src/features/learning/session.ts'
 import { householdWords, householdCategories, householdRound } from '../src/features/learning/household.ts'
 import { ko } from '../src/features/locale/ko.ts'
+import { AUTO_ADVANCE_DELAY, scheduleLearningAdvance } from '../src/features/learning/autoAdvance.ts'
 
 test('twenty unique bilingual countries have local flags and valid regions; rounds never repeat a country', () => {
   assert.equal(countries.length, 20)
@@ -108,4 +109,55 @@ test('shared lesson logic scores household words and preserves skipped, hinted a
   assert.equal(retry.index, 0)
   assert.equal(retry.hinted, false)
   assert.deepEqual(retry.answers, [])
+})
+
+test('country and household answers complete on the final letter without submitting, only once', () => {
+  for (const item of [countries[0], countries.find(country => country.code === 'kr'), householdWords.find(word => word.id === 'vacuum-cleaner')]) {
+    let state = newLearningSession([item], 'quiz')
+    for (let length = 1; length <= item.english.length; length++) {
+      state = learningReducer(state, { type: 'input', value: item.english.slice(0, length).toUpperCase() })
+      assert.equal(state.feedback, length === item.english.length ? 'correct' : 'none')
+    }
+    assert.equal(state.answers.length, 1)
+    assert.equal(learningReducer(state, { type: 'check' }), state)
+    assert.equal(learningReducer(state, { type: 'input', value: item.english }), state)
+  }
+})
+
+test('a corrected typo remains marked for review even when Enter is never pressed', () => {
+  let state = newLearningSession([countries[0]], 'quiz')
+  state = learningReducer(state, { type: 'input', value: 'Jx' })
+  state = learningReducer(state, { type: 'input', value: 'J' })
+  state = learningReducer(state, { type: 'input', value: 'Japan' })
+  assert.equal(state.feedback, 'correct')
+  assert.equal(state.answers[0].mistakes, 1)
+})
+
+test('automatic advance clears the answer for the next item and finishes the last item', async () => {
+  let state = newLearningSession(countries.slice(0, 2), 'guide')
+  state = learningReducer(state, { type: 'input', value: countries[0].english })
+  scheduleLearningAdvance(state, action => { state = learningReducer(state, action) })
+  await new Promise(resolve => setTimeout(resolve, AUTO_ADVANCE_DELAY + 30))
+  assert.equal(state.index, 1)
+  assert.equal(state.input, '')
+  state = learningReducer(state, { type: 'input', value: countries[1].english })
+  scheduleLearningAdvance(state, action => { state = learningReducer(state, action) })
+  await new Promise(resolve => setTimeout(resolve, AUTO_ADVANCE_DELAY + 30))
+  assert.equal(state.finished, true)
+  assert.equal(state.answers.length, 2)
+})
+
+test('reset, cleanup and skipped answers cannot trigger an unwanted automatic question change', async () => {
+  let state = newLearningSession(countries.slice(0, 2), 'guide')
+  state = learningReducer(state, { type: 'input', value: countries[0].english })
+  const cancel = scheduleLearningAdvance(state, () => assert.fail('Cancelled callback ran'))
+  cancel()
+  const oldOrder = state.order
+  const oldIndex = state.index
+  state = learningReducer(state, { type: 'reset', order: countries.slice(2, 4), mode: 'quiz' })
+  state = learningReducer(state, { type: 'input', value: state.order[0].english })
+  assert.equal(learningReducer(state, { type: 'next', expectedOrder: oldOrder, expectedIndex: oldIndex }), state)
+  const skipped = learningReducer(newLearningSession(countries.slice(0, 2), 'quiz'), { type: 'skip' })
+  scheduleLearningAdvance(skipped, () => assert.fail('Skipped question advanced automatically'))
+  await new Promise(resolve => setTimeout(resolve, AUTO_ADVANCE_DELAY + 30))
 })

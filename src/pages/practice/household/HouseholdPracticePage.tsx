@@ -5,6 +5,7 @@ import { householdIcon, arrowRightIcon, rotateLeftIcon } from '../../../lib/icon
 import { useLocale } from '../../../features/locale/useLocale'
 import { householdCategories, householdRound, householdWords, type HouseholdCategory, type HouseholdWord } from '../../../features/learning/household'
 import { learningReducer, newLearningSession, type LearnMode } from '../../../features/learning/session'
+import { useAutoAdvance } from '../../../features/learning/useAutoAdvance'
 import { normalizeLearningAnswer } from '../../../features/learning/answer'
 import './HouseholdPracticePage.css'
 
@@ -12,6 +13,7 @@ export default function HouseholdPracticePage() {
   const { t, locale } = useLocale()
   const [category, setCategory] = useState<HouseholdCategory>('kitchen')
   const [state, dispatch] = useReducer(learningReducer<HouseholdWord>, undefined, () => newLearningSession(householdRound('kitchen'), 'guide'))
+  useAutoAdvance(state, dispatch)
   const [notice, setNotice] = useState('')
   const [reviewing, setReviewing] = useState(false)
   const field = useRef<HTMLInputElement>(null)
@@ -43,6 +45,7 @@ export default function HouseholdPracticePage() {
       <div className="learning-heading"><h2 id="household-title">{t(householdCategories[category].label)}</h2><span className="learning-badge">{t('日用品の英単語')}</span></div>
       <div className="learning-settings"><label>{t('学び方')}<select value={state.mode} onChange={event => restart(category, event.target.value as LearnMode)}><option value="guide">{t('お手本を見て練習')}</option><option value="quiz">{t('思い出して入力')}</option></select></label></div>
       <p className="learning-help">{reviewing ? t('復習モード：ヒントを見た・間違えた・答えを確認した単語を、思い出して入力しましょう。') : t('カテゴリー・学び方を変更すると最初から始まります。1カテゴリー8問、時間制限はありません。')}</p>
+      <p className="learning-help">{t('正しい答えを入力し終えると、自動で次の問題へ進みます。Enterキーは不要です。')}</p>
       {state.finished ? <div className="learning-summary">
         <h3 ref={summary} tabIndex={-1}>{t('おつかれさまでした！')}</h3><p>{t('身の回りで見かけたら、英語の名前を思い出してみましょう。')}</p>
         <dl className="learning-stats"><div><dt>{t('学習した単語')}</dt><dd>{state.answers.length}</dd></div><div><dt>{t('正解した単語')}</dt><dd>{correct}</dd></div><div><dt>{state.mode === 'guide' ? t('一度で正解') : t('ヒント・間違いなし')}</dt><dd>{firstTry}</dd></div></dl>
