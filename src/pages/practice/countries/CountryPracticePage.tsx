@@ -1,3 +1,5 @@
+import { useLearningHistory } from '../../../features/learning/useLearningHistory'
+import LearningSaveNotice from '../../../components/learning/LearningSaveNotice'
 import { lazy, Suspense, useEffect, useReducer, useRef, useState, type SubmitEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -16,6 +18,7 @@ export default function CountryPracticePage() {
   const [region, setRegion] = useState<CountryRegion | 'all'>('all')
   const [state, dispatch] = useReducer(learningReducer<Country>, undefined, () => newLearningSession(countryRound('all'), 'guide'))
   useAutoAdvance(state, dispatch)
+  useLearningHistory(state, 'countries', region === 'all' ? '世界の国々' : regionLabels[region])
   const input = useRef<HTMLInputElement>(null)
   const summary = useRef<HTMLHeadingElement>(null)
   const nextButton = useRef<HTMLButtonElement>(null)
@@ -50,7 +53,7 @@ export default function CountryPracticePage() {
       {!pronunciation.supported && <p className="learning-help" role="status">{t('このブラウザでは音声を再生できません。練習はそのまま続けられます。')}</p>}
       {pronunciation.enabled && pronunciation.supported && <p className="learning-help">{t('英語の発音を出題時に再生します。設定はこの端末に保存されます。')}</p>}
       {pronunciation.enabled && pronunciation.supported && pronunciation.status && <p className="learning-help" role="status">{pronunciation.status === 'blocked' ? t('音声を開始するには「発音を聞く」を押してください。') : t('発音を再生できませんでした。「発音を聞く」で再試行できます。')}</p>}
-      {state.finished ? <div className="learning-summary">
+      {state.finished ? <div className="learning-summary"><LearningSaveNotice />
         <h3 ref={summary} tabIndex={-1}>{t('おつかれさまでした！')}</h3>
         <p>{t('国旗と英語の国名を、もう一度振り返ってみましょう。')}</p>
         <dl className="learning-stats"><div><dt>{t('学習した国')}</dt><dd>{state.answers.length}</dd></div><div><dt>{t('正解した国')}</dt><dd>{correct}</dd></div><div><dt>{state.mode === 'guide' ? t('一度で正解') : t('ヒント・間違いなし')}</dt><dd>{independent}</dd></div></dl>

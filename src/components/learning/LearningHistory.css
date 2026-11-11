@@ -1,0 +1,34 @@
+.learning-history { margin: 44px 0; padding: 28px; border: 1px solid #e0e7e2; border-radius: 20px; background: #fff; }
+.learning-history > header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.learning-history header span { color: #32846a; font-size: 11px; letter-spacing: .13em; }
+.learning-history h2 { margin: 8px 0; font-size: 23px; }
+.learning-history a { color: #176bb5; font-size: 13px; }
+.learning-history-note, .learning-history-empty { color: #686863; font-size: 13px; line-height: 1.9; }
+.learning-history-filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
+.learning-history-filters button { padding: 9px 13px; border: 1px solid #dce5df; border-radius: 99px; color: #42584c; background: white; font: inherit; font-size: 12px; }
+.learning-history-filters button[aria-pressed=true] { background: #e7f4ed; border-color: #32846a; color: #23664e; }
+.learning-history-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 20px 0; }
+.learning-history-stats > div { background: #f3f8f5; padding: 18px; border-radius: 12px; }
+.learning-history-stats dt { font-size: 12px; color: #686863; line-height: 1.7; }
+.learning-history-stats dd { font-size: 30px; font-weight: 700; margin: 8px 0 0; }
+.learning-history-list { list-style: none; padding: 0; margin: 24px 0 0; }
+.learning-history-list > li { display: flex; gap: 16px; border-top: 1px solid #e6ece8; padding: 22px 0; }
+.learning-history-kind { flex-shrink: 0; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; color: #287453; background: #eaf6ef; font-size: 20px; }
+.learning-history-kind.kind-household { color: #8462b3; background: #f3edfc; }
+.learning-history-kind.kind-shops { color: #ab6a18; background: #fff2da; }
+.learning-history-entry { min-width: 0; flex: 1; }
+.learning-history-heading { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.learning-history-heading h3 { margin: 0; font-size: 16px; }
+.learning-history-heading small { font-size: 12px; color: #686863; font-weight: 400; margin-left: 8px; }
+.learning-history-heading time, .learning-history-mode { font-size: 12px; color: #686863; }
+.learning-history-numbers { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13px; line-height: 1.9; }
+.learning-history-numbers strong { color: #287453; }
+.learning-history details { margin-top: 14px; font-size: 13px; }
+.learning-history summary { cursor: pointer; color: #176bb5; }
+.learning-history details ul { list-style: none; padding: 0; margin: 12px 0; }
+.learning-history details li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid #edf0ec; }
+.learning-history details strong, .learning-history details span { display: block; overflow-wrap: anywhere; }
+.learning-history details span, .learning-history details small { color: #686863; margin-top: 4px; }
+:root[data-theme=calm] .learning-history { background: #fffdf7; border-color: #e7ddce; border-radius: 28px; }
+:root[data-theme=calm] .learning-history-stats > div { background: #e9e3f8; }
+@media (max-width: 600px) { .learning-history { padding: 20px 16px; } .learning-history-list > li { gap: 10px; } .learning-history-stats > div { padding: 14px 10px; } .learning-history-stats dt { font-size: 11px; } }

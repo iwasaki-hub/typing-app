@@ -1,3 +1,5 @@
+import { useLearningHistory } from '../../../features/learning/useLearningHistory'
+import LearningSaveNotice from '../../../components/learning/LearningSaveNotice'
 import { useEffect, useReducer, useRef, useState, type SubmitEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -27,6 +29,7 @@ export default function ShopPracticePage() {
   const [category, setCategory] = useState<ShopCategory>('coffee')
   const [state, dispatch] = useReducer(learningReducer<ShopWord>, undefined, () => newLearningSession(shopRound('coffee'), 'guide'))
   useAutoAdvance(state, dispatch)
+  useLearningHistory(state, 'shops', shopCategories[category].label)
   const [notice, setNotice] = useState('')
   const [reviewing, setReviewing] = useState(false)
   const field = useRef<HTMLInputElement>(null)
@@ -63,7 +66,7 @@ export default function ShopPracticePage() {
       {pronunciation.enabled && pronunciation.supported && pronunciation.status && <p className="learning-help" role="status">{pronunciation.status === 'blocked' ? t('音声を開始するには「発音を聞く」を押してください。') : t('発音を再生できませんでした。「発音を聞く」で再試行できます。')}</p>}
       <p className="learning-help">{reviewing ? t('復習モード：ヒントを見た・間違えた・答えを確認した単語を、思い出して入力しましょう。') : t('カテゴリー・学び方を変更すると最初から始まります。1カテゴリー4問、時間制限はありません。')}</p>
       <p className="learning-help">{t('正しい答えを入力し終えると、自動で次の問題へ進みます。Enterキーは不要です。')}</p>
-      {state.finished ? <div className="learning-summary">
+      {state.finished ? <div className="learning-summary"><LearningSaveNotice />
         <h3 ref={summary} tabIndex={-1}>{t('おつかれさまでした！')}</h3><p>{t('お店を見かけたら、英語の名前と発音を思い出してみましょう。')}</p>
         <dl className="learning-stats"><div><dt>{t('学習したお店')}</dt><dd>{state.answers.length}</dd></div><div><dt>{t('正解したお店')}</dt><dd>{correct}</dd></div><div><dt>{state.mode === 'guide' ? t('一度で正解') : t('ヒント・間違いなし')}</dt><dd>{firstTry}</dd></div></dl>
         <ul className="learning-recap">{state.answers.map(answer => <li key={answer.item.id}><span className="shop-recap-emoji" aria-hidden="true">{answer.item.emoji}</span><div><strong>{answer.item[locale]}</strong><span lang="en">{answer.item.english}</span></div><small>{answer.skipped ? t('答えを確認') : answer.hinted || answer.mistakes ? t('復習してみよう') : t('正解')}</small></li>)}</ul>
@@ -83,6 +86,6 @@ export default function ShopPracticePage() {
         </form></div><ShopLogo key={current.id} shop={current} /></div>
       </>}
     </section>
-    <aside className="learning-about"><h2>{t('街のお店を、英語で見つけよう。')}</h2><p>{t('各社のロゴ・公式サイトのアイコンを使用しています。名称・ロゴの権利は各社に帰属し、このアプリとの提携を示すものではありません。')}</p><p>{t('通常の文章タイピング記録やランキングとは別の学習モードです。ページを離れると進行状態はリセットされます。')}</p></aside>
+    <aside className="learning-about"><h2>{t('街のお店を、英語で見つけよう。')}</h2><p>{t('各社のロゴ・公式サイトのアイコンを使用しています。名称・ロゴの権利は各社に帰属し、このアプリとの提携を示すものではありません。')}</p><p>{t('学習を最後まで終えると結果を保存し、ダッシュボードで確認できます。途中の進行状態はページを離れるとリセットされます。')}</p></aside>
   </main>
 }

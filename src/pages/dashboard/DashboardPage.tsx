@@ -1,3 +1,4 @@
+import LearningHistory from '../../components/learning/LearningHistory'
 import { useLocale } from '../../features/locale/useLocale'
 import { keyboardIcon, trophyIcon, userIcon } from '../../lib/icons';
 import { Link, Navigate } from 'react-router-dom';
@@ -11,7 +12,7 @@ import './DashboardPage.css';
 export default function DashboardPage() {
     const { t } = useLocale();
     const { session, ready, error, displayName } = useAuth();
-    const { results } = useHistory();
+    const { results, allResults } = useHistory();
     if (!ready)
         return <main id="main" tabIndex={-1} className="dashboard-page"><p role="status">{t("ログイン状態を確認しています…")}</p></main>;
     if (error)
@@ -22,9 +23,10 @@ export default function DashboardPage() {
     const latest = results[0];
     return <main id="main" tabIndex={-1} className="dashboard-page">
     <header className="dashboard-intro"><span>YOUR DASHBOARD</span><h1>{displayName ? t("{0} さん、おかえりなさい。", [displayName]) : t("おかえりなさい。")}</h1><p>{t("今日も、自分のペースで一歩ずつ。")}</p>{!displayName && <Link to="/profile">{t("まずは表示名を設定する →")}</Link>}</header>
-    <dl className="dashboard-stats" aria-label={t("このアカウントの練習記録")}><div><dt>{t("保存済みの練習")}</dt><dd>{results.length}<small>{t("件")}</small></dd></div><div><dt>{t("英語の最高速度")}</dt><dd>{best}<small> WPM</small></dd></div><div><dt>{t("直近の正確率")}</dt><dd>{latest?.accuracy ?? 0}<small> %</small></dd></div></dl>
-    <p className="dashboard-note">{t("このアカウントの最新100件の集計です。同期状態は下の練習履歴で確認できます。")}</p>
+    <dl className="dashboard-stats" aria-label={t("このアカウントの練習記録")}><div><dt>{t("保存済みの練習")}</dt><dd>{allResults.length}<small>{t("件")}</small></dd></div><div><dt>{t("英語の最高速度")}</dt><dd>{best}<small> WPM</small></dd></div><div><dt>{t("直近の正確率")}</dt><dd>{latest?.accuracy ?? 0}<small> %</small></dd></div></dl>
+    <p className="dashboard-note">{t("保存件数は文章タイピングと学習記録の合計です。速度・正確率は文章タイピングの集計です。同期状態は下の履歴で確認できます。")}</p>
     <div className="dashboard-actions"><MotionLink whileHover={{ y: -5, boxShadow: '0 12px 28px #192c4610' }} whileTap={{ scale: 0.98 }} to="/practice"><FontAwesomeIcon icon={keyboardIcon} aria-hidden="true"/><h2>{t("練習をはじめる")}</h2><p>{t("英文を打って、次の自己ベストへ。")}</p><span>{t("タイピングへ →")}</span></MotionLink><MotionLink whileHover={{ y: -5, boxShadow: '0 12px 28px #192c4610' }} whileTap={{ scale: 0.98 }} to="/ranking"><FontAwesomeIcon icon={trophyIcon} aria-hidden="true"/><h2>{t("ランキング")}</h2><p>{t("記録を公開して、みんなと比較。")}</p><span>{t("ランキングを見る →")}</span></MotionLink><MotionLink whileHover={{ y: -5, boxShadow: '0 12px 28px #192c4610' }} whileTap={{ scale: 0.98 }} to="/profile"><FontAwesomeIcon icon={userIcon} aria-hidden="true"/><h2>{t("プロフィール")}</h2><p>{t("表示名の変更とログアウト。")}</p><span>{t("プロフィールを編集 →")}</span></MotionLink></div>
+    <LearningHistory />
     <TypingHistory allowDelete/>
     <ReviewForm />
   </main>;

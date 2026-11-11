@@ -1,3 +1,4 @@
+import { isLearningRecord, type LearningRecord } from '../learning/history.ts'
 export const HISTORY_KEY = 'typing-app:results:v1'
 export const HISTORY_LIMIT = 100
 
@@ -14,6 +15,7 @@ export interface TypingResult {
   language?: 'en' | 'ko'
   cpm?: number
   credit?: TatoebaCredit
+  learning?: LearningRecord
   correct: number
   reason: 'completed' | 'timeout' | 'stopped'
 }
@@ -27,6 +29,7 @@ function isResult(value: unknown): value is TypingResult {
     && Number(item.accuracy) <= 100 && Number(item.elapsed) <= Number(item.duration)
     && (item.language === undefined || item.language === 'en' || item.language === 'ko')
     && (item.language !== 'ko' || (typeof item.cpm === 'number' && Number.isFinite(item.cpm) && item.cpm >= 0))
+    && (item.learning === undefined || isLearningRecord(item.learning))
     && (item.credit === undefined || isTatoebaCredit(item.credit))
 }
 

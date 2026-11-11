@@ -1,7 +1,7 @@
 import type { TypingResult } from './history'
 
 export function isRankingEligible(result: TypingResult) {
-  return result.language !== 'ko' && ['completed', 'timeout'].includes(result.reason)
+  return !result.learning && result.language !== 'ko' && ['completed', 'timeout'].includes(result.reason)
     && [30, 60, 120].includes(result.duration)
     && Number.isFinite(result.elapsed) && result.elapsed >= 5 && result.elapsed <= result.duration
     && Number.isInteger(result.correct) && result.correct > 0 && result.correct <= result.text.length

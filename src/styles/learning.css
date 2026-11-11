@@ -62,3 +62,5 @@
 .learning-pronunciation button, .learning-listen { border: 1px solid #cfc3e2; border-radius: 8px; padding: 9px 14px; background: #fff; color: #69479c; font: inherit; font-size: 13px; }
 .learning-pronunciation button[aria-pressed=true] { background: #f3edfc; }
 .learning-listen { display: inline-flex; align-items: center; gap: 8px; }
+
+.learning-save-notice { padding: 14px 18px; border-radius: 12px; background: #eff7f2; margin-top: 24px; font-size: 13px; line-height: 1.8; }

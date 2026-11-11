@@ -32,7 +32,7 @@ export default function TypingHistory({ allowDelete = false }: {
         }
     }
     return (<section className="typing-history" aria-labelledby="history-title">
-      <h2 id="history-title">{t("練習履歴")}<small>{results.length}{t("件")}</small></h2>
+      <h2 id="history-title">{t("文章タイピングの履歴")}<small>{results.length}{t("件")}</small></h2>
       {allowDelete && <button type="button" className="history-delete" disabled={deleting} onClick={() => { setDeleteError(''); setConfirmDelete(true); }}>{t("全履歴を削除")}</button>}
       <Dialog open={confirmDelete} onClose={() => { if (!deleting)
         setConfirmDelete(false); }} className="history-delete-dialog">
