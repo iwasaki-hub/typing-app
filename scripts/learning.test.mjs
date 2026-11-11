@@ -161,3 +161,29 @@ test('reset, cleanup and skipped answers cannot trigger an unwanted automatic qu
   scheduleLearningAdvance(skipped, () => assert.fail('Skipped question advanced automatically'))
   await new Promise(resolve => setTimeout(resolve, AUTO_ADVANCE_DELAY + 30))
 })
+
+ test('all practice countries have valid globe locations and cardinal directions project correctly', async () => {
+  const { countryLocations, globePoint } = await import('../src/features/learning/locations.ts')
+  assert.equal(Object.keys(countryLocations).length, countries.length)
+  for (const country of countries) {
+    const [lat, lon] = countryLocations[country.code]
+    assert.ok(lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180)
+    assert.ok(Math.abs(Math.hypot(...globePoint(lat, lon)) - 1) < 1e-10)
+  }
+  assert.deepEqual(globePoint(0, 0), [0, 0, 1])
+  assert.ok(Math.abs(globePoint(0, 90)[0] - 1) < 1e-10)
+  assert.ok(Math.abs(globePoint(90, 0)[1] - 1) < 1e-10)
+  const borders = JSON.parse(fs.readFileSync('public/maps/country-borders.json', 'utf8'))
+  assert.deepEqual(Object.keys(borders).sort(), countries.map(country => country.code).sort())
+  for (const rings of Object.values(borders)) {
+    assert.ok(rings.length > 0)
+    for (const ring of rings) {
+      assert.ok(ring.length >= 4)
+      assert.deepEqual(ring[0], ring.at(-1))
+      for (const [lon, lat] of ring) assert.ok(Number.isFinite(lon) && Number.isFinite(lat) && Math.abs(lon) <= 180 && Math.abs(lat) <= 90)
+    }
+  }
+  const map = JSON.parse(fs.readFileSync('public/maps/land.geojson', 'utf8'))
+  assert.ok(map.features.length > 0)
+  assert.ok(map.features.every(feature => ['Polygon', 'MultiPolygon'].includes(feature.geometry.type)))
+})

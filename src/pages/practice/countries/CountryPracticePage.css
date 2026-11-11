@@ -1,1 +1,6 @@
 @import '../../../styles/learning.css';
+
+.country-learning-page { max-width: 1320px; }
+.country-learning-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, 1fr); gap: 32px; margin-top: 20px; align-items: start; }
+.country-learning-question { min-width: 0; }
+@media (max-width: 900px) { .country-learning-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; } }

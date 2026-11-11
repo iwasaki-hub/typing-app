@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState, type SubmitEvent } from 'react'
+import { lazy, Suspense, useEffect, useReducer, useRef, useState, type SubmitEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { globeIcon, arrowRightIcon, rotateLeftIcon } from '../../../lib/icons'
@@ -7,6 +7,8 @@ import { countries, countryRound, regionLabels, type Country, type CountryRegion
 import { learningReducer, newLearningSession, type LearnMode } from '../../../features/learning/session'
 import { useAutoAdvance } from '../../../features/learning/useAutoAdvance'
 import './CountryPracticePage.css'
+
+const CountryGlobe = lazy(() => import('../../../components/learning/CountryGlobe'))
 
 export default function CountryPracticePage() {
   const { t, locale } = useLocale()
@@ -32,7 +34,7 @@ export default function CountryPracticePage() {
     dispatch({ type: 'reset', order: countryRound(nextRegion), mode })
   }
   function check(event: SubmitEvent<HTMLFormElement>) { event.preventDefault(); dispatch({ type: 'check' }) }
-  return <main id="main" tabIndex={-1} className="learning-page">
+  return <main id="main" tabIndex={-1} className="learning-page country-learning-page">
     <header className="learning-intro"><Link to="/practice">{t('← 練習メニューに戻る')}</Link><span className="learning-eyebrow">TYPE & LEARN</span><h1><FontAwesomeIcon icon={globeIcon} aria-hidden="true" /> {t('世界の国名を、指先から。')}</h1><p>{t('国旗と国名を見ながら、英語のスペルを覚えよう。20か国から、1回最大10問を出題します。')}</p></header>
     <section className="learning-card" aria-labelledby="learning-title">
       <div className="learning-heading"><h2 id="learning-title">{t('国名タイピング')}</h2><span className="learning-badge">{t('英語の国名を入力')}</span></div>
@@ -51,7 +53,7 @@ export default function CountryPracticePage() {
         <button className="learning-primary" type="button" onClick={() => restart()}><FontAwesomeIcon icon={rotateLeftIcon} aria-hidden="true" /> {t('もう一度学ぶ')}</button>
       </div> : <>
         <div className="learning-progress"><span>{t('第{0}問 / 全{1}問', [state.index + 1, state.order.length])}</span><progress max={state.order.length} value={state.answers.length} aria-label={t('学習の進み具合')} /></div>
-        <div className="learning-prompt"><img src={`/flags/${current.code}.svg`} alt={t('{0}の国旗', [current[locale]])} width="100" height="70" /><div><span>{t(regionLabels[current.region])}</span><h3>{current[locale]}</h3></div></div>
+        <div className="country-learning-layout"><div className="country-learning-question"><div className="learning-prompt"><img src={`/flags/${current.code}.svg`} alt={t('{0}の国旗', [current[locale]])} width="100" height="70" /><div><span>{t(regionLabels[current.region])}</span><h3>{current[locale]}</h3></div></div>
         <p className="learning-instruction">{state.mode === 'guide' ? t('お手本と同じ英語の国名を入力してください。') : t('この国の英語名を思い出して入力してください。')}</p>
         <div className={`learning-target${showEnglish ? '' : ' is-hidden'}`}>
           {showEnglish ? <span lang="en" aria-label={current.english}>{[...current.english].map((letter, index) => <span key={index} className={state.mode === 'guide' && state.input[index] ? state.input[index].toLowerCase() === letter.toLowerCase() ? 'is-correct' : 'is-incorrect' : ''}>{letter}</span>)}</span> : <span>{t('英語では何というかな？')}</span>}
@@ -75,7 +77,7 @@ export default function CountryPracticePage() {
               <button type="button" onClick={() => dispatch({ type: 'skip' })}>{t('答えを確認して進む')}</button>
             </>}
           </div>
-        </form>
+        </form></div><Suspense fallback={<p>{t('地球を読み込み中…')}</p>}><CountryGlobe country={current} /></Suspense></div>
       </>}
     </section>
     <aside className="learning-about"><h2>{t('少しずつ、世界を知ろう。')}</h2><p>{t('国名は一般的な英語表記を使っています。国旗・国名・地域を組み合わせて覚える学習モードです。通常のタイピング記録やランキングとは別に楽しめます。')}</p><p>{t('掲載国数：{0}か国。学習中の進み具合は、このページを離れるとリセットされます。', [countries.length])}</p><Link to="/practice/sentences">{t('通常のタイピング練習へ →')}</Link><p className="learning-source">Flags: <a href="https://flagpedia.net" target="_blank" rel="noopener noreferrer">Flagpedia / FlagCDN</a></p></aside>
