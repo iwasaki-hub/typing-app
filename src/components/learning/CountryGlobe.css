@@ -1,11 +1,11 @@
-.country-globe { align-self: start; padding: 28px 20px; border-radius: 20px; background: radial-gradient(ellipse at 50% 42%, #e0f2eb, #f1f7f5 70%); text-align: center; min-width: 0; }
+.country-globe { align-self: start; padding: 28px 20px; border-radius: 20px; background: radial-gradient(ellipse at 50% 42%, #c9edff, #edf8ff 70%); text-align: center; min-width: 0; }
 .country-globe-eyebrow { font-size: 10px; letter-spacing: .16em; color: #387964; font-weight: 700; }
 .country-globe h3 { font-size: 18px; margin: 12px 0 0; }
 .country-globe-canvas { height: 350px; width: 100%; }
 .country-globe-canvas canvas { display: block; width: 100%; height: 100%; }
 .country-globe-caption { display: flex; justify-content: center; gap: 12px; align-items: center; }
 .country-globe-caption img { object-fit: contain; }
-.country-globe-plane { color: #b77919; font-size: 18px; }
+.country-globe-plane { width: 34px; height: 34px; object-fit: contain; }
 .country-globe p, .country-globe a { font-size: 11px; color: #4e7065; line-height: 1.8; }
 :root[data-theme=calm] .country-globe { background: radial-gradient(ellipse at 50% 42%, #e4e1f4, #f2eef9 70%); }
 @media (max-width: 900px) { .country-globe-canvas { height: 280px; } }

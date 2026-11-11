@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { planeIcon } from '../../lib/icons'
 import type { Country } from '../../features/learning/countries'
 import { countryLocations, globePoint } from '../../features/learning/locations'
 import { useLocale } from '../../features/locale/useLocale'
@@ -36,10 +34,10 @@ export default function CountryGlobe({ country }: { country: Country }) {
       geometries.push(geometry); materials.push(material)
       return new THREE.Mesh(geometry, material)
     }
-    const earth = sphere(1, 0x174f68)
+    const earth = sphere(1, 0x087fe5)
     earth.rotation.y = -Math.PI / 2
     world.add(earth)
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x4e8b9d, transparent: true, opacity: .35 })
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xa0e8ff, transparent: true, opacity: .28 })
     materials.push(lineMaterial)
     let texture: THREE.CanvasTexture | undefined
     function line(points: THREE.Vector3[]) {
@@ -49,32 +47,23 @@ export default function CountryGlobe({ country }: { country: Country }) {
     }
     for (let lat = -60; lat <= 60; lat += 30) line(Array.from({ length: 181 }, (_, i) => new THREE.Vector3(...globePoint(lat, i * 2, 1.002))))
     for (let lon = 0; lon < 360; lon += 30) line(Array.from({ length: 91 }, (_, i) => new THREE.Vector3(...globePoint(i * 2 - 90, lon, 1.002))))
-    // A camera-facing sprite keeps the airplane readable at every latitude.
-    const markerCanvas = document.createElement('canvas')
-    markerCanvas.width = 128; markerCanvas.height = 128
-    const markerContext = markerCanvas.getContext('2d')!
-    const [iconWidth, iconHeight, , , iconPath] = planeIcon.icon
-    const iconScale = 104 / Math.max(iconWidth, iconHeight)
-    markerContext.translate((128 - iconWidth * iconScale) / 2, (128 - iconHeight * iconScale) / 2)
-    markerContext.scale(iconScale, iconScale)
-    markerContext.fillStyle = '#ffc46a'
-    markerContext.strokeStyle = '#68420f'
-    markerContext.lineWidth = 12
-    markerContext.lineJoin = 'round'
-    for (const path of Array.isArray(iconPath) ? iconPath : [iconPath]) {
-      const shape = new Path2D(path)
-      markerContext.stroke(shape); markerContext.fill(shape)
-    }
-    const markerTexture = new THREE.CanvasTexture(markerCanvas)
-    markerTexture.colorSpace = THREE.SRGBColorSpace
-    const markerMaterial = new THREE.SpriteMaterial({ map: markerTexture, depthWrite: false })
+    // Keep the supplied airplane facing the camera as the globe turns.
+    let disposed = false
+    const markerMaterial = new THREE.SpriteMaterial({ depthWrite: false, transparent: true })
     materials.push(markerMaterial)
     const marker = new THREE.Sprite(markerMaterial)
-    marker.scale.set(.16, .16, 1)
+    marker.visible = false
+    marker.scale.set(.26, .26, 1)
+    const markerTexture = new THREE.TextureLoader().load('/images/country-airplane.png', loaded => {
+      if (disposed) { loaded.dispose(); return }
+      loaded.colorSpace = THREE.SRGBColorSpace
+      markerMaterial.map = loaded; markerMaterial.needsUpdate = true
+      marker.visible = true; draw()
+    })
     world.add(marker)
     const borders = new THREE.Group()
     world.add(borders)
-    const borderMaterial = new THREE.LineBasicMaterial({ color: 0xffd166 })
+    const borderMaterial = new THREE.LineBasicMaterial({ color: 0xff176b })
     materials.push(borderMaterial)
     let borderData: Record<string, number[][][]> = {}
     let selectedCode = ''
@@ -134,7 +123,6 @@ export default function CountryGlobe({ country }: { country: Country }) {
     const observer = new ResizeObserver(resize)
     observer.observe(container)
     const abort = new AbortController()
-    let disposed = false
     void fetch('/maps/country-borders.json', { signal: abort.signal }).then(response => {
       if (!response.ok) throw new Error('borders')
       return response.json() as Promise<Record<string, number[][][]>>
@@ -150,8 +138,8 @@ export default function CountryGlobe({ country }: { country: Country }) {
       const canvas = document.createElement('canvas')
       canvas.width = 2048; canvas.height = 1024
       const context = canvas.getContext('2d')!
-      context.fillStyle = '#174f68'; context.fillRect(0, 0, 2048, 1024)
-      context.fillStyle = '#9ccfb0'
+      context.fillStyle = '#087fe5'; context.fillRect(0, 0, 2048, 1024)
+      context.fillStyle = '#42d883'
       for (const feature of data.features) {
         const polygons = feature.geometry.type === 'Polygon' ? [feature.geometry.coordinates as number[][][]] : feature.geometry.coordinates as number[][][][]
         for (const rings of polygons) {
@@ -196,9 +184,9 @@ export default function CountryGlobe({ country }: { country: Country }) {
     <h3>{t('地球で場所を見てみよう')}</h3>
     <div ref={host} className="country-globe-canvas" aria-hidden="true" hidden={failed} />
     {failed && <p role="status">{t('このブラウザでは3D地球を表示できません。練習はそのまま続けられます。')}</p>}
-    <div className="country-globe-caption"><img src={`/flags/${country.code}.svg`} width="32" height="22" alt="" /><strong>{country[locale]}</strong><FontAwesomeIcon className="country-globe-plane" icon={planeIcon} aria-hidden="true" /></div>
+    <div className="country-globe-caption"><img src={`/flags/${country.code}.svg`} width="32" height="22" alt="" /><strong>{country[locale]}</strong><img className="country-globe-plane" src="/images/country-airplane.png" width="34" height="34" alt="" /></div>
     <p>{t('マーカーは国の代表的な位置を示しています。')}</p>
-    <p>{t('出題中の国の境界を金色の線で表示しています。地図は学習用に簡略化されています。')}</p>
+    <p>{t('出題中の国の境界をピンク色の線で表示しています。地図は学習用に簡略化されています。')}</p>
     {bordersFailed && <p role="status">{t('国境線を読み込めませんでした。練習はそのまま続けられます。')}</p>}
     {mapFailed && <p role="status">{t('地図を読み込めませんでした。国の位置のみ表示しています。')}</p>}
     <a href="https://www.naturalearthdata.com/about/terms-of-use/" target="_blank" rel="noopener noreferrer">Made with Natural Earth</a>
