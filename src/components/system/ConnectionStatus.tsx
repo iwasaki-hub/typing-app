@@ -1,10 +1,10 @@
-import { getFormattingLocale } from '../features/locale/store'
-import { useLocale } from '../features/locale/useLocale'
-import { circleCheckIcon, circleExclamationIcon, plugIcon, spinnerIcon } from '../lib/icons';
+import { getFormattingLocale } from '../../features/locale/store'
+import { useLocale } from '../../features/locale/useLocale'
+import { circleCheckIcon, circleExclamationIcon, plugIcon, spinnerIcon } from '../../lib/icons';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { checkSupabaseConnection } from '../api/supabase';
-import { getApiErrorMessage } from '../api/client';
+import { checkSupabaseConnection } from '../../api/supabase';
+import { getApiErrorMessage } from '../../api/client';
 import './ConnectionStatus.css';
 export default function ConnectionStatus() {
     const { t } = useLocale();

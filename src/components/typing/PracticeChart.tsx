@@ -1,11 +1,11 @@
-import { getFormattingLocale } from '../features/locale/store'
-import { useLocale } from '../features/locale/useLocale'
+import { getFormattingLocale } from '../../features/locale/store'
+import { useLocale } from '../../features/locale/useLocale'
 import SentenceCredit from './SentenceCredit';
 import { useId, useState } from 'react';
 import LanguageBadge from './LanguageBadge';
-import type { TypingResult } from '../features/typing/history';
-import type { PracticeLanguage } from '../features/typing/samples';
-import { chartResults, chartSpeed, speedCeiling } from '../features/typing/chart';
+import type { TypingResult } from '../../features/typing/history';
+import type { PracticeLanguage } from '../../features/typing/samples';
+import { chartResults, chartSpeed, speedCeiling } from '../../features/typing/chart';
 import './PracticeChart.css';
 const dateLabel = (value: string) => new Date(value).toLocaleString(getFormattingLocale(), { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 const reasons = { completed: 'クリア', timeout: '時間切れ', stopped: '手動終了' };

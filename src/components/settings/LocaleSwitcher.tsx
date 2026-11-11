@@ -1,4 +1,4 @@
-import { useLocale } from '../features/locale/useLocale'
+import { useLocale } from '../../features/locale/useLocale'
 import './LocaleSwitcher.css'
 export default function LocaleSwitcher() {
   const { locale, setLocale, t } = useLocale()

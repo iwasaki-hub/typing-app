@@ -1,7 +1,7 @@
 import { useLocale } from '../features/locale/useLocale'
 import { Link } from 'react-router-dom';
-import QuotePractice from '../components/QuotePractice';
-import TypingHistory from '../components/TypingHistory';
+import QuotePractice from '../components/typing/QuotePractice';
+import TypingHistory from '../components/typing/TypingHistory';
 import './TypingPage.css';
 export default function TypingPage() {
     const { t } = useLocale();

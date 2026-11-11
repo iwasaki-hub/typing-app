@@ -1,12 +1,12 @@
-import { getFormattingLocale } from '../features/locale/store'
-import { useLocale } from '../features/locale/useLocale'
+import { getFormattingLocale } from '../../features/locale/store'
+import { useLocale } from '../../features/locale/useLocale'
 import SentenceCredit from './SentenceCredit';
 import LanguageBadge from './LanguageBadge';
-import { chevronLeftIcon, chevronRightIcon } from '../lib/icons';
+import { chevronLeftIcon, chevronRightIcon } from '../../lib/icons';
 import { useId, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { formatResultSpeed, type TypingResult } from '../features/typing/history';
-import { groupResultsByDay, localDateKey, monthCells } from '../features/typing/calendar';
+import { formatResultSpeed, type TypingResult } from '../../features/typing/history';
+import { groupResultsByDay, localDateKey, monthCells } from '../../features/typing/calendar';
 import './PracticeCalendar.css';
 const reasons = { completed: 'クリア', timeout: '時間切れ', stopped: '手動終了' };
 const weekdays = ['日', '月', '火', '水', '木', '金', '土'];

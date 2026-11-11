@@ -1,5 +1,5 @@
-import { useLocale } from '../features/locale/useLocale'
-import type { PracticeLanguage } from '../features/typing/samples';
+import { useLocale } from '../../features/locale/useLocale'
+import type { PracticeLanguage } from '../../features/typing/samples';
 import './LanguageBadge.css';
 const languages = {
     en: { name: '英語', flag: '/flags/us.svg' },

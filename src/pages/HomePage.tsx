@@ -1,10 +1,10 @@
 import { useLocale } from '../features/locale/useLocale'
 import { arrowRightIcon, arrowTrendUpIcon, arrowUpRightFromSquareIcon, keyboardIcon, fontIcon, wandMagicSparklesIcon, arrowTurnDownIcon } from '../lib/icons';
-import HomeReviews from '../components/HomeReviews';
+import HomeReviews from '../components/reviews/HomeReviews';
 import { Link } from 'react-router-dom';
 import { m } from 'motion/react';
-import MotionLink from '../components/MotionLink';
-import ConnectionStatus from '../components/ConnectionStatus';
+import MotionLink from '../components/ui/MotionLink';
+import ConnectionStatus from '../components/system/ConnectionStatus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './HomePage.css';
 export default function HomePage() {

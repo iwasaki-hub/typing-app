@@ -1,12 +1,12 @@
-import { useLocale } from '../features/locale/useLocale'
-import { barsIcon, xmarkIcon, houseIcon, keyboardIcon, circleInfoIcon, bookOpenIcon, arrowRightIcon, trophyIcon, chartLineIcon } from '../lib/icons';
+import { useLocale } from '../../features/locale/useLocale'
+import { barsIcon, xmarkIcon, houseIcon, keyboardIcon, circleInfoIcon, bookOpenIcon, arrowRightIcon, trophyIcon, chartLineIcon } from '../../lib/icons';
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Navigation.css';
-import { useAuth } from '../features/auth/context';
-import ThemeSwitcher from './ThemeSwitcher';
-import LocaleSwitcher from './LocaleSwitcher';
+import { useAuth } from '../../features/auth/context';
+import ThemeSwitcher from '../settings/ThemeSwitcher';
+import LocaleSwitcher from '../settings/LocaleSwitcher';
 const links = [
     { href: '/', label: 'ホーム', icon: houseIcon },
     { href: '/practice', label: 'タイピング', icon: keyboardIcon },

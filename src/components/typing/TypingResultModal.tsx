@@ -1,11 +1,11 @@
-import { useLocale } from '../features/locale/useLocale'
-import { arrowRightIcon, flagCheckeredIcon, rotateLeftIcon, xmarkIcon, speedIcon, accuracyIcon, circleExclamationIcon } from '../lib/icons';
+import { useLocale } from '../../features/locale/useLocale'
+import { arrowRightIcon, flagCheckeredIcon, rotateLeftIcon, xmarkIcon, speedIcon, accuracyIcon, circleExclamationIcon } from '../../lib/icons';
 import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { m } from 'motion/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { CSSProperties } from 'react';
-import type { TypingSession } from '../features/typing/session';
-import type { PracticeLanguage } from '../features/typing/samples';
+import type { TypingSession } from '../../features/typing/session';
+import type { PracticeLanguage } from '../../features/typing/samples';
 import LanguageBadge from './LanguageBadge';
 import './TypingResultModal.css';
 const petals = Array.from({ length: 80 }, (_, index) => ({

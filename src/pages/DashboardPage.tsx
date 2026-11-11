@@ -4,9 +4,9 @@ import { Link, Navigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../features/auth/context';
 import { useHistory } from '../features/typing/historyContext';
-import TypingHistory from '../components/TypingHistory';
-import ReviewForm from '../components/ReviewForm';
-import MotionLink from '../components/MotionLink';
+import TypingHistory from '../components/typing/TypingHistory';
+import ReviewForm from '../components/reviews/ReviewForm';
+import MotionLink from '../components/ui/MotionLink';
 import './DashboardPage.css';
 export default function DashboardPage() {
     const { t } = useLocale();

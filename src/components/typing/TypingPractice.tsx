@@ -1,16 +1,16 @@
-import { useLocale } from '../features/locale/useLocale'
-import { arrowRightIcon, rotateLeftIcon, volumeHighIcon, volumeXmarkIcon } from '../lib/icons';
+import { useLocale } from '../../features/locale/useLocale'
+import { arrowRightIcon, rotateLeftIcon, volumeHighIcon, volumeXmarkIcon } from '../../lib/icons';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { PracticeQuote } from '../api/quotes';
+import type { PracticeQuote } from '../../api/quotes';
 import TypingResultModal from './TypingResultModal';
 import LanguageBadge, { LanguageFlag } from './LanguageBadge';
 import SentenceCredit from './SentenceCredit';
-import { newSession, sessionMetrics, sessionReducer } from '../features/typing/session';
-import { useTypingSound } from '../features/typing/useTypingSound';
-import { useHistory } from '../features/typing/historyContext';
-import type { PracticeLanguage } from '../features/typing/samples';
-import { durationSetting, isDuration, isEnabled, readSetting, statsVisibleSetting, writeSetting } from '../features/typing/settings';
+import { newSession, sessionMetrics, sessionReducer } from '../../features/typing/session';
+import { useTypingSound } from '../../features/typing/useTypingSound';
+import { useHistory } from '../../features/typing/historyContext';
+import type { PracticeLanguage } from '../../features/typing/samples';
+import { durationSetting, isDuration, isEnabled, readSetting, statsVisibleSetting, writeSetting } from '../../features/typing/settings';
 import './TypingPractice.css';
 export default function TypingPractice({ quote, loading, notice, onNext, onLanguageChange }: {
     quote: PracticeQuote;

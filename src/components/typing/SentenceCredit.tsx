@@ -1,5 +1,5 @@
-import { useLocale } from '../features/locale/useLocale'
-import type { TatoebaCredit } from '../features/typing/tatoeba';
+import { useLocale } from '../../features/locale/useLocale'
+import type { TatoebaCredit } from '../../features/typing/tatoeba';
 import './SentenceCredit.css';
 export default function SentenceCredit({ credit }: {
     credit?: TatoebaCredit;

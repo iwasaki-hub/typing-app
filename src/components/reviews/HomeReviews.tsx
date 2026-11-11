@@ -1,13 +1,13 @@
-import { useLocale } from '../features/locale/useLocale'
+import { useLocale } from '../../features/locale/useLocale'
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useInView, useReducedMotion } from 'motion/react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { starIcon, chevronLeftIcon, chevronRightIcon, keyboardIcon, chartLineIcon, bookOpenIcon } from '../lib/icons';
-import { demoReviews } from '../data/demoReviews';
-import type { PublicReview } from '../features/reviews/review';
+import { starIcon, chevronLeftIcon, chevronRightIcon, keyboardIcon, chartLineIcon, bookOpenIcon } from '../../lib/icons';
+import { demoReviews } from '../../data/demoReviews';
+import type { PublicReview } from '../../features/reviews/review';
 import './HomeReviews.css';
 type ReviewCard = {
     id: string;
@@ -110,7 +110,7 @@ export default function HomeReviews() {
     const [published, setPublished] = useState<PublicReview[]>([]);
     useEffect(() => {
         const controller = new AbortController();
-        import('../api/reviews').then(api => api.getPublicReviews(controller.signal)).then(data => { if (!controller.signal.aborted)
+        import('../../api/reviews').then(api => api.getPublicReviews(controller.signal)).then(data => { if (!controller.signal.aborted)
             setPublished(data); }).catch(() => { });
         return () => controller.abort();
     }, []);

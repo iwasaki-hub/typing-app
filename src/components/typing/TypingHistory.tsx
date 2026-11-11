@@ -1,5 +1,5 @@
-import { getFormattingLocale } from '../features/locale/store'
-import { useLocale } from '../features/locale/useLocale'
+import { getFormattingLocale } from '../../features/locale/store'
+import { useLocale } from '../../features/locale/useLocale'
 import SentenceCredit from './SentenceCredit';
 import LanguageBadge from './LanguageBadge';
 import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
@@ -7,8 +7,8 @@ import { useId, useState } from 'react';
 import { m } from 'motion/react';
 import PracticeCalendar from './PracticeCalendar';
 import PracticeChart from './PracticeChart';
-import { formatResultSpeed } from '../features/typing/history';
-import { useHistory } from '../features/typing/historyContext';
+import { formatResultSpeed } from '../../features/typing/history';
+import { useHistory } from '../../features/typing/historyContext';
 import { Link } from 'react-router-dom';
 import './TypingHistory.css';
 const reasons = { completed: 'クリア', timeout: '時間切れ', stopped: '手動終了' };

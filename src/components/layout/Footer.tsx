@@ -1,5 +1,5 @@
-import { useLocale } from '../features/locale/useLocale'
-import { arrowUpIcon, blueskyIcon, discordIcon, instagramIcon, youtubeIcon } from '../lib/icons';
+import { useLocale } from '../../features/locale/useLocale'
+import { arrowUpIcon, blueskyIcon, discordIcon, instagramIcon, youtubeIcon } from '../../lib/icons';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Footer.css';

@@ -1,9 +1,9 @@
-import { useLocale } from '../features/locale/useLocale'
+import { useLocale } from '../../features/locale/useLocale'
 import { useEffect, useRef, useState, type SubmitEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { starIcon } from '../lib/icons';
-import { useAuth } from '../features/auth/context';
-import { validateReview, type ReviewInput } from '../features/reviews/review';
+import { starIcon } from '../../lib/icons';
+import { useAuth } from '../../features/auth/context';
+import { validateReview, type ReviewInput } from '../../features/reviews/review';
 import './ReviewForm.css';
 export default function ReviewForm() {
     const { user, displayName } = useAuth();
@@ -28,7 +28,7 @@ function AccountReviewForm({ userId, defaultName }: {
     useEffect(() => {
         const controller = new AbortController();
         request.current = controller;
-        import('../api/reviews').then(api => api.getOwnReview(userId, controller.signal)).then(review => {
+        import('../../api/reviews').then(api => api.getOwnReview(userId, controller.signal)).then(review => {
             if (controller.signal.aborted)
                 return;
             if (review) {
@@ -64,7 +64,7 @@ function AccountReviewForm({ userId, defaultName }: {
         const controller = new AbortController();
         request.current = controller;
         try {
-            const { saveReview } = await import('../api/reviews');
+            const { saveReview } = await import('../../api/reviews');
             await saveReview(userId, value, controller.signal);
             if (!controller.signal.aborted) {
                 setExists(true);

@@ -1,8 +1,8 @@
-import { useLocale } from '../features/locale/useLocale'
+import { useLocale } from '../../features/locale/useLocale'
 import { useId } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { paletteIcon } from '../lib/icons';
-import { useTheme } from '../features/theme/context';
+import { paletteIcon } from '../../lib/icons';
+import { useTheme } from '../../features/theme/context';
 import './ThemeSwitcher.css';
 export default function ThemeSwitcher() {
     const { t } = useLocale();

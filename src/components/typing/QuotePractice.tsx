@@ -1,11 +1,11 @@
-import { useLocale } from '../features/locale/useLocale'
+import { useLocale } from '../../features/locale/useLocale'
 import { useEffect, useRef, useState } from 'react';
 import TypingPractice from './TypingPractice';
-import { fallbackQuotes, getFallbackQuote, getPracticeQuote } from '../api/quotes';
-import type { PracticeLanguage } from '../features/typing/samples';
-import { createKoreanQueue, koreanFallback } from '../features/typing/koreanQueue';
-import { getKoreanBatch } from '../api/tatoeba';
-import { isLanguage, languageSetting, readSetting, writeSetting } from '../features/typing/settings';
+import { fallbackQuotes, getFallbackQuote, getPracticeQuote } from '../../api/quotes';
+import type { PracticeLanguage } from '../../features/typing/samples';
+import { createKoreanQueue, koreanFallback } from '../../features/typing/koreanQueue';
+import { getKoreanBatch } from '../../api/tatoeba';
+import { isLanguage, languageSetting, readSetting, writeSetting } from '../../features/typing/settings';
 type LanguageProps = {
     onLanguageChange: (language: PracticeLanguage) => void;
 };
