@@ -1,5 +1,14 @@
 .typing-result-modal { position: relative; z-index: 1000; color: #252525; }
 .result-modal-backdrop { position: fixed; inset: 0; background: #12203680; backdrop-filter: blur(5px); }
+.result-confetti { position: fixed; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.result-confetti > span { position: absolute; bottom: -12px; background: var(--petal-color); border-radius: 70% 15% 70% 25%; opacity: 0; animation: result-petal-burst var(--petal-duration) var(--petal-delay) linear both; }
+@keyframes result-petal-burst {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); animation-timing-function: cubic-bezier(.15, .75, .3, 1); }
+  40% { opacity: .9; transform: translate3d(calc(var(--petal-distance) * .7), var(--petal-rise), 0) rotate(calc(var(--petal-turn) * .4)); animation-timing-function: ease-in; }
+  80% { opacity: .75; transform: translate3d(calc(var(--petal-distance) * .95), calc(var(--petal-rise) * .3), 0) rotate(calc(var(--petal-turn) * .8)); }
+  100% { opacity: 0; transform: translate3d(var(--petal-distance), 18vh, 0) rotate(var(--petal-turn)); }
+}
+@media (prefers-reduced-motion: reduce) { .result-confetti { display: none; } .result-confetti > span { animation: none; } }
 .result-modal-viewport { position: fixed; inset: 0; overflow-y: auto; overscroll-behavior: contain; }
 .result-modal-center { display: flex; min-height: 100%; align-items: center; justify-content: center; padding: 24px 16px; }
 .result-modal-panel { position: relative; width: 100%; max-width: 540px; padding: 36px; border-radius: 18px; background: white; box-shadow: 0 24px 90px #12203640; text-align: center; }

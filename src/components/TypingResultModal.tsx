@@ -2,10 +2,23 @@ import { arrowRightIcon, flagCheckeredIcon, rotateLeftIcon, xmarkIcon, speedIcon
 import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { m } from 'motion/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import type { CSSProperties } from 'react'
 import type { TypingSession } from '../features/typing/session'
 import type { PracticeLanguage } from '../features/typing/samples'
 import LanguageBadge from './LanguageBadge'
 import './TypingResultModal.css'
+
+const petals = Array.from({ length: 80 }, (_, index) => ({
+  left: index % 2 === 0 ? '2%' : '98%',
+  '--petal-color': ['#f2a8c4', '#edc0e8', '#f5c5a5', '#d6c2ef', '#f5d890'][index % 5],
+  '--petal-distance': `${(index % 2 === 0 ? 1 : -1) * (28 + (Math.floor(index / 2) * 13) % 49)}vw`,
+  '--petal-rise': `${-(58 + (Math.floor(index / 2) * 7) % 37)}vh`,
+  '--petal-turn': `${(index % 2 ? -1 : 1) * (180 + index * 23)}deg`,
+  '--petal-duration': `${2.7 + (Math.floor(index / 2) % 9) * 0.1}s`,
+  '--petal-delay': `${(Math.floor(index / 2) % 6) * 0.025}s`,
+  width: `${7 + index % 5}px`,
+  height: `${10 + index % 6}px`,
+} as CSSProperties))
 
 export default function TypingResultModal({ session, language = 'en', wpm, speedUnit = 'WPM', accuracy, correct, total, loading, onNext, onRetry, onDismiss }: {
   session: TypingSession; wpm: number; accuracy: number; correct: number; total: number; loading: boolean
@@ -15,6 +28,7 @@ export default function TypingResultModal({ session, language = 'en', wpm, speed
 }) {
   return <Dialog open onClose={onDismiss} className="typing-result-modal">
     <DialogBackdrop className="result-modal-backdrop" />
+    <div className="result-confetti" aria-hidden="true">{petals.map((style, index) => <span key={index} style={style} />)}</div>
     <div className="result-modal-viewport"><div className="result-modal-center">
     <DialogPanel as={m.div} className="result-modal-panel" initial={{ opacity: 0, y: 14, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}>
       <button type="button" className="result-modal-close" aria-label="結果を閉じる" onClick={onDismiss}><FontAwesomeIcon icon={xmarkIcon} aria-hidden="true" /></button>
