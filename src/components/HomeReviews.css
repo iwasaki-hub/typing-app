@@ -1,0 +1,32 @@
+.home-page .home-review-carousel { --review-columns: 1; margin: 28px auto 0; }
+.home-page .home-review-window { overflow: hidden; }
+.home-page .home-review-track { display: flex; align-items: stretch; touch-action: pan-y pinch-zoom; margin-left: -20px; }
+.home-page .home-review-slide { flex: 0 0 calc(100% / var(--review-columns)); min-width: 0; display: flex; padding-left: 20px; box-sizing: border-box; }
+.home-page .home-review-slide .home-review-card { width: 100%; min-width: 0; padding: 18px; border: 1px solid #e3e3ed; border-radius: 22px; background: #fff; }
+.home-page .home-review-slide .home-review-card[data-accent="0"] { background: #f6f7fa; }
+.home-page .home-review-visual { position: relative; display: flex; align-items: center; justify-content: space-between; isolation: isolate; overflow: hidden; aspect-ratio: 16 / 9; padding: 20px; border-radius: 14px; background: radial-gradient(ellipse at 40% 80%, #159765, transparent 75%), #174e3c; color: #a3ebc3; }
+.home-page [data-accent="1"] .home-review-visual { background: linear-gradient(130deg, #a02cdb, #e43c86 65%, #f2786b); color: #f9bae8; }
+.home-page [data-accent="2"] .home-review-visual { background: radial-gradient(ellipse at 35% 80%, #8732cf, transparent 75%), #3c1d7e; color: #d2a3fb; }
+.home-page .home-review-visual > svg { width: 36%; height: auto; opacity: .65; transform: rotate(-12deg); }
+.home-page .home-review-visual-label { position: absolute; top: 15px; left: 16px; font-size: 8px; font-weight: 700; letter-spacing: 1.4px; }
+.home-page .home-review-visual-avatar { display: grid; place-items: center; width: 46%; aspect-ratio: 1; border-radius: 50% 50% 42% 42%; background: #ffffffdf; box-shadow: 0 14px 0 8px #ffffff25; color: #26314a; font-size: clamp(36px, 5vw, 66px); font-weight: 750; transform: translateY(12px) rotate(6deg); }
+.home-page .home-review-slide .home-review-card h3 { font-size: 18px; line-height: 1.65; margin: 20px 0 12px; }
+.home-page .home-review-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.home-page .home-review-badges > span { display: inline-flex; align-items: center; gap: 6px; padding: 3px 7px; border: 1px solid #d5d5e3; border-radius: 5px; color: #66687b; font-size: 11px; }
+.home-page .home-review-score svg { color: #bd7610; }
+.home-page .home-review-controls { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.home-page .home-review-controls > span { margin-right: auto; font-size: 12px; color: #686863; font-variant-numeric: tabular-nums; }
+.home-page .home-review-controls button { border: 1px solid #deded9; border-radius: 8px; padding: 9px 12px; min-height: 40px; background: #fff; color: #333; font: inherit; font-size: 12px; cursor: pointer; }
+.home-page .home-review-controls button:disabled { opacity: .5; cursor: not-allowed; }
+.home-page .home-review-controls button:hover:not(:disabled) { background: #edf6ff; }
+.home-page .home-review-dots { display: flex; justify-content: center; gap: 4px; margin-top: 12px; }
+.home-page .home-review-dots button { display: grid; place-items: center; border: 0; width: 36px; height: 36px; padding: 0; background: transparent; cursor: pointer; }
+.home-page .home-review-dots span { width: 8px; height: 8px; border-radius: 50%; background: #c6c6c0; }
+.home-page .home-review-dots button[aria-pressed=true] span { width: 24px; border-radius: 99px; background: #176bb5; }
+.home-page .home-review-carousel button:focus-visible { outline: 3px solid #2383e2; outline-offset: 2px; }
+:root[data-theme=calm] .home-page .home-review-slide .home-review-card { border-color: #e7ddce; background: #fff8eb; }
+:root[data-theme=calm] .home-page .home-review-controls button { background: #fff8eb; border-color: #e7ddce; border-radius: 99px; }
+:root[data-theme=calm] .home-page .home-review-dots button[aria-pressed=true] span { background: #b95424; }
+@media (min-width: 700px) { .home-page .home-review-carousel { --review-columns: 2; } }
+@media (min-width: 1000px) { .home-page .home-review-carousel { --review-columns: 3; } .home-page .home-review-carousel[data-review-count="2"] { --review-columns: 2; } }
+.home-page .home-review-carousel[data-review-count="1"] { --review-columns: 1; max-width: 540px; margin-inline: auto; }
