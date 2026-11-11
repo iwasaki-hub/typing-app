@@ -338,3 +338,5 @@ export default defineConfig([
 国名タイピングには Three.js の3D地球を表示します。出題国の代表地点が正面になるよう回転し、マーカーを表示します。PCでは右側、幅900px以下では入力欄の下に配置します。20か国の代表緯度経度は `src/features/learning/locations.ts` に保存し、外部APIやAPIキーは不要です。地図はNatural Earthのパブリックドメインデータ（110m land、https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_land.geojson）を `public/maps/land.geojson` に同梱しています。国境や正確な国土の中心を表すものではありません。地球は遅延読み込みし、回転が完了したら描画ループを止め、ページを離れる際はGPUリソースを解放します。動きを減らす設定では瞬時に切り替え、WebGL未対応時はメッセージを表示して練習を継続できます。
 
 出題国の国境・海岸線を鮮やかなピンク色の線で表示します。Natural Earthの110m admin 0 countriesから20か国の境界座標のみ抽出して `public/maps/country-borders.json` に同梱しています（https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_admin_0_countries.geojson）。境界は簡略化された学習用の表示です。問題切替時に前の国の線を解放し、新しい国の線に切り替えます。
+
+国名タイピング・日用品の英単語ページでは、共通のON/OFF設定を使い、出題時にWeb Speech APIで英語の発音を自動再生します。初期設定はONで、ON/OFFは端末のlocalStorageに保存します。「発音を聞く」で繰り返し再生でき、問題・カテゴリー変更、OFF、結果表示、ページ離脱時には前の音声を停止します。ブラウザの制限により最初に操作が必要な場合があり、音声の種類・利用可否は端末の英語音声に依存します。日本語・韓国語のUI切替にかかわらず、発音は英語です。

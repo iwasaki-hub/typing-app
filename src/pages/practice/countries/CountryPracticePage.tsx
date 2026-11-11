@@ -1,11 +1,12 @@
 import { lazy, Suspense, useEffect, useReducer, useRef, useState, type SubmitEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { globeIcon, arrowRightIcon, rotateLeftIcon } from '../../../lib/icons'
+import { globeIcon, arrowRightIcon, rotateLeftIcon, volumeHighIcon, volumeXmarkIcon } from '../../../lib/icons'
 import { useLocale } from '../../../features/locale/useLocale'
 import { countries, countryRound, regionLabels, type Country, type CountryRegion } from '../../../features/learning/countries'
 import { learningReducer, newLearningSession, type LearnMode } from '../../../features/learning/session'
 import { useAutoAdvance } from '../../../features/learning/useAutoAdvance'
+import { usePronunciation } from '../../../features/learning/usePronunciation'
 import './CountryPracticePage.css'
 
 const CountryGlobe = lazy(() => import('../../../components/learning/CountryGlobe'))
@@ -20,6 +21,7 @@ export default function CountryPracticePage() {
   const nextButton = useRef<HTMLButtonElement>(null)
   const [inputNotice, setInputNotice] = useState('')
   const current = state.order[state.index]
+  const pronunciation = usePronunciation(current.english, state.order, state.finished)
   const answered = state.feedback === 'correct' || state.feedback === 'skipped'
   const showEnglish = state.mode === 'guide' || state.hinted || answered
   const correct = state.answers.filter(answer => !answer.skipped).length
@@ -41,9 +43,13 @@ export default function CountryPracticePage() {
       <div className="learning-settings">
         <label>{t('地域')}<select value={region} onChange={event => restart(event.target.value as CountryRegion | 'all')}><option value="all">{t('世界の国々')}</option>{Object.entries(regionLabels).map(([value, label]) => <option key={value} value={value}>{t(label)}</option>)}</select></label>
         <label>{t('学び方')}<select value={state.mode} onChange={event => restart(region, event.target.value as LearnMode)}><option value="guide">{t('お手本を見て練習')}</option><option value="quiz">{t('思い出して入力')}</option></select></label>
+        <div className="learning-pronunciation"><span>{t('発音の自動再生')}</span><button type="button" aria-pressed={pronunciation.enabled} disabled={!pronunciation.supported} onClick={pronunciation.toggle}><FontAwesomeIcon icon={pronunciation.enabled ? volumeHighIcon : volumeXmarkIcon} aria-hidden="true" /> {pronunciation.enabled ? 'ON' : 'OFF'}</button></div>
       </div>
       <p className="learning-help">{t('地域・学び方を変更すると最初から始まります。時間制限はありません。')}</p>
       <p className="learning-help">{t('正しい答えを入力し終えると、自動で次の問題へ進みます。Enterキーは不要です。')}</p>
+      {!pronunciation.supported && <p className="learning-help" role="status">{t('このブラウザでは音声を再生できません。練習はそのまま続けられます。')}</p>}
+      {pronunciation.enabled && pronunciation.supported && <p className="learning-help">{t('英語の発音を出題時に再生します。設定はこの端末に保存されます。')}</p>}
+      {pronunciation.enabled && pronunciation.supported && pronunciation.status && <p className="learning-help" role="status">{pronunciation.status === 'blocked' ? t('音声を開始するには「発音を聞く」を押してください。') : t('発音を再生できませんでした。「発音を聞く」で再試行できます。')}</p>}
       {state.finished ? <div className="learning-summary">
         <h3 ref={summary} tabIndex={-1}>{t('おつかれさまでした！')}</h3>
         <p>{t('国旗と英語の国名を、もう一度振り返ってみましょう。')}</p>
@@ -54,6 +60,7 @@ export default function CountryPracticePage() {
       </div> : <>
         <div className="learning-progress"><span>{t('第{0}問 / 全{1}問', [state.index + 1, state.order.length])}</span><progress max={state.order.length} value={state.answers.length} aria-label={t('学習の進み具合')} /></div>
         <div className="country-learning-layout"><div className="country-learning-question"><div className="learning-prompt"><img src={`/flags/${current.code}.svg`} alt={t('{0}の国旗', [current[locale]])} width="100" height="70" /><div><span>{t(regionLabels[current.region])}</span><h3>{current[locale]}</h3></div></div>
+        {pronunciation.enabled && pronunciation.supported && <button className="learning-listen" type="button" onClick={pronunciation.replay}><FontAwesomeIcon icon={volumeHighIcon} aria-hidden="true" /> {t('発音を聞く')}</button>}
         <p className="learning-instruction">{state.mode === 'guide' ? t('お手本と同じ英語の国名を入力してください。') : t('この国の英語名を思い出して入力してください。')}</p>
         <div className={`learning-target${showEnglish ? '' : ' is-hidden'}`}>
           {showEnglish ? <span lang="en" aria-label={current.english}>{[...current.english].map((letter, index) => <span key={index} className={state.mode === 'guide' && state.input[index] ? state.input[index].toLowerCase() === letter.toLowerCase() ? 'is-correct' : 'is-incorrect' : ''}>{letter}</span>)}</span> : <span>{t('英語では何というかな？')}</span>}

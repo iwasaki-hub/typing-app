@@ -1,11 +1,12 @@
 import { useEffect, useReducer, useRef, useState, type SubmitEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { householdIcon, arrowRightIcon, rotateLeftIcon } from '../../../lib/icons'
+import { householdIcon, arrowRightIcon, rotateLeftIcon, volumeHighIcon, volumeXmarkIcon } from '../../../lib/icons'
 import { useLocale } from '../../../features/locale/useLocale'
 import { householdCategories, householdRound, householdWords, type HouseholdCategory, type HouseholdWord } from '../../../features/learning/household'
 import { learningReducer, newLearningSession, type LearnMode } from '../../../features/learning/session'
 import { useAutoAdvance } from '../../../features/learning/useAutoAdvance'
+import { usePronunciation } from '../../../features/learning/usePronunciation'
 import { normalizeLearningAnswer } from '../../../features/learning/answer'
 import './HouseholdPracticePage.css'
 
@@ -20,6 +21,7 @@ export default function HouseholdPracticePage() {
   const nextButton = useRef<HTMLButtonElement>(null)
   const summary = useRef<HTMLHeadingElement>(null)
   const current = state.order[state.index]
+  const pronunciation = usePronunciation(current.english, state.order, state.finished)
   const answered = state.feedback === 'correct' || state.feedback === 'skipped'
   const showEnglish = state.mode === 'guide' || state.hinted || answered
   const typed = normalizeLearningAnswer(state.input)
@@ -43,7 +45,10 @@ export default function HouseholdPracticePage() {
     </div>
     <section className="learning-card" aria-labelledby="household-title">
       <div className="learning-heading"><h2 id="household-title">{t(householdCategories[category].label)}</h2><span className="learning-badge">{t('日用品の英単語')}</span></div>
-      <div className="learning-settings"><label>{t('学び方')}<select value={state.mode} onChange={event => restart(category, event.target.value as LearnMode)}><option value="guide">{t('お手本を見て練習')}</option><option value="quiz">{t('思い出して入力')}</option></select></label></div>
+      <div className="learning-settings"><label>{t('学び方')}<select value={state.mode} onChange={event => restart(category, event.target.value as LearnMode)}><option value="guide">{t('お手本を見て練習')}</option><option value="quiz">{t('思い出して入力')}</option></select></label><div className="learning-pronunciation"><span>{t('発音の自動再生')}</span><button type="button" aria-pressed={pronunciation.enabled} disabled={!pronunciation.supported} onClick={pronunciation.toggle}><FontAwesomeIcon icon={pronunciation.enabled ? volumeHighIcon : volumeXmarkIcon} aria-hidden="true" /> {pronunciation.enabled ? 'ON' : 'OFF'}</button></div></div>
+      {!pronunciation.supported && <p className="learning-help" role="status">{t('このブラウザでは音声を再生できません。練習はそのまま続けられます。')}</p>}
+      {pronunciation.enabled && pronunciation.supported && <p className="learning-help">{t('英語の発音を出題時に再生します。設定はこの端末に保存されます。')}</p>}
+      {pronunciation.enabled && pronunciation.supported && pronunciation.status && <p className="learning-help" role="status">{pronunciation.status === 'blocked' ? t('音声を開始するには「発音を聞く」を押してください。') : t('発音を再生できませんでした。「発音を聞く」で再試行できます。')}</p>}
       <p className="learning-help">{reviewing ? t('復習モード：ヒントを見た・間違えた・答えを確認した単語を、思い出して入力しましょう。') : t('カテゴリー・学び方を変更すると最初から始まります。1カテゴリー8問、時間制限はありません。')}</p>
       <p className="learning-help">{t('正しい答えを入力し終えると、自動で次の問題へ進みます。Enterキーは不要です。')}</p>
       {state.finished ? <div className="learning-summary">
@@ -54,6 +59,7 @@ export default function HouseholdPracticePage() {
       </div> : <>
         <div className="learning-progress"><span>{t('第{0}問 / 全{1}問', [state.index + 1, state.order.length])}</span><progress max={state.order.length} value={state.answers.length} aria-label={t('学習の進み具合')} /></div>
         <div className="learning-prompt"><span className="household-prompt-emoji" aria-hidden="true">{current.emoji}</span><div><span>{t(householdCategories[current.category].label)}</span><h3>{current[locale]}</h3></div></div>
+        {pronunciation.enabled && pronunciation.supported && <button className="learning-listen" type="button" onClick={pronunciation.replay}><FontAwesomeIcon icon={volumeHighIcon} aria-hidden="true" /> {t('発音を聞く')}</button>}
         <p className="learning-instruction">{state.mode === 'guide' ? t('意味とスペルを確認して、お手本の英単語を入力してください。') : t('この日用品を英語で何というか、思い出して入力してください。')}</p>
         <div className={`learning-target${showEnglish ? '' : ' is-hidden'}`}>{showEnglish ? <span lang="en" aria-label={current.english}>{[...current.english].map((letter, index) => <span key={index} className={state.mode === 'guide' && typed[index] ? typed[index] === letter ? 'is-correct' : 'is-incorrect' : ''}>{letter}</span>)}</span> : t('英語では何というかな？')}</div>
         <form onSubmit={check}>

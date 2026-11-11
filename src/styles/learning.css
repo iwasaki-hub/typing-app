@@ -57,3 +57,8 @@
 :root[data-theme=calm] .learning-intro { padding: 28px; border-radius: 28px; background: #dfeedd; }
 :root[data-theme=calm] .learning-page .learning-primary { border-radius: 99px; background: #2b3d8a; border-color: #2b3d8a; }
 @media (max-width: 600px) { .learning-page { padding: 32px 16px 60px; } .learning-card { padding: 20px; } .learning-prompt { gap: 18px; } .learning-prompt img { width: 80px; height: 56px; } .learning-target { padding: 20px 16px; } .learning-stats { gap: 8px; } .learning-stats dt { font-size: 11px; } }
+
+.learning-pronunciation { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.learning-pronunciation button, .learning-listen { border: 1px solid #cfc3e2; border-radius: 8px; padding: 9px 14px; background: #fff; color: #69479c; font: inherit; font-size: 13px; }
+.learning-pronunciation button[aria-pressed=true] { background: #f3edfc; }
+.learning-listen { display: inline-flex; align-items: center; gap: 8px; }
