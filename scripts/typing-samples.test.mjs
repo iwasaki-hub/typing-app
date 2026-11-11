@@ -4,11 +4,14 @@ import { practiceSamples } from '../src/features/typing/samples.ts'
 import { formatResultSpeed, parseHistory } from '../src/features/typing/history.ts'
 import { isRankingEligible } from '../src/features/typing/ranking.ts'
 
-test('each language has fifteen unique, normalized local examples including five longer passages', () => {
+test('local examples are unique and normalized, with 15 short/10 long Korean and 10 short/5 long English passages', () => {
   for (const [language, samples] of Object.entries(practiceSamples)) {
-    assert.equal(samples.length, 15)
-    assert.equal(new Set(samples).size, 15)
-    assert.equal(samples.slice(10).filter((text) => text.length >= (language === 'en' ? 90 : 45) && text.length <= 180).length, 5)
+    const shortCount = language === 'ko' ? 15 : 10
+    const longCount = language === 'ko' ? 10 : 5
+    assert.equal(samples.length, shortCount + longCount)
+    assert.equal(new Set(samples).size, samples.length)
+    assert.ok(samples.slice(0, shortCount).every(text => text.length < (language === 'en' ? 90 : 45)))
+    assert.equal(samples.slice(shortCount).filter((text) => text.length >= (language === 'en' ? 90 : 45) && text.length <= 180).length, longCount)
     for (const text of samples) {
       assert.equal(text, text.normalize('NFC'))
       assert.ok(text.length > 0)
