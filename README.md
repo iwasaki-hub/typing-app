@@ -56,6 +56,7 @@ src/
       PracticeMenuPage  # 練習を選ぶ入口（.tsx / .css）
       sentences/        # SentencePracticePage
       countries/        # CountryPracticePage
+      household/        # HouseholdPracticePage
 ```
 
 CSS は対応するコンポーネントと同じフォルダに配置します。Provider の適用順は `src/providers/AppProviders.tsx` に集約し、`main.tsx` はルーターとアプリの起動を担当します。
@@ -85,6 +86,7 @@ React Router の `BrowserRouter` を使用します。
 - `/practice`: 練習を選ぶメニュー (`PracticeMenuPage.tsx` / `PracticeMenuPage.css`)
 - `/practice/sentences`: 従来の文章タイピング (`SentencePracticePage.tsx` / `SentencePracticePage.css`)
 - `/practice/countries`: 国旗と英語の国名を学ぶ (`CountryPracticePage.tsx` / `CountryPracticePage.css`)
+- `/practice/household`: 日用品の英単語をカテゴリー別に学ぶ (`HouseholdPracticePage.tsx` / `HouseholdPracticePage.css`)
 - `/learn/countries`: `/practice/countries` にリダイレクト（旧URLの互換用）
 - `/ranking`: 全ユーザーランキング (`RankingPage.tsx` / `RankingPage.css`)
 - `/login`: メールログイン (`LoginPage.tsx` / `LoginPage.css`)
@@ -132,6 +134,12 @@ Tatoeba の例文には作者・元の例文へのリンク・ライセンスを
 ナビゲーションは「タイピング」に入口を集約します。`/practice` のカードから各練習を選び、各ページの「練習メニューに戻る」で一覧に戻れます。練習中もナビゲーションの「タイピング」が選択状態になります。
 `src/features/practice/activities.ts` をメニューとルートの共通定義にしています。新しい練習を増やすときは、独立したページと専用CSS・採点ロジック／問題データを作り、この定義に `id`・`path`・タイトル・説明・カテゴリ・アイコン・`lazy` のページ読み込みを追加してください。メニューカードとルートは自動で生成されるため、ナビゲーションや `App.tsx` に個別の項目を増やす必要はありません。韓国語の表示文言は `ko.ts` に追加します。
 各ページは遅延読み込みします。練習の採点方法や保存項目は題材によって異なるため、ページ・ロジックを分け、国旗表示など必要になった部品を共通化していく構成です。`npm run test:practice-menu` でID／パスの重複と翻訳を検証できます。
+
+### 日用品の英単語で学ぶ
+
+練習メニューの「日用品の英単語」から、キッチン・洗面所／バスルーム・掃除／洗濯・文房具・リビングの5カテゴリーを選べます。各8語、計40語を `src/features/learning/household.ts` に収録し、カテゴリー内で重複なし・ランダム順に出題します。意味は表示言語に合わせて日本語／韓国語で表示し、英語のスペルを入力します。画像の代わりに補助的な絵文字イメージを添えています。
+お手本モード・クイズモード・ヒント・答えの確認・結果の振り返りに対応し、間違えた／ヒントを見た／答えを確認した単語だけをクイズで復習できます。一般的な表記を1つずつ採用しているため、別の同義語ではなく、画面のお手本の表記で答えます。通常の文章タイピング履歴には保存せず、ページを離れると進行状態をリセットします。
+国名と日用品の判定・復習情報は `features/learning/session.ts` の型付き共通ロジックで管理し、共通の見た目は `src/styles/learning.css`、ページ固有の装飾は各ページのCSSで管理します。`npm run test:learning` で両方の題材を検証できます。
 
 ### 国名タイピングで学ぶ
 

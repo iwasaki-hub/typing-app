@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { globeIcon, arrowRightIcon, rotateLeftIcon } from '../../../lib/icons'
 import { useLocale } from '../../../features/locale/useLocale'
-import { countries, countryRound, regionLabels, type CountryRegion } from '../../../features/learning/countries'
+import { countries, countryRound, regionLabels, type Country, type CountryRegion } from '../../../features/learning/countries'
 import { learningReducer, newLearningSession, type LearnMode } from '../../../features/learning/session'
 import './CountryPracticePage.css'
 
 export default function CountryPracticePage() {
   const { t, locale } = useLocale()
   const [region, setRegion] = useState<CountryRegion | 'all'>('all')
-  const [state, dispatch] = useReducer(learningReducer, undefined, () => newLearningSession(countryRound('all'), 'guide'))
+  const [state, dispatch] = useReducer(learningReducer<Country>, undefined, () => newLearningSession(countryRound('all'), 'guide'))
   const input = useRef<HTMLInputElement>(null)
   const summary = useRef<HTMLHeadingElement>(null)
   const nextButton = useRef<HTMLButtonElement>(null)
@@ -44,11 +44,11 @@ export default function CountryPracticePage() {
         <p>{t('国旗と英語の国名を、もう一度振り返ってみましょう。')}</p>
         <dl className="learning-stats"><div><dt>{t('学習した国')}</dt><dd>{state.answers.length}</dd></div><div><dt>{t('正解した国')}</dt><dd>{correct}</dd></div><div><dt>{state.mode === 'guide' ? t('一度で正解') : t('ヒント・間違いなし')}</dt><dd>{independent}</dd></div></dl>
         <p className="learning-help">{state.mode === 'guide' ? t('今回は、お手本を見ながらの練習でした。次は「思い出して入力」にも挑戦してみましょう。') : t('答えを見たり間違えたりした国は、もう一度練習してみましょう。')}</p>
-        <ul className="learning-recap">{state.answers.map(answer => <li key={answer.country.code}><img src={`/flags/${answer.country.code}.svg`} alt="" width="40" height="28" /><div><strong>{answer.country[locale]}</strong><span lang="en">{answer.country.english}</span></div><small>{answer.skipped ? t('答えを確認') : answer.hinted || answer.mistakes ? t('復習してみよう') : t('正解')}</small></li>)}</ul>
+        <ul className="learning-recap">{state.answers.map(answer => <li key={answer.item.code}><img src={`/flags/${answer.item.code}.svg`} alt="" width="40" height="28" /><div><strong>{answer.item[locale]}</strong><span lang="en">{answer.item.english}</span></div><small>{answer.skipped ? t('答えを確認') : answer.hinted || answer.mistakes ? t('復習してみよう') : t('正解')}</small></li>)}</ul>
         <button className="learning-primary" type="button" onClick={() => restart()}><FontAwesomeIcon icon={rotateLeftIcon} aria-hidden="true" /> {t('もう一度学ぶ')}</button>
       </div> : <>
         <div className="learning-progress"><span>{t('第{0}問 / 全{1}問', [state.index + 1, state.order.length])}</span><progress max={state.order.length} value={state.answers.length} aria-label={t('学習の進み具合')} /></div>
-        <div className="learning-country"><img src={`/flags/${current.code}.svg`} alt={t('{0}の国旗', [current[locale]])} width="100" height="70" /><div><span>{t(regionLabels[current.region])}</span><h3>{current[locale]}</h3></div></div>
+        <div className="learning-prompt"><img src={`/flags/${current.code}.svg`} alt={t('{0}の国旗', [current[locale]])} width="100" height="70" /><div><span>{t(regionLabels[current.region])}</span><h3>{current[locale]}</h3></div></div>
         <p className="learning-instruction">{state.mode === 'guide' ? t('お手本と同じ英語の国名を入力してください。') : t('この国の英語名を思い出して入力してください。')}</p>
         <div className={`learning-target${showEnglish ? '' : ' is-hidden'}`}>
           {showEnglish ? <span lang="en" aria-label={current.english}>{[...current.english].map((letter, index) => <span key={index} className={state.mode === 'guide' && state.input[index] ? state.input[index].toLowerCase() === letter.toLowerCase() ? 'is-correct' : 'is-incorrect' : ''}>{letter}</span>)}</span> : <span>{t('英語では何というかな？')}</span>}

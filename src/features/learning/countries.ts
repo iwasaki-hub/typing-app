@@ -34,4 +34,4 @@ export function countryRound(region: CountryRegion | 'all', random = Math.random
   }
   return choices.slice(0, 10)
 }
-export const normalizeCountryAnswer = (value: string) => value.trim().replace(/\s+/g, ' ').toLowerCase()
+export { normalizeLearningAnswer as normalizeCountryAnswer } from './answer.ts'
