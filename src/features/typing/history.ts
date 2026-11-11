@@ -13,6 +13,7 @@ export interface TypingResult {
   attempts?: number
   language?: 'en' | 'ko'
   cpm?: number
+  credit?: TatoebaCredit
   correct: number
   reason: 'completed' | 'timeout' | 'stopped'
 }
@@ -26,6 +27,7 @@ function isResult(value: unknown): value is TypingResult {
     && Number(item.accuracy) <= 100 && Number(item.elapsed) <= Number(item.duration)
     && (item.language === undefined || item.language === 'en' || item.language === 'ko')
     && (item.language !== 'ko' || (typeof item.cpm === 'number' && Number.isFinite(item.cpm) && item.cpm >= 0))
+    && (item.credit === undefined || isTatoebaCredit(item.credit))
 }
 
 export function formatResultSpeed(result: TypingResult) {
@@ -98,3 +100,4 @@ export function createHistoryStore(getStorage: () => Pick<Storage, 'getItem' | '
     },
   }
 }
+import { isTatoebaCredit, type TatoebaCredit } from './tatoeba.ts'

@@ -1,10 +1,12 @@
 import { createApiClient } from './client.ts'
 import { practiceSamples, type PracticeLanguage } from '../features/typing/samples.ts'
+import type { TatoebaCredit } from '../features/typing/tatoeba.ts'
 
 export interface PracticeQuote {
   text: string
   author: string | null
-  source: 'dummyjson' | 'local'
+  source: 'dummyjson' | 'local' | 'tatoeba'
+  credit?: TatoebaCredit
   language?: PracticeLanguage
 }
 

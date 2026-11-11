@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import TypingPractice from './TypingPractice'
 import { fallbackQuotes, getFallbackQuote, getPracticeQuote } from '../api/quotes'
-import { practiceSamples, type PracticeLanguage } from '../features/typing/samples'
+import type { PracticeLanguage } from '../features/typing/samples'
+import { createKoreanQueue, koreanFallback } from '../features/typing/koreanQueue'
+import { getKoreanBatch } from '../api/tatoeba'
 import { isLanguage, languageSetting, readSetting, writeSetting } from '../features/typing/settings'
 
 type LanguageProps = { onLanguageChange: (language: PracticeLanguage) => void }
@@ -47,16 +49,33 @@ function EnglishPractice({ onLanguageChange }: LanguageProps) {
 }
 
 function KoreanPractice({ onLanguageChange }: LanguageProps) {
-  const [index, setIndex] = useState(() => Math.floor(Math.random() * practiceSamples.ko.length))
-  const samples = practiceSamples.ko
-  function nextQuestion() {
-    if (samples.length <= 1) return
-    const choice = Math.floor(Math.random() * (samples.length - 1))
-    setIndex(choice >= index ? choice + 1 : choice)
+  const [quote, setQuote] = useState(() => koreanFallback())
+  const [loading, setLoading] = useState(true)
+  const queue = useRef<ReturnType<typeof createKoreanQueue> | null>(null)
+  const pending = useRef(false)
+  useEffect(() => {
+    const current = createKoreanQueue({ load: getKoreanBatch, storage: () => window.sessionStorage })
+    queue.current = current
+    let active = true
+    current.next().then(next => { if (active) { setQuote(next); setLoading(false) } }).catch(() => { if (active) setLoading(false) })
+    return () => { active = false; current.dispose(); if (queue.current === current) queue.current = null }
+  }, [])
+  async function nextQuestion() {
+    const current = queue.current
+    if (!current || loading || pending.current) return
+    pending.current = true
+    setLoading(true)
+    try {
+      const next = await current.next(quote.text)
+      if (queue.current === current) setQuote(next)
+    } finally {
+      pending.current = false
+      if (queue.current === current) setLoading(false)
+    }
   }
-  return <TypingPractice quote={{ text: samples[index], source: 'local', author: null, language: 'ko' }}
-    loading={false} notice={`韓国語の例文（全${samples.length}文からランダムに出題）`}
-    onNext={nextQuestion} onLanguageChange={onLanguageChange} />
+  return <TypingPractice quote={quote} loading={loading}
+    notice={loading ? '韓国語の例文を用意しています…' : quote.source === 'tatoeba' ? 'Tatoeba の韓国語例文です。残りが少なくなると自動で補充します。' : 'APIの例文を利用できないため、アプリ内の25文から出題しています。'}
+    onNext={() => { void nextQuestion().catch(() => {}) }} onLanguageChange={onLanguageChange} />
 }
 
 export default function QuotePractice() {

@@ -1,3 +1,4 @@
+import SentenceCredit from './SentenceCredit'
 import LanguageBadge from './LanguageBadge'
 import { chevronLeftIcon, chevronRightIcon } from '../lib/icons'
 import { useId, useState } from 'react'
@@ -33,7 +34,7 @@ export default function PracticeCalendar({ results }: { results: TypingResult[] 
       return <td key={index}><button type="button" className={`${count ? 'calendar-practiced' : ''}${key === selectedKey ? ' calendar-selected' : ''}`} aria-label={`${year}年${month + 1}月${day}日、練習${count}件`} aria-pressed={key === selectedKey} aria-current={key === todayKey ? 'date' : undefined} aria-controls={detailId} onClick={() => setSelected(new Date(year, month, day))}><span>{day}</span>{count > 0 && <small>{count}<span className="calendar-unit">件</span></small>}</button></td>
     })}</tr>)}</tbody></table>
     <section id={detailId} className="calendar-detail" aria-labelledby={`${detailId}-title`}><h3 id={`${detailId}-title`}>{month + 1}月{selected.getDate()}日の記録 <small>{entries.length}件</small></h3>
-      {entries.length === 0 ? <p>この日の練習記録はありません。</p> : <ul>{entries.map((result) => <li key={result.id}><div><time dateTime={result.savedAt}>{new Date(result.savedAt).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}</time><LanguageBadge language={result.language} compact /><span>{reasons[result.reason]} · {result.duration}秒設定</span></div><strong>{formatResultSpeed(result)} <small>正確率 {result.accuracy}% · ミス {result.mistakes}回</small></strong><p>{result.text}</p></li>)}</ul>}
+      {entries.length === 0 ? <p>この日の練習記録はありません。</p> : <ul>{entries.map((result) => <li key={result.id}><div><time dateTime={result.savedAt}>{new Date(result.savedAt).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })}</time><LanguageBadge language={result.language} compact /><span>{reasons[result.reason]} · {result.duration}秒設定</span></div><strong>{formatResultSpeed(result)} <small>正確率 {result.accuracy}% · ミス {result.mistakes}回</small></strong><p>{result.text}</p><SentenceCredit credit={result.credit} /></li>)}</ul>}
     </section>
   </div>
 }

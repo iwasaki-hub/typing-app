@@ -1,3 +1,4 @@
+import SentenceCredit from './SentenceCredit'
 import { useId, useState } from 'react'
 import LanguageBadge from './LanguageBadge'
 import type { TypingResult } from '../features/typing/history'
@@ -61,7 +62,7 @@ export default function PracticeChart({ results }: { results: TypingResult[] }) 
       <div className="practice-chart-detail">
         <label>結果を確認 <select value={selected.id} onChange={event => setSelectedId(event.target.value)}>{entries.map((entry, index) => <option key={entry.id} value={entry.id}>{index + 1}. {dateLabel(entry.savedAt)} · {chartSpeed(entry)} {language === 'ko' ? 'CPM' : 'WPM'} · {entry.accuracy}%</option>)}</select></label>
         <dl><div><dt>入力速度</dt><dd>{chartSpeed(selected)} {language === 'ko' ? 'CPM' : 'WPM'}</dd></div><div><dt>正確率</dt><dd>{selected.accuracy}%</dd></div><div><dt>ミス</dt><dd>{selected.mistakes}回</dd></div><div><dt>結果</dt><dd>{reasons[selected.reason]}（{selected.duration}秒設定）</dd></div></dl>
-        <p>{selected.text}</p>
+        <p>{selected.text}</p><SentenceCredit credit={selected.credit} />
       </div>
     </>}
   </div>

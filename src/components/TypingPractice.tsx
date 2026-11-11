@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { PracticeQuote } from '../api/quotes'
 import TypingResultModal from './TypingResultModal'
 import LanguageBadge, { LanguageFlag } from './LanguageBadge'
+import SentenceCredit from './SentenceCredit'
 import { newSession, sessionMetrics, sessionReducer } from '../features/typing/session'
 import { useTypingSound } from '../features/typing/useTypingSound'
 import { useHistory } from '../features/typing/historyContext'
@@ -42,10 +43,11 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
     const result = sessionMetrics(session, text)
     typingHistory.save({
       id: crypto.randomUUID(), savedAt: new Date().toISOString(), text, duration, language, cpm: result.cpm,
+      credit: quote.credit,
       elapsed: session.elapsed, wpm: result.wpm, accuracy: result.accuracy,
       mistakes: session.mistakes, attempts: session.attempts, correct: result.correct, reason: session.reason,
     })
-  }, [session, text, duration, language, typingHistory])
+  }, [session, text, duration, language, typingHistory, quote.credit])
 
   useEffect(() => {
     if (!running) return
@@ -126,7 +128,7 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
       <div className="typing-body">
         <p className="typing-notice" role="status">{notice}</p>
         <p className={`typing-text${korean ? ' typing-text-korean' : ''}`} lang={language} aria-label={text}>{[...text].map((letter, index) => <span key={index} aria-hidden="true" className={`${index < session.input.length ? session.input[index] === letter ? 'typing-correct' : 'typing-incorrect' : ''} ${index === session.input.length && !finished ? 'typing-cursor' : ''}`}>{letter}</span>)}</p>
-        <p className="typing-credit">{quote.source === 'dummyjson' ? <>出典: <a href="https://dummyjson.com/docs/quotes" target="_blank" rel="noopener noreferrer">DummyJSON</a>{quote.author && ` / ${quote.author}`}</> : 'オリジナル練習文'}</p>
+        {quote.source === 'tatoeba' ? <SentenceCredit credit={quote.credit} /> : <p className="typing-credit">{quote.source === 'dummyjson' ? <>出典: <a href="https://dummyjson.com/docs/quotes" target="_blank" rel="noopener noreferrer">DummyJSON</a>{quote.author && ` / ${quote.author}`}</> : 'オリジナル練習文'}</p>}
         <label htmlFor="typing-input" className="typing-input-label">{finished ? '練習が終了しました' : `${korean ? '韓国語' : '英文'}を入力（最初の入力で計測開始）`}</label>
         <div className="typing-input-wrap">
         <span className="typing-input-flag" aria-hidden="true"><LanguageFlag language={language} /></span>

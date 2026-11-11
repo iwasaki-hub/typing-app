@@ -1,3 +1,4 @@
+import SentenceCredit from './SentenceCredit'
 import LanguageBadge from './LanguageBadge'
 import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useId, useState } from 'react'
@@ -41,7 +42,7 @@ export default function TypingHistory({ allowDelete = false }: { allowDelete?: b
       <m.div key={view} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
       {view === 'chart' ? <PracticeChart results={results} /> : view === 'calendar' ? <PracticeCalendar results={results} /> : results.length === 0 ? <p>まだ履歴がありません。練習を終了すると自動で保存されます。</p> : (
         <div className="history-table-scroll" tabIndex={0} role="region" aria-label="練習履歴の表（横にスクロールできます）">
-          <table><caption className="history-caption">新しい結果から表示</caption><thead><tr><th scope="col">日時・言語・練習文</th><th scope="col">結果</th><th scope="col">速度</th><th scope="col">正確率</th><th scope="col">ミス</th><th scope="col">経過 / 制限</th></tr></thead><tbody>{results.map((result) => <tr key={result.id}><td><time dateTime={result.savedAt}>{new Date(result.savedAt).toLocaleString('ja-JP')}</time><LanguageBadge language={result.language} compact /><span className="history-text" title={result.text}>{result.text}</span></td><td>{reasons[result.reason]}</td><td>{formatResultSpeed(result)}</td><td>{result.accuracy}%</td><td>{result.mistakes}回</td><td>{result.elapsed.toFixed(1)} / {result.duration}秒</td></tr>)}</tbody></table>
+          <table><caption className="history-caption">新しい結果から表示</caption><thead><tr><th scope="col">日時・言語・練習文</th><th scope="col">結果</th><th scope="col">速度</th><th scope="col">正確率</th><th scope="col">ミス</th><th scope="col">経過 / 制限</th></tr></thead><tbody>{results.map((result) => <tr key={result.id}><td><time dateTime={result.savedAt}>{new Date(result.savedAt).toLocaleString('ja-JP')}</time><LanguageBadge language={result.language} compact /><span className="history-text" title={result.text}>{result.text}</span><SentenceCredit credit={result.credit} /></td><td>{reasons[result.reason]}</td><td>{formatResultSpeed(result)}</td><td>{result.accuracy}%</td><td>{result.mistakes}回</td><td>{result.elapsed.toFixed(1)} / {result.duration}秒</td></tr>)}</tbody></table>
         </div>
       )}
       </m.div>
