@@ -1,17 +1,18 @@
 import { useLocale } from './features/locale/useLocale'
-import HomePage from './pages/HomePage';
+import HomePage from './pages/home/HomePage';
 import { lazy, Suspense, useEffect, useRef } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { practiceActivities } from './features/practice/activities';
 import { useAuth } from './features/auth/context';
 import { authCallbackDestination } from './features/auth/password';
 import { m } from 'motion/react';
 import Navigation from './components/layout/Navigation';
 import Footer from './components/layout/Footer';
-import TypingPage from './pages/TypingPage';
-import NotFoundPage from './pages/NotFoundPage';
-const RankingPage = lazy(() => import('./pages/RankingPage'));
-const LoginPage = lazy(() => import('./pages/LoginPage'));
-const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+import PracticeMenuPage from './pages/practice/PracticeMenuPage';
+import NotFoundPage from './pages/errors/NotFoundPage';
+const RankingPage = lazy(() => import('./pages/ranking/RankingPage'));
+const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
+const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage'));
 export default function App() {
     const { t } = useLocale();
     const { pathname, hash } = useLocation();
@@ -29,8 +30,11 @@ export default function App() {
             void navigate('/reset-password', { replace: true });
         }
     }, [ready, session, navigate, isPasswordRecovery, pathname]);
-    useEffect(() => { document.title = t(pathname === '/' ? 'Typing — ことばを打つ。毎日が、少し軽くなる。'
-            : pathname === '/practice' ? 'タイピング練習 | Typing' : pathname === '/ranking' ? 'ランキング | Typing' : pathname === '/dashboard' ? 'ダッシュボード | Typing' : pathname === '/profile' ? 'プロフィール | Typing' : pathname === '/login' ? 'ログイン | Typing' : pathname === '/reset-password' ? 'パスワードの設定 | Typing' : 'ページが見つかりません | Typing'); }, [pathname, t]);
+    useEffect(() => {
+        const activity = practiceActivities.find(item => item.path === pathname);
+        document.title = activity ? `${t(activity.title)} | Typing` : t(pathname === '/' ? 'Typing — ことばを打つ。毎日が、少し軽くなる。'
+            : pathname === '/practice' ? 'タイピングメニュー | Typing' : pathname === '/ranking' ? 'ランキング | Typing' : pathname === '/dashboard' ? 'ダッシュボード | Typing' : pathname === '/profile' ? 'プロフィール | Typing' : pathname === '/login' ? 'ログイン | Typing' : pathname === '/reset-password' ? 'パスワードの設定 | Typing' : 'ページが見つかりません | Typing');
+    }, [pathname, t]);
     useEffect(() => {
         const frame = requestAnimationFrame(() => {
             const target = hash ? document.getElementById(hash.slice(1)) : null;
@@ -48,7 +52,9 @@ export default function App() {
       <m.div className="app-content" key={`page:${pathname}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
       <Routes>
         <Route path="/" element={<HomePage />}/>
-        <Route path="/practice" element={<TypingPage />}/>
+        <Route path="/practice" element={<PracticeMenuPage />}/>
+        {practiceActivities.map(activity => <Route key={activity.id} path={activity.path} element={<Suspense fallback={<main id="main" tabIndex={-1}><p role="status">{t('読み込んでいます…')}</p></main>}><activity.Page /></Suspense>} />)}
+        <Route path="/learn/countries" element={<Navigate to="/practice/countries" replace />} />
         <Route path="/dashboard" element={<Suspense fallback={<main id="main" tabIndex={-1}><p role="status">{t("読み込んでいます…")}</p></main>}><DashboardPage /></Suspense>}/>
         <Route path="/profile" element={<Suspense fallback={<main id="main" tabIndex={-1}><p role="status">{t("読み込んでいます…")}</p></main>}><LoginPage profile/></Suspense>}/>
         <Route path="/login" element={<Suspense fallback={<main id="main" tabIndex={-1}><p role="status">{t("読み込んでいます…")}</p></main>}><LoginPage /></Suspense>}/>

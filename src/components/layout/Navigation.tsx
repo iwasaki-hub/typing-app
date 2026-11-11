@@ -41,7 +41,7 @@ export default function Navigation() {
         <Link className="site-brand" to="/" onClick={() => setOpen(false)} aria-label={t("Typing ホーム")}><span className="site-mark">t.</span>Typing</Link>
         <button ref={toggle} className="site-menu-toggle" type="button" aria-expanded={open} aria-controls="site-navigation" aria-label={open ? t("メニューを閉じる") : t("メニューを開く")} onClick={() => setOpen(!open)}><FontAwesomeIcon icon={open ? xmarkIcon : barsIcon} aria-hidden="true"/></button>
         <nav id="site-navigation" className={`site-navigation${open ? ' is-open' : ''}`} aria-label={t("メインナビゲーション")}>
-          {links.map((link) => <NavLink end key={link.href} to={link.href} onClick={() => setOpen(false)}><FontAwesomeIcon icon={link.icon} aria-hidden="true"/>{t(link.label)}</NavLink>)}
+          {links.map((link) => <NavLink end={link.href !== '/practice'} key={link.href} to={link.href} onClick={() => setOpen(false)}><FontAwesomeIcon icon={link.icon} aria-hidden="true"/>{t(link.label)}</NavLink>)}
           {session && <NavLink to="/dashboard" onClick={() => setOpen(false)}><FontAwesomeIcon icon={chartLineIcon} aria-hidden="true"/>{t("ダッシュボード")}</NavLink>}
           <Link to="/#features" onClick={() => setOpen(false)}><FontAwesomeIcon icon={circleInfoIcon} aria-hidden="true"/>{t("このアプリについて")}</Link>
           <Link to="/#how-to" onClick={() => setOpen(false)}><FontAwesomeIcon icon={bookOpenIcon} aria-hidden="true"/>{t("使い方")}</Link>

@@ -1,12 +1,12 @@
-import { useLocale } from '../features/locale/useLocale'
-import { lockIcon, userIcon } from '../lib/icons';
+import { useLocale } from '../../features/locale/useLocale'
+import { lockIcon, userIcon } from '../../lib/icons';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAuth } from '../features/auth/context';
-import { signInWithPassword, registerWithPassword, requestPasswordReset, getLoginLinkRetryAt } from '../api/auth';
-import { LOGIN_RESEND_KEY } from '../features/auth/loginLink';
-import { validatePassword } from '../features/auth/password';
+import { useAuth } from '../../features/auth/context';
+import { signInWithPassword, registerWithPassword, requestPasswordReset, getLoginLinkRetryAt } from '../../api/auth';
+import { LOGIN_RESEND_KEY } from '../../features/auth/loginLink';
+import { validatePassword } from '../../features/auth/password';
 import './LoginPage.css';
 function PasswordForm() {
     const { t } = useLocale();

@@ -1,4 +1,4 @@
-import { useLocale } from '../features/locale/useLocale'
+import { useLocale } from '../../features/locale/useLocale'
 import { Link } from 'react-router-dom';
 import './NotFoundPage.css';
 export default function NotFoundPage() {

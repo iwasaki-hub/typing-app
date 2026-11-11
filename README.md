@@ -46,10 +46,20 @@ src/
     system/             # 接続確認
     ui/                 # 汎用の MotionLink
   features/             # 状態・Context・フック・採点などのロジック
-  pages/                # ルートに対応するページ
+  pages/
+    home/               # HomePage
+    auth/               # LoginPage（ログイン・プロフィール・パスワード設定）
+    dashboard/          # DashboardPage
+    ranking/            # RankingPage
+    errors/             # NotFoundPage
+    practice/
+      PracticeMenuPage  # 練習を選ぶ入口（.tsx / .css）
+      sentences/        # SentencePracticePage
+      countries/        # CountryPracticePage
 ```
 
 CSS は対応するコンポーネントと同じフォルダに配置します。Provider の適用順は `src/providers/AppProviders.tsx` に集約し、`main.tsx` はルーターとアプリの起動を担当します。
+ページも用途別フォルダに分類します。新しい学習題材は `pages/practice/<題材>/` にページとCSSを置き、問題データや判定は `features/` に分けます。URLはファイル名から自動生成せず、練習メニューの共通定義で管理します。
 
 ### 表示言語の切り替え
 
@@ -72,7 +82,10 @@ CSS は対応するコンポーネントと同じフォルダに配置します�
 React Router の `BrowserRouter` を使用します。
 
 - `/`: ホーム (`HomePage.tsx` / `HomePage.css`)
-- `/practice`: タイピング練習 (`TypingPage.tsx` / `TypingPage.css`)
+- `/practice`: 練習を選ぶメニュー (`PracticeMenuPage.tsx` / `PracticeMenuPage.css`)
+- `/practice/sentences`: 従来の文章タイピング (`SentencePracticePage.tsx` / `SentencePracticePage.css`)
+- `/practice/countries`: 国旗と英語の国名を学ぶ (`CountryPracticePage.tsx` / `CountryPracticePage.css`)
+- `/learn/countries`: `/practice/countries` にリダイレクト（旧URLの互換用）
 - `/ranking`: 全ユーザーランキング (`RankingPage.tsx` / `RankingPage.css`)
 - `/login`: メールログイン (`LoginPage.tsx` / `LoginPage.css`)
 - `/dashboard`: ログイン後のダッシュボード (`DashboardPage.tsx` / `DashboardPage.css`)
@@ -93,7 +106,7 @@ React Router の `BrowserRouter` を使用します。
 - `src/api/tatoeba.ts`: Tatoeba API から韓国語を一度に20件要求し、入力可能な文字・長さ・作者・ライセンスを検証して採用します。
 - `src/features/typing/koreanQueue.ts`: 韓国語の未出題キュー、先読み、重複除外、sessionStorage キャッシュを管理します。
 - `src/components/layout/Navigation.tsx`: PC・スマホ共通のナビゲーション。Escape キーでも閉じられます。
-- `src/pages/HomePage.css`: ホーム専用のスタイル。共通コンポーネントは各 CSS を持ちます。
+- `src/pages/home/HomePage.css`: ホーム専用のスタイル。共通コンポーネントは各 CSS を持ちます。
 
 API を追加するときは `src/api/` にサービス別ファイルを作り、`createApiClient` を利用してください。
 UI にはリクエスト処理を書かず、API 関数を呼び出します。Supabase の公開用キーは
@@ -113,6 +126,18 @@ Tatoeba の例文には作者・元の例文へのリンク・ライセンスを
 言語切り替え・ページ移動時には進行中の英語リクエストを中断し、古い応答が別の言語に反映されないようにしています。
 
 ## タイピング練習
+
+### 練習メニューの拡張
+
+ナビゲーションは「タイピング」に入口を集約します。`/practice` のカードから各練習を選び、各ページの「練習メニューに戻る」で一覧に戻れます。練習中もナビゲーションの「タイピング」が選択状態になります。
+`src/features/practice/activities.ts` をメニューとルートの共通定義にしています。新しい練習を増やすときは、独立したページと専用CSS・採点ロジック／問題データを作り、この定義に `id`・`path`・タイトル・説明・カテゴリ・アイコン・`lazy` のページ読み込みを追加してください。メニューカードとルートは自動で生成されるため、ナビゲーションや `App.tsx` に個別の項目を増やす必要はありません。韓国語の表示文言は `ko.ts` に追加します。
+各ページは遅延読み込みします。練習の採点方法や保存項目は題材によって異なるため、ページ・ロジックを分け、国旗表示など必要になった部品を共通化していく構成です。`npm run test:practice-menu` でID／パスの重複と翻訳を検証できます。
+
+### 国名タイピングで学ぶ
+
+「タイピング」→「国名タイピング」から、国旗・日本語／韓国語の国名・地域を見ながら英語のスペルを学べます。`src/features/learning/countries.ts` に20か国の一般的な英語名と対訳、地域を収録しています。[UN M49](https://unstats.un.org/unsd/methodology/m49/) の地域区分を参考に、北アメリカはメキシコも含む学習用の大陸区分です。国旗は [FlagCDN](https://flagcdn.com/) から取得して `public/flags` に保存しています。プレイ中に外部APIは使いません。
+地域ごとに最大10問を重複なしでランダム出題します。「お手本を見て練習」と「思い出して入力」を選べます。後者では英語表記のヒントを表示できます。大文字・小文字や前後／連続した空白は区別しません。略称ではなく表示される英語名で入力します。答えを確認して進むこともでき、終了後に各国を復習できます。
+通常の文章タイピング履歴・ランキング・端末間同期とは独立した学習モードです。時間制限はなく、ページを離れると進行状態はリセットされます。`npm run test:learning` で出題・判定・ヒント・復習情報を検証できます。
 
 ### アプリのレビュー
 
