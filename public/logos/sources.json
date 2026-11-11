@@ -1,0 +1,102 @@
+[
+  {
+    "id": "starbucks",
+    "website": "https://starbucks.com",
+    "source": "https://www.google.com/s2/favicons?domain=starbucks.com&sz=128"
+  },
+  {
+    "id": "dunkin",
+    "website": "https://dunkindonuts.com",
+    "source": "https://www.google.com/s2/favicons?domain=dunkindonuts.com&sz=128"
+  },
+  {
+    "id": "costa",
+    "website": "https://costa.co.uk",
+    "source": "https://www.google.com/s2/favicons?domain=costa.co.uk&sz=128"
+  },
+  {
+    "id": "tim-hortons",
+    "website": "https://timhortons.com",
+    "source": "https://www.google.com/s2/favicons?domain=timhortons.com&sz=128"
+  },
+  {
+    "id": "mcdonalds",
+    "website": "https://mcdonalds.com",
+    "source": "https://www.google.com/s2/favicons?domain=mcdonalds.com&sz=128"
+  },
+  {
+    "id": "burger-king",
+    "website": "https://bk.com",
+    "source": "https://www.google.com/s2/favicons?domain=bk.com&sz=128"
+  },
+  {
+    "id": "wendys",
+    "website": "https://wendys.com",
+    "source": "https://www.google.com/s2/favicons?domain=wendys.com&sz=128"
+  },
+  {
+    "id": "mos",
+    "website": "https://mos.jp",
+    "source": "https://www.google.com/s2/favicons?domain=mos.jp&sz=128"
+  },
+  {
+    "id": "dominos",
+    "website": "https://dominos.com",
+    "source": "https://www.google.com/s2/favicons?domain=dominos.com&sz=128"
+  },
+  {
+    "id": "pizza-hut",
+    "website": "https://pizzahut.com",
+    "source": "https://www.google.com/s2/favicons?domain=pizzahut.com&sz=128"
+  },
+  {
+    "id": "papa-johns",
+    "website": "https://papajohns.com",
+    "source": "https://www.google.com/s2/favicons?domain=papajohns.com&sz=128"
+  },
+  {
+    "id": "little-caesars",
+    "website": "https://littlecaesars.com",
+    "source": "https://www.google.com/s2/favicons?domain=littlecaesars.com&sz=128"
+  },
+  {
+    "id": "kfc",
+    "website": "https://kfc.com",
+    "source": "https://www.google.com/s2/favicons?domain=kfc.com&sz=128"
+  },
+  {
+    "id": "popeyes",
+    "website": "https://popeyes.com",
+    "source": "https://www.google.com/s2/favicons?domain=popeyes.com&sz=128"
+  },
+  {
+    "id": "chick-fil-a",
+    "website": "https://chick-fil-a.com",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/0/02/Chick-fil-A_Logo.svg"
+  },
+  {
+    "id": "jollibee",
+    "website": "https://jollibee.com",
+    "source": "https://www.google.com/s2/favicons?domain=jollibee.com&sz=128"
+  },
+  {
+    "id": "baskin-robbins",
+    "website": "https://baskinrobbins.com",
+    "source": "https://www.google.com/s2/favicons?domain=baskinrobbins.com&sz=128"
+  },
+  {
+    "id": "dairy-queen",
+    "website": "https://dairyqueen.com",
+    "source": "https://www.google.com/s2/favicons?domain=dairyqueen.com&sz=128"
+  },
+  {
+    "id": "krispy-kreme",
+    "website": "https://krispykreme.com",
+    "source": "https://www.google.com/s2/favicons?domain=krispykreme.com&sz=128"
+  },
+  {
+    "id": "cold-stone",
+    "website": "https://coldstonecreamery.com",
+    "source": "https://www.google.com/s2/favicons?domain=coldstonecreamery.com&sz=128"
+  }
+]

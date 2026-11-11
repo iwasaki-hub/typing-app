@@ -1,6 +1,9 @@
 import { normalizeLearningAnswer } from './answer.ts'
 export type LearnMode = 'guide' | 'quiz'
-export interface LearningItem { english: string }
+export interface LearningItem { english: string; inputKind?: 'brand' }
+export function isLearningInput(value: string, item: LearningItem) {
+  return item.inputKind === 'brand' ? /^[A-Za-z '-]{0,64}$/.test(value) : /^[A-Za-z ]{0,64}$/.test(value)
+}
 export interface LearningAnswer<T extends LearningItem> { item: T; skipped: boolean; hinted: boolean; mistakes: number }
 export interface LearningSession<T extends LearningItem> {
   order: T[]; index: number; input: string; mode: LearnMode
@@ -22,7 +25,7 @@ export function learningReducer<T extends LearningItem>(state: LearningSession<T
   }
   if (answered) return state
   if (action.type === 'input') {
-    if (!/^[A-Za-z ]{0,64}$/.test(action.value)) return state
+    if (!isLearningInput(action.value, state.order[state.index])) return state
     const target = normalizeLearningAnswer(state.order[state.index].english)
     const value = normalizeLearningAnswer(action.value)
     const enteredWrongPrefix = value && !target.startsWith(value) && target.startsWith(normalizeLearningAnswer(state.input)) && action.value.length >= state.input.length

@@ -187,3 +187,27 @@ test('reset, cleanup and skipped answers cannot trigger an unwanted automatic qu
   assert.ok(map.features.length > 0)
   assert.ok(map.features.every(feature => ['Polygon', 'MultiPolygon'].includes(feature.geometry.type)))
 })
+
+test('shop categories include logos and punctuation-aware answers without changing other lessons', async () => {
+  const { shopWords, shopCategories, shopRound } = await import('../src/features/learning/shops.ts')
+  assert.equal(shopWords.length, 20)
+  assert.equal(new Set(shopWords.map(word => word.id)).size, 20)
+  for (const [category, metadata] of Object.entries(shopCategories)) {
+    assert.ok(ko[metadata.label])
+    const round = shopRound(category, () => .5)
+    assert.equal(round.length, 4)
+    assert.equal(new Set(round.map(word => word.id)).size, 4)
+    for (const word of round) {
+      assert.equal(word.category, category)
+      const image = fs.readFileSync('public' + word.logo)
+      assert.ok(image.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) || image.subarray(0, 3).equals(Buffer.from([255,216,255])) || image.toString().includes('<svg'), word.id)
+      let state = newLearningSession([word], 'guide')
+      for (let index = 1; index <= word.english.length; index++) state = learningReducer(state, { type: 'input', value: word.english.slice(0, index) })
+      assert.equal(state.feedback, 'correct', word.english)
+      assert.equal(state.answers.length, 1)
+      assert.equal(state.answers[0].mistakes, 0)
+    }
+  }
+  const country = newLearningSession([countries[0]], 'guide')
+  assert.equal(learningReducer(country, { type: 'input', value: "Japan'" }), country)
+})

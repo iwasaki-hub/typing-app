@@ -1,5 +1,6 @@
 // Central icon definitions. Import named icons to keep unused exports tree-shakeable.
 export {
+  faStore as storeIcon,
   faPlane as planeIcon,
   faBasketShopping as householdIcon,
   faEarthAmericas as globeIcon,
