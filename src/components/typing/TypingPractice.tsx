@@ -1,3 +1,5 @@
+import KoreanCompositionGuide from './KoreanCompositionGuide'
+import { koreanDraftFeedback } from '../../features/typing/koreanParts'
 import { useLocale } from '../../features/locale/useLocale'
 import { arrowRightIcon, rotateLeftIcon, volumeHighIcon, volumeXmarkIcon } from '../../lib/icons';
 import { useEffect, useReducer, useRef, useState } from 'react';
@@ -40,6 +42,7 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
     const running = session.status === 'running';
     const finished = session.status === 'finished';
     const metrics = sessionMetrics(session, text);
+    const koreanPreview = korean && draft !== null && !finished ? koreanDraftFeedback(text, draft) : null;
     const savedSession = useRef<typeof session | null>(null);
     useEffect(() => {
         if (session.status !== 'finished' || !session.reason || savedSession.current === session)
@@ -132,7 +135,13 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
       </dl>}
       <div className="typing-body">
         <p className="typing-notice" role="status">{t(notice)}</p>
-        <p className={`typing-text${korean ? ' typing-text-korean' : ''}`} lang={language} aria-label={text}>{[...text].map((letter, index) => <span key={index} aria-hidden="true" className={`${index < session.input.length ? session.input[index] === letter ? 'typing-correct' : 'typing-incorrect' : ''} ${index === session.input.length && !finished ? 'typing-cursor' : ''}`}>{letter}</span>)}</p>
+        <p className={`typing-text${korean ? ' typing-text-korean' : ''}`} lang={language} aria-label={text}>{[...text].map((letter, index) => {
+          const previewState = koreanPreview?.characters[index]?.state;
+          const color = previewState === 'partial' ? 'typing-partial' : previewState === 'correct' ? 'typing-correct' : previewState === 'incorrect' ? 'typing-incorrect' : koreanPreview ? '' : index < session.input.length ? session.input[index] === letter ? 'typing-correct' : 'typing-incorrect' : '';
+          const cursor = !finished && index === (koreanPreview?.activeIndex ?? session.input.length);
+          return <span key={index} aria-hidden="true" className={`${color} ${cursor ? 'typing-cursor' : ''}`}>{letter}</span>;
+        })}</p>
+        {korean && !finished && <KoreanCompositionGuide text={text} committed={session.input} draft={draft} />}
         {quote.source === 'tatoeba' ? <SentenceCredit credit={quote.credit}/> : <p className="typing-credit">{quote.source === 'dummyjson' ? <>{t("出典:")}<a href="https://dummyjson.com/docs/quotes" target="_blank" rel="noopener noreferrer">DummyJSON</a>{quote.author && ` / ${quote.author}`}</> : t("オリジナル練習文")}</p>}
         <label htmlFor="typing-input" className="typing-input-label">{finished ? t("練習が終了しました") : t("{0}を入力（最初の入力で計測開始）", [korean ? t("韓国語") : t("英文")])}</label>
         <div className="typing-input-wrap">
@@ -146,7 +155,7 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
         setInputNotice('英字入力に切り替えてください。'); }} onChange={(event) => handleInput(event.target.value, composing.current || (event.nativeEvent as InputEvent).isComposing)} onSelect={(event) => { if (composing.current)
         return; const target = event.currentTarget; target.setSelectionRange(target.value.length, target.value.length); }} onPaste={(event) => { event.preventDefault(); setInputNotice('練習中は貼り付けできません。キーボードで入力してください。'); }} onDrop={(event) => event.preventDefault()} autoComplete="off" autoCapitalize="off" spellCheck={false} maxLength={text.length + (korean ? 2 : 0)} aria-describedby="typing-help" placeholder={korean ? t("ここに韓国語を入力してください") : t("ここに英文を入力してください")}/>
         </div>
-        <p className="typing-notice" id="typing-help" role="status">{t(inputNotice) || (korean ? t("韓国語キーボード（IME）で入力してください。変換中は判定せず、確定後に判定します。貼り付けは無効です。") : running ? t("Backspace で修正できます。修正前のミスも正確率に含まれます。") : t("英字入力で練習してください。貼り付けは無効です。"))}</p>
+        <p className="typing-notice" id="typing-help" role="status">{t(inputNotice) || (korean ? t("韓国語キーボード（IME）で入力してください。組み立て中はパーツごとに色で確認でき、ミスは確定後に記録します。貼り付けは無効です。") : running ? t("Backspace で修正できます。修正前のミスも正確率に含まれます。") : t("英字入力で練習してください。貼り付けは無効です。"))}</p>
         <label className="typing-progress-label">{t("進み具合")}{metrics.progress}%<progress max="100" value={metrics.progress}/></label>
         {finished && <button ref={resultButton} type="button" className="typing-result-open" onClick={() => setDismissedResult(null)}>{t("結果を表示する")}</button>}
         {finished && dismissedResult !== session && <TypingResultModal language={language} session={session} wpm={korean ? metrics.cpm : metrics.wpm} speedUnit={korean ? 'CPM' : 'WPM'} accuracy={metrics.accuracy} correct={metrics.correct} total={text.length} loading={loading} onNext={nextQuestion} onRetry={reset} onDismiss={dismissResult}/>}

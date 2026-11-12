@@ -1,0 +1,15 @@
+.korean-composition-guide { margin: 14px 0 20px; padding: 16px 18px; border: 1px solid #dce8e2; background: #f6faf8; border-radius: 12px; }
+.korean-composition-heading { display: flex; gap: 12px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; font-size: 13px; font-weight: 650; }
+.korean-composition-heading small { color: #686863; font-size: 11px; font-weight: 400; }
+.korean-composition-parts { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 14px 0 8px; font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif; }
+.korean-composition-parts > strong { font-size: 30px; padding-right: 6px; }
+.korean-part { display: grid; place-items: center; min-width: 58px; padding: 8px 10px; border: 1px solid #dce2dd; border-radius: 10px; background: white; }
+.korean-part b { font-size: 24px; line-height: 1.4; }
+.korean-part small { font-size: 10px; margin-top: 4px; }
+.korean-part.part-pending { color: #777; }
+.korean-part.part-correct { color: #166534; border-color: #79bb93; background: #e8f7ed; }
+.korean-part.part-incorrect { color: #b91c1c; border-color: #ec9999; background: #ffeaea; }
+.korean-composition-guide p { font-size: 11px; line-height: 1.8; color: #686863; margin: 8px 0 0; }
+.typing-text .typing-partial { color: #166534; background: #e8f7ed; text-decoration: underline dotted; text-underline-offset: 5px; }
+:root[data-theme=calm] .korean-composition-guide { background: #f5f0fc; border-color: #e3d9ee; }
+@media (max-width: 600px) { .korean-composition-guide { padding: 14px; } .korean-composition-parts { gap: 8px; } .korean-part { min-width: 48px; padding: 7px 8px; } }
