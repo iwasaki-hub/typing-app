@@ -13,7 +13,7 @@ import { newSession, sessionMetrics, sessionReducer } from '../../features/typin
 import { useTypingSound } from '../../features/typing/useTypingSound';
 import { useHistory } from '../../features/typing/historyContext';
 import type { PracticeLanguage } from '../../features/typing/samples';
-import { durationSetting, isDuration, isEnabled, readSetting, statsVisibleSetting, writeSetting } from '../../features/typing/settings';
+import { durationSetting, isDuration, isEnabled, readSetting, statsVisibleSetting, koreanPartsVisibleSetting, writeSetting } from '../../features/typing/settings';
 import './TypingPractice.css';
 export default function TypingPractice({ quote, loading, notice, onNext, onLanguageChange }: {
     quote: PracticeQuote;
@@ -29,6 +29,8 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
     useEffect(() => { writeSetting(durationSetting, duration); }, [duration]);
     const [statsVisible, setStatsVisible] = useState(() => readSetting(statsVisibleSetting, true, isEnabled));
     useEffect(() => { writeSetting(statsVisibleSetting, statsVisible); }, [statsVisible]);
+    const [partsVisible, setPartsVisible] = useState(() => readSetting(koreanPartsVisibleSetting, true, isEnabled));
+    useEffect(() => { writeSetting(koreanPartsVisibleSetting, partsVisible); }, [partsVisible]);
     const [inputNotice, setInputNotice] = useState('');
     const [draft, setDraft] = useState<string | null>(null);
     const composing = useRef(false);
@@ -134,6 +136,7 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
         <label>{t("練習言語")}<select value={language} disabled={running} onChange={(event) => onLanguageChange(event.target.value === 'ko' ? 'ko' : 'en')}><option value="en">{t("🇺🇸 英語")}</option><option value="ko">{t("🇰🇷 韓国語")}</option></select></label>
         <label>{t("制限時間")}<select value={duration} disabled={running || loading} onChange={(event) => { setDuration(Number(event.target.value)); reset(); }}><option value={30}>{t("30秒")}</option><option value={60}>{t("60秒")}</option><option value={120}>{t("120秒")}</option></select></label>
         <label>{t("練習状況")}<select value={statsVisible ? 'show' : 'hide'} onChange={(event) => setStatsVisible(event.target.value === 'show')}><option value="show">{t("表示")}</option><option value="hide">{t("非表示")}</option></select></label>
+        {korean && <label>{t("ハングルのパーツを確認")}<select value={partsVisible ? 'on' : 'off'} onChange={(event) => setPartsVisible(event.target.value === 'on')}><option value="on">ON</option><option value="off">OFF</option></select></label>}
         <span className="typing-settings-break" aria-hidden="true"/>
         <label>{t("打鍵音")}<FontAwesomeIcon className={`typing-sound-icon${sound.enabled ? ' is-enabled' : ''}`} icon={sound.enabled ? volumeHighIcon : volumeXmarkIcon} aria-hidden="true"/><select value={sound.enabled ? 'on' : 'off'} onChange={(event) => { if ((event.target.value === 'on') !== sound.enabled)
         sound.toggle(); }}><option value="on">ON</option><option value="off">OFF</option></select></label>
@@ -156,7 +159,7 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
           const cursor = !finished && index === (koreanPreview?.activeIndex ?? session.input.length);
           return <span key={index} aria-hidden="true" className={`${color} ${cursor ? 'typing-cursor' : ''}`}>{letter}</span>;
         })}</p>
-        {korean && !finished && <KoreanCompositionGuide text={text} committed={session.input} draft={draft} />}
+        {korean && partsVisible && !finished && <KoreanCompositionGuide text={text} committed={session.input} draft={draft} />}
         {quote.source === 'tatoeba' ? <SentenceCredit credit={quote.credit}/> : <p className="typing-credit">{quote.source === 'dummyjson' ? <>{t("出典:")}<a href="https://dummyjson.com/docs/quotes" target="_blank" rel="noopener noreferrer">DummyJSON</a>{quote.author && ` / ${quote.author}`}</> : t("オリジナル練習文")}</p>}
         <label htmlFor="typing-input" className="typing-input-label">{finished ? t("練習が終了しました") : t("{0}を入力（最初の入力で計測開始）", [korean ? t("韓国語") : t("英文")])}</label>
         <div className="typing-input-wrap">
