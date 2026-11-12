@@ -1,3 +1,4 @@
+import { createKoreanPartSoundTracker } from '../../features/typing/koreanPartSound'
 import KoreanCompositionGuide from './KoreanCompositionGuide'
 import { koreanDraftFeedback } from '../../features/typing/koreanParts'
 import { useLocale } from '../../features/locale/useLocale'
@@ -31,6 +32,7 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
     const [inputNotice, setInputNotice] = useState('');
     const [draft, setDraft] = useState<string | null>(null);
     const composing = useRef(false);
+    const partSound = useRef(createKoreanPartSoundTracker());
     const field = useRef<HTMLInputElement>(null);
     const resultButton = useRef<HTMLButtonElement>(null);
     const focusAfterLoad = useRef(false);
@@ -66,6 +68,7 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
     }, [running, duration]);
     function reset() {
         composing.current = false;
+        partSound.current.reset();
         setDraft(null);
         focusAfterLoad.current = true;
         field.current?.focus();
@@ -76,6 +79,7 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
         if (loading || running)
             return;
         composing.current = false;
+        partSound.current.reset();
         setDraft(null);
         focusAfterLoad.current = true;
         dispatch({ type: 'reset' });
@@ -94,10 +98,17 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
         }
     }, [loading, session.status, text]);
     function handleInput(value: string, isComposing: boolean, committed = false) {
+        if (loading || finished) return;
         if (isComposing) {
-            if (korean)
+            if (korean) {
+                if (session.startedAt !== null && performance.now() - session.startedAt >= duration * 1000) {
+                    dispatch({ type: 'tick', now: performance.now(), duration });
+                    return;
+                }
                 setDraft(value);
-            else
+                const kind = partSound.current.update(value, text);
+                if (kind) void sound.play(kind);
+            } else
                 setInputNotice('英字入力に切り替えてください。');
             return;
         }
@@ -108,8 +119,12 @@ export default function TypingPractice({ quote, loading, notice, onNext, onLangu
             return;
         dispatch(action);
         setInputNotice('');
+        const partKind = korean && next.reason !== 'timeout' ? partSound.current.update(value, text) : null;
         if (next.reason === 'completed')
             void sound.play('complete');
+        else if (korean) {
+            if (partKind) void sound.play(partKind);
+        }
         else if (next.attempts > session.attempts)
             void sound.play(next.mistakes > session.mistakes ? 'error' : 'key');
     }
