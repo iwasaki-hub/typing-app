@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { globeIcon, householdIcon, storeIcon } from '../../lib/icons'
+import { globeIcon, householdIcon, storeIcon, planeIcon } from '../../lib/icons'
 import { learningLabels, learningStats, type LearningActivity } from '../../features/learning/history'
 import { useHistory } from '../../features/typing/historyContext'
 import { useLocale } from '../../features/locale/useLocale'
 import { getFormattingLocale } from '../../features/locale/store'
 import './LearningHistory.css'
 
-const icons = { countries: globeIcon, household: householdIcon, shops: storeIcon }
+const icons = { countries: globeIcon, household: householdIcon, shops: storeIcon, travel: planeIcon }
 
 export default function LearningHistory() {
   const { t, locale } = useLocale()
@@ -19,7 +19,7 @@ export default function LearningHistory() {
   const independent = entries.reduce((sum, result) => sum + learningStats(result.learning).independent, 0)
   return <section className="learning-history" aria-labelledby="learning-history-title">
     <header><div><span>YOUR LEARNING</span><h2 id="learning-history-title">{t('学習記録')}</h2></div><Link to="/practice">{t('学習をはじめる →')}</Link></header>
-    <p className="learning-history-note">{t('国名・日用品・お店の学習結果です。文章タイピングと合わせて最新100件を保存します。全履歴の削除は下のボタンから行えます。')}</p>
+    <p className="learning-history-note">{t('国名・日用品・お店・旅行英会話の学習結果です。文章タイピングと合わせて最新100件を保存します。全履歴の削除は下のボタンから行えます。')}</p>
     <div className="learning-history-filters" role="group" aria-label={t('学習記録の種類')}>
       <button type="button" aria-pressed={activity === 'all'} onClick={() => setActivity('all')}>{t('すべての学習')}</button>
       {(Object.keys(learningLabels) as LearningActivity[]).map(key => <button key={key} type="button" aria-pressed={activity === key} onClick={() => setActivity(key)}><FontAwesomeIcon icon={icons[key]} aria-hidden="true" /> {t(learningLabels[key])}</button>)}
@@ -27,7 +27,7 @@ export default function LearningHistory() {
     <dl className="learning-history-stats"><div><dt>{t('学習回数')}</dt><dd>{entries.length}</dd></div><div><dt>{t('取り組んだ問題数')}</dt><dd>{learned}</dd></div><div><dt>{t('ヒント・ミスなしの正解数')}</dt><dd>{independent}</dd></div></dl>
     {error && <p role="alert">{t(error)}</p>}
     <p className="learning-history-note" role="status">{t(status)}</p>
-    {entries.length === 0 ? <p className="learning-history-empty">{t('まだ学習記録がありません。国名・日用品・お店の学習を最後まで終えると保存されます。')}</p> : <ol className="learning-history-list">{entries.map(result => {
+    {entries.length === 0 ? <p className="learning-history-empty">{t('まだ学習記録がありません。学習を最後まで終えると保存されます。')}</p> : <ol className="learning-history-list">{entries.map(result => {
       const record = result.learning
       const stats = learningStats(record)
       return <li key={result.id}>

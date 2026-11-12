@@ -1,7 +1,8 @@
 import { normalizeLearningAnswer } from './answer.ts'
 export type LearnMode = 'guide' | 'quiz'
-export interface LearningItem { english: string; inputKind?: 'brand' }
+export interface LearningItem { english: string; inputKind?: 'brand' | 'phrase' }
 export function isLearningInput(value: string, item: LearningItem) {
+  if (item.inputKind === 'phrase') return /^[A-Za-z ',.?!-]{0,64}$/.test(value)
   return item.inputKind === 'brand' ? /^[A-Za-z '-]{0,64}$/.test(value) : /^[A-Za-z ]{0,64}$/.test(value)
 }
 export interface LearningAnswer<T extends LearningItem> { item: T; skipped: boolean; hinted: boolean; mistakes: number }

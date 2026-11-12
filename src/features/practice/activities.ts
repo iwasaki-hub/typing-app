@@ -1,6 +1,6 @@
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react'
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { keyboardIcon, globeIcon, householdIcon, storeIcon } from '../../lib/icons.ts'
+import { keyboardIcon, globeIcon, householdIcon, storeIcon, planeIcon } from '../../lib/icons.ts'
 
 export interface PracticeActivity {
   id: string
@@ -38,5 +38,11 @@ export const practiceActivities: readonly PracticeActivity[] = [
     description: 'コーヒーショップ・ハンバーガー・ピザ・チキン・スイーツ。有名チェーン店の英語名を、発音とロゴで学びましょう。',
     category: 'タイピングで学ぶ', icon: storeIcon,
     Page: lazy(() => import('../../pages/practice/shops/ShopPracticePage')),
+  },
+  {
+    id: 'travel', path: '/practice/travel', title: '旅行の英会話',
+    description: '空港・ホテル・レストラン・買い物・交通。旅先の英会話を意味と発音で学びましょう。',
+    category: 'タイピングで学ぶ', icon: planeIcon,
+    Page: lazy(() => import('../../pages/practice/travel/TravelPracticePage')),
   },
 ]

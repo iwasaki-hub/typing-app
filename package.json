@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test:practice-menu": "node --test scripts/practice-menu.test.mjs",
-    "test:learning": "node --test scripts/learning.test.mjs scripts/learning-history.test.mjs",
+    "test:learning": "node --test scripts/learning.test.mjs scripts/learning-history.test.mjs scripts/travel.test.mjs",
     "test:locale": "node --test scripts/locale.test.mjs",
     "test:reviews": "node --test scripts/reviews.test.mjs",
     "test:auth": "node --test scripts/auth-login-link.test.mjs scripts/auth-password.test.mjs",

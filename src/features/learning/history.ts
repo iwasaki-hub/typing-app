@@ -1,7 +1,7 @@
 import type { TypingResult } from '../typing/history.ts'
 import type { LearningItem, LearningSession } from './session.ts'
 
-export const learningLabels = { countries: '国名タイピング', household: '日用品の英単語', shops: 'お店の英単語' } as const
+export const learningLabels = { countries: '国名タイピング', household: '日用品の英単語', shops: 'お店の英単語', travel: '旅行の英会話' } as const
 export type LearningActivity = keyof typeof learningLabels
 interface NamedItem extends LearningItem { ja: string; ko: string }
 export interface LearningRecord {
